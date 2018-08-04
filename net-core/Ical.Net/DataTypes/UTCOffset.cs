@@ -79,17 +79,17 @@ namespace Ical.Net.DataTypes
             return Offset.GetHashCode();
         }
 
-        public virtual DateTime ToLocal(DateTime dt)
-        {
-            return DateTime.SpecifyKind(dt.Add(Offset), DateTimeKind.Local);
-        }
-
         public override string ToString()
         {
             return (Positive ? "+" : "-") + Hours.ToString("00") + Minutes.ToString("00") + (Seconds != 0 ? Seconds.ToString("00") : string.Empty);
         }
 
-        public virtual DateTime ToUtc(DateTime dt)
+        public DateTime ToLocal(DateTime dt)
+        {
+            return DateTime.SpecifyKind(dt.Add(Offset), DateTimeKind.Local);
+        }
+
+        public DateTime ToUtc(DateTime dt)
         {
             return DateTime.SpecifyKind(dt.Add(-Offset), DateTimeKind.Utc);
         }

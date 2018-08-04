@@ -15,7 +15,7 @@
             Status = status;
         }
 
-        public virtual FreeBusyStatus Status { get; set; }
+        public FreeBusyStatus Status { get; set; }
 
         public override void CopyFrom(ICopyable obj)
         {

@@ -49,7 +49,7 @@ namespace Ical.Net.DataTypes
             EndTime = start.Add(duration);
         }
 
-        public virtual TimeSpan Duration
+        public TimeSpan Duration
         {
             get
             {
@@ -73,7 +73,7 @@ namespace Ical.Net.DataTypes
             }
         }
 
-        public virtual IDateTime EndTime
+        public IDateTime EndTime
         {
             get => _endTime;
             set
@@ -87,7 +87,7 @@ namespace Ical.Net.DataTypes
             }
         }
 
-        public virtual IDateTime StartTime
+        public IDateTime StartTime
         {
             get
             {
@@ -107,7 +107,7 @@ namespace Ical.Net.DataTypes
             }
         }
 
-        public virtual bool CollidesWith(Period period)
+        public bool CollidesWith(Period period)
         {
             return period != null
                 && ((period.StartTime != null && Contains(period.StartTime)) || (period.EndTime != null && Contains(period.EndTime)));
@@ -130,7 +130,7 @@ namespace Ical.Net.DataTypes
             throw new Exception("An error occurred while comparing two Periods.");
         }
 
-        public virtual bool Contains(IDateTime dt)
+        public bool Contains(IDateTime dt)
         {
             // Start time is inclusive
             if (dt == null || StartTime == null || !StartTime.LessThanOrEqual(dt))

@@ -46,8 +46,10 @@ namespace Ical.Net.DataTypes
 
             // For example, events containing these rules generate the same recurrence set, including having the same time zone for each occurrence, so
             // they're the same:
+            //
             // Event A:
             // RDATE:20170302T060000Z,20170303T060000Z
+            //
             // Event B:
             // RDATE:20170302T060000Z
             // RDATE:20170303T060000Z

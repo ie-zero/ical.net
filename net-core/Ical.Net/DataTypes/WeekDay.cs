@@ -32,9 +32,9 @@ namespace Ical.Net.DataTypes
             CopyFrom(serializer.Deserialize(new StringReader(value)) as ICopyable);
         }
 
-        public virtual DayOfWeek DayOfWeek { get; set; }
+        public DayOfWeek DayOfWeek { get; set; }
 
-        public virtual int Offset { get; set; } = int.MinValue;
+        public int Offset { get; set; } = int.MinValue;
 
         public int CompareTo(object obj)
         {

@@ -48,17 +48,17 @@ namespace Ical.Net.DataTypes
             Uri = a.Uri;
         }
 
-        public virtual byte[] Data { get; }
+        public byte[] Data { get; }
 
-        public virtual string FormatType
+        public string FormatType
         {
             get => Parameters.Get("FMTTYPE");
             set => Parameters.Set("FMTTYPE", value);
         }
 
-        public virtual Uri Uri { get; set; }
+        public Uri Uri { get; set; }
 
-        public virtual Encoding ValueEncoding
+        public Encoding ValueEncoding
         {
             get => _valueEncoding;
             set

@@ -46,24 +46,24 @@ namespace Ical.Net.DataTypes
             }
         }
 
-        public virtual Calendar Calendar
+        public Calendar Calendar
         {
             get { return _associatedObject?.Calendar; }
         }
 
-        public virtual string Language
+        public string Language
         {
             get => Parameters.Get("LANGUAGE");
             set => Parameters.Set("LANGUAGE", value);
         }
 
-        public virtual IParameterCollection Parameters => _proxy;
+        public IParameterCollection Parameters => _proxy;
 
         /// <summary>
         /// Creates a copy of the object.
         /// </summary>
         /// <returns>The copy of the object.</returns>
-        public virtual T Copy<T>()
+        public T Copy<T>()
         {
             var type = GetType();
             var obj = Activator.CreateInstance(type) as ICopyable;
@@ -94,7 +94,7 @@ namespace Ical.Net.DataTypes
             _proxy.SetProxiedObject(dt.Parameters);
         }
 
-        public virtual object GetService(Type serviceType)
+        public object GetService(Type serviceType)
         {
             return _serviceProvider.GetService(serviceType);
         }
@@ -114,7 +114,7 @@ namespace Ical.Net.DataTypes
             return _serviceProvider.GetService<T>(name);
         }
 
-        public virtual Type GetValueType()
+        public Type GetValueType()
         {
             // See RFC 5545 Section 3.2.20.
             if (_proxy != null && _proxy.ContainsKey("VALUE"))
@@ -177,7 +177,7 @@ namespace Ical.Net.DataTypes
             _serviceProvider.SetService(obj);
         }
 
-        public virtual void SetValueType(string type)
+        public void SetValueType(string type)
         {
             _proxy?.Set("VALUE", type ?? type.ToUpper());
         }
@@ -194,9 +194,9 @@ namespace Ical.Net.DataTypes
             OnDeserializing(context);
         }
 
-        protected virtual void OnDeserialized(StreamingContext context) { }
+        protected void OnDeserialized(StreamingContext context) { }
 
-        protected virtual void OnDeserializing(StreamingContext context)
+        protected void OnDeserializing(StreamingContext context)
         {
             Initialize();
         }

@@ -24,13 +24,13 @@ namespace Ical.Net.DataTypes
             CopyFrom(serializer.Deserialize(new StringReader(value)) as ICopyable);
         }
 
-        public virtual string CommonName
+        public string CommonName
         {
             get => Parameters.Get("CN");
             set => Parameters.Set("CN", value);
         }
 
-        public virtual Uri DirectoryEntry
+        public Uri DirectoryEntry
         {
             get => new Uri(Parameters.Get("DIR"));
             set
@@ -46,7 +46,7 @@ namespace Ical.Net.DataTypes
             }
         }
 
-        public virtual Uri SentBy
+        public Uri SentBy
         {
             get => new Uri(Parameters.Get("SENT-BY"));
             set
@@ -62,7 +62,7 @@ namespace Ical.Net.DataTypes
             }
         }
 
-        public virtual Uri Value { get; set; }
+        public Uri Value { get; set; }
 
         public override void CopyFrom(ICopyable copyable)
         {

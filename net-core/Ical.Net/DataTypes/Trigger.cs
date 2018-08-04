@@ -12,7 +12,6 @@ namespace Ical.Net.DataTypes
     {
         private IDateTime _dateTime;
         private TimeSpan? _duration;
-        private string _related = TriggerRelation.Start;
 
         public Trigger() { }
 
@@ -27,7 +26,7 @@ namespace Ical.Net.DataTypes
             CopyFrom(serializer.Deserialize(new StringReader(value)) as ICopyable);
         }
 
-        public virtual IDateTime DateTime
+        public IDateTime DateTime
         {
             get => _dateTime;
             set
@@ -49,7 +48,7 @@ namespace Ical.Net.DataTypes
             }
         }
 
-        public virtual TimeSpan? Duration
+        public TimeSpan? Duration
         {
             get => _duration;
             set
@@ -65,16 +64,12 @@ namespace Ical.Net.DataTypes
             }
         }
 
-        public virtual bool IsRelative
+        public bool IsRelative
         {
             get { return _duration != null; }
         }
 
-        public virtual string Related
-        {
-            get => _related;
-            set => _related = value;
-        }
+        public string Related { get; set; } = TriggerRelation.Start;
 
         public override void CopyFrom(ICopyable obj)
         {
@@ -92,7 +87,7 @@ namespace Ical.Net.DataTypes
 
         protected bool Equals(Trigger other)
         {
-            return Equals(_dateTime, other._dateTime) && _duration.Equals(other._duration) && _related == other._related;
+            return Equals(_dateTime, other._dateTime) && _duration.Equals(other._duration) && Related == other.Related;
         }
 
         public override bool Equals(object obj)
@@ -118,7 +113,7 @@ namespace Ical.Net.DataTypes
             {
                 var hashCode = _dateTime?.GetHashCode() ?? 0;
                 hashCode = (hashCode * 397) ^ _duration.GetHashCode();
-                hashCode = (hashCode * 397) ^ _related?.GetHashCode() ?? 0;
+                hashCode = (hashCode * 397) ^ Related?.GetHashCode() ?? 0;
                 return hashCode;
             }
         }

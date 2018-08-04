@@ -20,19 +20,19 @@ namespace Ical.Net.DataTypes
             CopyFrom(serializer.Deserialize(new StringReader(value)) as ICopyable);
         }
 
-        public virtual string Description
+        public string Description
         {
             get => _description;
             set => _description = value;
         }
 
-        public virtual string ExtraData
+        public string ExtraData
         {
             get => _extraData;
             set => _extraData = value;
         }
 
-        public virtual StatusCode StatusCode
+        public StatusCode StatusCode
         {
             get => _statusCode;
             set => _statusCode = value;
