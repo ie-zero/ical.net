@@ -165,18 +165,6 @@ namespace Ical.Net.CalendarComponents
 
         protected virtual bool EvaluationIncludesReferenceDate => false;
 
-        // TODO: SortByDate() - Possibly obsolete method.
-        public static IEnumerable<IRecurringComponent> SortByDate(IEnumerable<IRecurringComponent> list)
-        {
-            return SortByDate<IRecurringComponent>(list);
-        }
-
-        // TODO: SortByDate() - Possibly obsolete method.
-        public static IEnumerable<TRecurringComponent> SortByDate<TRecurringComponent>(IEnumerable<TRecurringComponent> list)
-        {
-            return list.OrderBy(d => d);
-        }
-
         public virtual void ClearEvaluation()
         {
             RecurrenceUtil.ClearEvaluation(this);
