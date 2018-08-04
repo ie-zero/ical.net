@@ -17,12 +17,6 @@ namespace Ical.Net
             Name = name;
         }
 
-        public CalendarObject(int line, int col) : this()
-        {
-            Line = line;
-            Column = col;
-        }
-
         internal CalendarObject()
         {
             Initialize();

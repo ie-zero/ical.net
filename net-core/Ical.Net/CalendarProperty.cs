@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -36,8 +37,6 @@ namespace Ical.Net
         {
             _values.Add(value);
         }
-
-        public CalendarProperty(int line, int col) : base(line, col) { }
 
         /// <summary>
         /// Returns a list of parameters that are associated with the iCalendar object.
