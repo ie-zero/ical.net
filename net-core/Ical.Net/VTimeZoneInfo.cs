@@ -14,10 +14,11 @@ namespace Ical.Net
 
         public VTimeZoneInfo()
         {
-            // FIXME: how do we ensure SEQUENCE doesn't get serialized?
-            //base.Sequence = null;
-            // iCalTimeZoneInfo does not allow sequence numbers
-            // Perhaps we should have a custom serializer that fixes this?
+            // TODO: How do we ensure SEQUENCE doesn't get serialized?
+            //      base.Sequence = null;
+            //
+            //      iCalTimeZoneInfo does not allow sequence numbers Perhaps we should have a 
+            //      custom serializer that fixes this?
 
             Initialize();
         }
@@ -51,12 +52,16 @@ namespace Ical.Net
             return base.Equals(obj);
         }
 
+        // TODO: VTimeZoneInfo class overrides Equals() but it does not override GetHashCode().
+
         public virtual string TzId
         {
-            get =>
-                !(Parent is VTimeZone tz)
-                    ? null
-                    : tz.TzId;
+            get
+            {
+                return !(Parent is VTimeZone tz)
+                   ? null
+                   : tz.TzId;
+            }
         }
 
         /// <summary>
@@ -73,9 +78,13 @@ namespace Ical.Net
         /// </summary>
         public virtual string TimeZoneName
         {
-            get => TimeZoneNames.Count > 0
-                ? TimeZoneNames[0]
-                : null;
+            get
+            {
+                return TimeZoneNames.Count > 0
+                   ? TimeZoneNames[0]
+                   : null;
+            }
+
             set
             {
                 TimeZoneNames.Clear();
@@ -161,15 +170,23 @@ namespace Ical.Net
         }
 
         public virtual HashSet<Occurrence> GetOccurrences(IDateTime dt)
-            => RecurrenceUtil.GetOccurrences(this, dt, true);
+        {
+            return RecurrenceUtil.GetOccurrences(this, dt, true);
+        }
 
         public virtual HashSet<Occurrence> GetOccurrences(DateTime dt)
-            => RecurrenceUtil.GetOccurrences(this, new CalDateTime(dt), true);
+        {
+            return RecurrenceUtil.GetOccurrences(this, new CalDateTime(dt), true);
+        }
 
         public virtual HashSet<Occurrence> GetOccurrences(IDateTime startTime, IDateTime endTime)
-            => RecurrenceUtil.GetOccurrences(this, startTime, endTime, true);
+        {
+            return RecurrenceUtil.GetOccurrences(this, startTime, endTime, true);
+        }
 
         public virtual HashSet<Occurrence> GetOccurrences(DateTime startTime, DateTime endTime)
-            => RecurrenceUtil.GetOccurrences(this, new CalDateTime(startTime), new CalDateTime(endTime), true);
+        {
+            return RecurrenceUtil.GetOccurrences(this, new CalDateTime(startTime), new CalDateTime(endTime), true);
+        }
     }
 }
