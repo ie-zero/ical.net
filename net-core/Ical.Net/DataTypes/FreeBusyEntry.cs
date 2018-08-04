@@ -2,8 +2,6 @@
 {
     public class FreeBusyEntry : Period
     {
-        public virtual FreeBusyStatus Status { get; set; }
-
         public FreeBusyEntry()
         {
             Status = FreeBusyStatus.Busy;
@@ -16,6 +14,8 @@
             CopyFrom(period);
             Status = status;
         }
+
+        public virtual FreeBusyStatus Status { get; set; }
 
         public override void CopyFrom(ICopyable obj)
         {

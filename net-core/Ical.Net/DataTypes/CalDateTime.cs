@@ -6,6 +6,8 @@ using NodaTime;
 
 namespace Ical.Net.DataTypes
 {
+    // TODO: CalDateTime class is presented as a value object but it is not as it inherits from a non-value object.  
+
     /// <summary>
     /// The iCalendar equivalent of the .NET <see cref="DateTime"/> class.
     /// <remarks>
@@ -15,12 +17,11 @@ namespace Ical.Net.DataTypes
     /// </summary>
     public sealed class CalDateTime : EncodableDataType, IDateTime
     {
-        public static CalDateTime Now => new CalDateTime(DateTime.Now);
-
-        public static CalDateTime Today => new CalDateTime(DateTime.Today);
-
+        private DateTime _asUtc = DateTime.MinValue;
         private bool _hasDate;
         private bool _hasTime;
+        private string _tzId = string.Empty;
+        private DateTime _value;
 
         public CalDateTime() { }
 
@@ -60,6 +61,7 @@ namespace Ical.Net.DataTypes
         }
 
         public CalDateTime(int year, int month, int day) : this(year, month, day, 0, 0, 0) { }
+
         public CalDateTime(int year, int month, int day, string tzId) : this(year, month, day, 0, 0, 0, tzId) { }
 
         public CalDateTime(string value)
@@ -68,56 +70,18 @@ namespace Ical.Net.DataTypes
             CopyFrom(serializer.Deserialize(new StringReader(value)) as ICopyable);
         }
 
-        private void Initialize(int year, int month, int day, int hour, int minute, int second, string tzId, Calendar cal)
-        {
-            Initialize(CoerceDateTime(year, month, day, hour, minute, second, DateTimeKind.Local), tzId, cal);
-        }
+        public static CalDateTime Now => new CalDateTime(DateTime.Now);
 
-        private void Initialize(DateTime value, string tzId, Calendar cal)
-        {
-            if (!string.IsNullOrWhiteSpace(tzId) && !tzId.Equals("UTC", StringComparison.OrdinalIgnoreCase))
-            {
-                // Definitely local
-                value = DateTime.SpecifyKind(value, DateTimeKind.Local);
-                TzId = tzId;
-            }
-            else if (string.Equals("UTC", tzId, StringComparison.OrdinalIgnoreCase) || value.Kind == DateTimeKind.Utc)
-            {
-                // Probably UTC
-                value = DateTime.SpecifyKind(value, DateTimeKind.Utc);
-                TzId = "UTC";
-            }
+        public static CalDateTime Today => new CalDateTime(DateTime.Today);
 
-            Value = new DateTime(value.Year, value.Month, value.Day, value.Hour, value.Minute, value.Second, value.Kind);
-            HasDate = true;
-            HasTime = value.Second != 0 || value.Minute != 0 || value.Hour != 0;
-            AssociatedObject = cal;
-        }
-
-        private DateTime CoerceDateTime(int year, int month, int day, int hour, int minute, int second, DateTimeKind kind)
-        {
-            var dt = DateTime.MinValue;
-
-            // NOTE: determine if a date/time value exceeds the representable date/time values in .NET.
-            // If so, let's automatically adjust the date/time to compensate.
-            // FIXME: should we have a parsing setting that will throw an exception
-            // instead of automatically adjusting the date/time value to the
-            // closest representable date/time?
-            try
-            {
-                if (year > 9999)
-                {
-                    dt = DateTime.MaxValue;
-                }
-                else if (year > 0)
-                {
-                    dt = new DateTime(year, month, day, hour, minute, second, kind);
-                }
-            }
-            catch { }
-
-            return dt;
-        }
+        /// <summary>
+        /// Returns a DateTimeOffset representation of the Value. If a TzId is specified, it will use that time zone's UTC offset, otherwise it will use the
+        /// system-local time zone.
+        /// </summary>
+        public DateTimeOffset AsDateTimeOffset =>
+            string.IsNullOrWhiteSpace(TzId)
+                ? new DateTimeOffset(AsSystemLocal)
+                : DateUtil.ToZonedDateTimeLeniently(Value, TzId).ToDateTimeOffset();
 
         public override ICalendarObject AssociatedObject
         {
@@ -130,89 +94,6 @@ namespace Ical.Net.DataTypes
                 }
             }
         }
-
-        public override void CopyFrom(ICopyable obj)
-        {
-            base.CopyFrom(obj);
-
-            var dt = obj as IDateTime;
-            if (dt == null)
-            {
-                return;
-            }
-
-            _value = dt.Value;
-            _hasDate = dt.HasDate;
-            _hasTime = dt.HasTime;
-
-            AssociateWith(dt);
-        }
-
-        public bool Equals(CalDateTime other)
-            => this == other;
-
-        public override bool Equals(object other)
-            => other is IDateTime && (CalDateTime) other == this;
-
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                var hashCode = Value.GetHashCode();
-                hashCode = (hashCode * 397) ^ HasDate.GetHashCode();
-                hashCode = (hashCode * 397) ^ AsUtc.GetHashCode();
-                hashCode = (hashCode * 397) ^ (TzId != null ? TzId.GetHashCode() : 0);
-                return hashCode;
-            }
-        }
-
-        public static bool operator <(CalDateTime left, IDateTime right)
-            => left != null && right != null && left.AsUtc < right.AsUtc;
-
-        public static bool operator >(CalDateTime left, IDateTime right)
-            => left != null && right != null && left.AsUtc > right.AsUtc;
-
-        public static bool operator <=(CalDateTime left, IDateTime right)
-            => left != null && right != null && left.AsUtc <= right.AsUtc;
-
-        public static bool operator >=(CalDateTime left, IDateTime right)
-            => left != null && right != null && left.AsUtc >= right.AsUtc;
-
-        public static bool operator ==(CalDateTime left, IDateTime right)
-        {
-            return ReferenceEquals(left, null) || ReferenceEquals(right, null)
-                ? ReferenceEquals(left, right)
-                : right is CalDateTime
-                    && left.Value.Equals(right.Value)
-                    && left.HasDate == right.HasDate
-                    && left.AsUtc.Equals(right.AsUtc)
-                    && string.Equals(left.TzId, right.TzId, StringComparison.OrdinalIgnoreCase);
-        }
-
-        public static bool operator !=(CalDateTime left, IDateTime right)
-            => !(left == right);
-
-        public static TimeSpan operator -(CalDateTime left, IDateTime right)
-        {
-            left.AssociateWith(right);
-            return left.AsUtc - right.AsUtc;
-        }
-
-        public static IDateTime operator -(CalDateTime left, TimeSpan right)
-        {
-            var copy = left.Copy<IDateTime>();
-            copy.Value -= right;
-            return copy;
-        }
-
-        public static IDateTime operator +(CalDateTime left, TimeSpan right)
-        {
-            var copy = left.Copy<IDateTime>();
-            copy.Value += right;
-            return copy;
-        }
-
-        public static implicit operator CalDateTime(DateTime left) => new CalDateTime(left);
 
         /// <summary>
         /// Converts the date/time to the date/time of the computer running the program. If the DateTimeKind is Unspecified, it's assumed that the underlying
@@ -235,7 +116,6 @@ namespace Ical.Net.DataTypes
             }
         }
 
-        private DateTime _asUtc = DateTime.MinValue;
         /// <summary>
         /// Returns a representation of the DateTime in Coordinated Universal Time (UTC)
         /// </summary>
@@ -255,7 +135,7 @@ namespace Ical.Net.DataTypes
                         var asLocal = DateUtil.ToZonedDateTimeLeniently(Value, TzId);
                         _asUtc = asLocal.ToDateTimeUtc();
                     }
-                    else if(IsUtc || Value.Kind == DateTimeKind.Utc)
+                    else if (IsUtc || Value.Kind == DateTimeKind.Utc)
                     {
                         _asUtc = DateTime.SpecifyKind(Value, DateTimeKind.Utc);
                     }
@@ -268,23 +148,13 @@ namespace Ical.Net.DataTypes
             }
         }
 
-        private DateTime _value;
-        public DateTime Value
-        {
-            get => _value;
-            set
-            {
-                if (_value == value && _value.Kind == value.Kind)
-                {
-                    return;
-                }
+        public DateTime Date => Value.Date;
 
-                _asUtc = DateTime.MinValue;
-                _value = value;
-            }
-        }
+        public int Day => Value.Day;
 
-        public bool IsUtc => _value.Kind == DateTimeKind.Utc;
+        public DayOfWeek DayOfWeek => Value.DayOfWeek;
+
+        public int DayOfYear => Value.DayOfYear;
 
         public bool HasDate
         {
@@ -298,7 +168,26 @@ namespace Ical.Net.DataTypes
             set => _hasTime = value;
         }
 
-        private string _tzId = string.Empty;
+        public int Hour => Value.Hour;
+
+        public bool IsUtc
+        {
+            get { return _value.Kind == DateTimeKind.Utc; }
+        }
+
+        public int Millisecond => Value.Millisecond;
+
+        public int Minute => Value.Minute;
+
+        public int Month => Value.Month;
+
+        public int Second => Value.Second;
+
+        public long Ticks => Value.Ticks;
+
+        public TimeSpan TimeOfDay => Value.TimeOfDay;
+
+        public string TimeZoneName => TzId;
 
         /// <summary>
         /// Setting the TzId to a local time zone will set Value.Kind to Local. Setting TzId to UTC will set Value.Kind to Utc. If the incoming value is null
@@ -343,83 +232,75 @@ namespace Ical.Net.DataTypes
             }
         }
 
-        public string TimeZoneName => TzId;
+        public DateTime Value
+        {
+            get => _value;
+            set
+            {
+                if (_value == value && _value.Kind == value.Kind)
+                {
+                    return;
+                }
+
+                _asUtc = DateTime.MinValue;
+                _value = value;
+            }
+        }
 
         public int Year => Value.Year;
 
-        public int Month => Value.Month;
-
-        public int Day => Value.Day;
-
-        public int Hour => Value.Hour;
-
-        public int Minute => Value.Minute;
-
-        public int Second => Value.Second;
-
-        public int Millisecond => Value.Millisecond;
-
-        public long Ticks => Value.Ticks;
-
-        public DayOfWeek DayOfWeek => Value.DayOfWeek;
-
-        public int DayOfYear => Value.DayOfYear;
-
-        public DateTime Date => Value.Date;
-
-        public TimeSpan TimeOfDay => Value.TimeOfDay;
-
-        /// <summary>
-        /// Returns a representation of the IDateTime in the specified time zone
-        /// </summary>
-        public IDateTime ToTimeZone(string tzId)
+        public static implicit operator CalDateTime(DateTime left)
         {
-            if (string.IsNullOrWhiteSpace(tzId))
-            {
-                throw new ArgumentException("You must provide a valid time zone id", nameof(tzId));
-            }
-
-            // If TzId is empty, it's a system-local datetime, so we should use the system time zone as the starting point.
-            var originalTzId = string.IsNullOrWhiteSpace(TzId)
-                ? TimeZoneInfo.Local.Id
-                : TzId;
-
-            var zonedOriginal = DateUtil.ToZonedDateTimeLeniently(Value, originalTzId);
-            var converted = zonedOriginal.WithZone(DateUtil.GetZone(tzId));
-
-            return converted.Zone == DateTimeZone.Utc
-                ? new CalDateTime(converted.ToDateTimeUtc(), tzId)
-                : new CalDateTime(DateTime.SpecifyKind(converted.ToDateTimeUnspecified(), DateTimeKind.Local), tzId);
+            return new CalDateTime(left);
         }
 
-        /// <summary>
-        /// Returns a DateTimeOffset representation of the Value. If a TzId is specified, it will use that time zone's UTC offset, otherwise it will use the
-        /// system-local time zone.
-        /// </summary>
-        public DateTimeOffset AsDateTimeOffset =>
-            string.IsNullOrWhiteSpace(TzId)
-                ? new DateTimeOffset(AsSystemLocal)
-                : DateUtil.ToZonedDateTimeLeniently(Value, TzId).ToDateTimeOffset();
+        public static TimeSpan operator -(CalDateTime left, IDateTime right)
+        {
+            left.AssociateWith(right);
+            return left.AsUtc - right.AsUtc;
+        }
+
+        public static IDateTime operator -(CalDateTime left, TimeSpan right)
+        {
+            var copy = left.Copy<IDateTime>();
+            copy.Value -= right;
+            return copy;
+        }
+
+        public static bool operator !=(CalDateTime left, IDateTime right)
+            => !(left == right);
+
+        public static IDateTime operator +(CalDateTime left, TimeSpan right)
+        {
+            var copy = left.Copy<IDateTime>();
+            copy.Value += right;
+            return copy;
+        }
+
+        public static bool operator <(CalDateTime left, IDateTime right)
+            => left != null && right != null && left.AsUtc < right.AsUtc;
+
+        public static bool operator <=(CalDateTime left, IDateTime right)
+            => left != null && right != null && left.AsUtc <= right.AsUtc;
+
+        public static bool operator ==(CalDateTime left, IDateTime right)
+        {
+            return ReferenceEquals(left, null) || ReferenceEquals(right, null)
+                ? ReferenceEquals(left, right)
+                : right is CalDateTime
+                    && left.Value.Equals(right.Value)
+                    && left.HasDate == right.HasDate
+                    && left.AsUtc.Equals(right.AsUtc)
+                    && string.Equals(left.TzId, right.TzId, StringComparison.OrdinalIgnoreCase);
+        }
+
+        public static bool operator >(CalDateTime left, IDateTime right)
+            => left != null && right != null && left.AsUtc > right.AsUtc;
+
+        public static bool operator >=(CalDateTime left, IDateTime right)
+            => left != null && right != null && left.AsUtc >= right.AsUtc;
 
         public IDateTime Add(TimeSpan ts) => this + ts;
-
-        public IDateTime Subtract(TimeSpan ts) => this - ts;
-
-        public TimeSpan Subtract(IDateTime dt) => this - dt;
-
-        public IDateTime AddYears(int years)
-        {
-            var dt = Copy<IDateTime>();
-            dt.Value = Value.AddYears(years);
-            return dt;
-        }
-
-        public IDateTime AddMonths(int months)
-        {
-            var dt = Copy<IDateTime>();
-            dt.Value = Value.AddMonths(months);
-            return dt;
-        }
 
         public IDateTime AddDays(int days)
         {
@@ -439,6 +320,17 @@ namespace Ical.Net.DataTypes
             return dt;
         }
 
+        public IDateTime AddMilliseconds(int milliseconds)
+        {
+            var dt = Copy<IDateTime>();
+            if (!dt.HasTime && milliseconds % 86400000 > 0)
+            {
+                dt.HasTime = true;
+            }
+            dt.Value = Value.AddMilliseconds(milliseconds);
+            return dt;
+        }
+
         public IDateTime AddMinutes(int minutes)
         {
             var dt = Copy<IDateTime>();
@@ -447,6 +339,13 @@ namespace Ical.Net.DataTypes
                 dt.HasTime = true;
             }
             dt.Value = Value.AddMinutes(minutes);
+            return dt;
+        }
+
+        public IDateTime AddMonths(int months)
+        {
+            var dt = Copy<IDateTime>();
+            dt.Value = Value.AddMonths(months);
             return dt;
         }
 
@@ -461,17 +360,6 @@ namespace Ical.Net.DataTypes
             return dt;
         }
 
-        public IDateTime AddMilliseconds(int milliseconds)
-        {
-            var dt = Copy<IDateTime>();
-            if (!dt.HasTime && milliseconds % 86400000 > 0)
-            {
-                dt.HasTime = true;
-            }
-            dt.Value = Value.AddMilliseconds(milliseconds);
-            return dt;
-        }
-
         public IDateTime AddTicks(long ticks)
         {
             var dt = Copy<IDateTime>();
@@ -480,13 +368,12 @@ namespace Ical.Net.DataTypes
             return dt;
         }
 
-        public bool LessThan(IDateTime dt) => this < dt;
-
-        public bool GreaterThan(IDateTime dt) => this > dt;
-
-        public bool LessThanOrEqual(IDateTime dt) => this <= dt;
-
-        public bool GreaterThanOrEqual(IDateTime dt) => this >= dt;
+        public IDateTime AddYears(int years)
+        {
+            var dt = Copy<IDateTime>();
+            dt.Value = Value.AddYears(years);
+            return dt;
+        }
 
         public void AssociateWith(IDateTime dt)
         {
@@ -517,9 +404,84 @@ namespace Ical.Net.DataTypes
             throw new Exception("An error occurred while comparing two IDateTime values.");
         }
 
-        public override string ToString() => ToString(null, null);
+        public override void CopyFrom(ICopyable obj)
+        {
+            base.CopyFrom(obj);
 
-        public string ToString(string format) => ToString(format, null);
+            var dt = obj as IDateTime;
+            if (dt == null)
+            {
+                return;
+            }
+
+            _value = dt.Value;
+            _hasDate = dt.HasDate;
+            _hasTime = dt.HasTime;
+
+            AssociateWith(dt);
+        }
+
+        public bool Equals(CalDateTime other)
+        {
+            return this == other;
+        }
+
+        public override bool Equals(object other)
+        {
+            return other is IDateTime && (CalDateTime)other == this;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hashCode = Value.GetHashCode();
+                hashCode = (hashCode * 397) ^ HasDate.GetHashCode();
+                hashCode = (hashCode * 397) ^ AsUtc.GetHashCode();
+                hashCode = (hashCode * 397) ^ (TzId != null ? TzId.GetHashCode() : 0);
+                return hashCode;
+            }
+        }
+
+        public bool GreaterThan(IDateTime dt)
+        {
+            return this > dt;
+        }
+
+        public bool GreaterThanOrEqual(IDateTime dt)
+        {
+            return this >= dt;
+        }
+
+        public bool LessThan(IDateTime dt)
+        {
+            return this < dt;
+        }
+
+        public bool LessThanOrEqual(IDateTime dt)
+        {
+            return this <= dt;
+        }
+
+        public IDateTime Subtract(TimeSpan ts)
+        {
+            return this - ts;
+        }
+
+        public TimeSpan Subtract(IDateTime dt)
+        {
+            return this - dt;
+        }
+
+        public override string ToString()
+        {
+            return ToString(null, null);
+        }
+
+        public string ToString(string format)
+        {
+            return ToString(format, null);
+        }
 
         public string ToString(string format, IFormatProvider formatProvider)
         {
@@ -542,6 +504,80 @@ namespace Ical.Net.DataTypes
                 return Value.TimeOfDay + tz;
             }
             return Value.ToString("d") + tz;
+        }
+
+        /// <summary>
+        /// Returns a representation of the IDateTime in the specified time zone
+        /// </summary>
+        public IDateTime ToTimeZone(string tzId)
+        {
+            if (string.IsNullOrWhiteSpace(tzId))
+            {
+                throw new ArgumentException("You must provide a valid time zone id", nameof(tzId));
+            }
+
+            // If TzId is empty, it's a system-local datetime, so we should use the system time zone as the starting point.
+            var originalTzId = string.IsNullOrWhiteSpace(TzId)
+                ? TimeZoneInfo.Local.Id
+                : TzId;
+
+            var zonedOriginal = DateUtil.ToZonedDateTimeLeniently(Value, originalTzId);
+            var converted = zonedOriginal.WithZone(DateUtil.GetZone(tzId));
+
+            return converted.Zone == DateTimeZone.Utc
+                ? new CalDateTime(converted.ToDateTimeUtc(), tzId)
+                : new CalDateTime(DateTime.SpecifyKind(converted.ToDateTimeUnspecified(), DateTimeKind.Local), tzId);
+        }
+
+        private DateTime CoerceDateTime(int year, int month, int day, int hour, int minute, int second, DateTimeKind kind)
+        {
+            var dt = DateTime.MinValue;
+
+            // NOTE: determine if a date/time value exceeds the representable date/time values in .NET.
+            // If so, let's automatically adjust the date/time to compensate.
+            // FIXME: should we have a parsing setting that will throw an exception
+            // instead of automatically adjusting the date/time value to the
+            // closest representable date/time?
+            try
+            {
+                if (year > 9999)
+                {
+                    dt = DateTime.MaxValue;
+                }
+                else if (year > 0)
+                {
+                    dt = new DateTime(year, month, day, hour, minute, second, kind);
+                }
+            }
+            catch { }
+
+            return dt;
+        }
+
+        private void Initialize(int year, int month, int day, int hour, int minute, int second, string tzId, Calendar cal)
+        {
+            Initialize(CoerceDateTime(year, month, day, hour, minute, second, DateTimeKind.Local), tzId, cal);
+        }
+
+        private void Initialize(DateTime value, string tzId, Calendar cal)
+        {
+            if (!string.IsNullOrWhiteSpace(tzId) && !tzId.Equals("UTC", StringComparison.OrdinalIgnoreCase))
+            {
+                // Definitely local
+                value = DateTime.SpecifyKind(value, DateTimeKind.Local);
+                TzId = tzId;
+            }
+            else if (string.Equals("UTC", tzId, StringComparison.OrdinalIgnoreCase) || value.Kind == DateTimeKind.Utc)
+            {
+                // Probably UTC
+                value = DateTime.SpecifyKind(value, DateTimeKind.Utc);
+                TzId = "UTC";
+            }
+
+            Value = new DateTime(value.Year, value.Month, value.Day, value.Hour, value.Minute, value.Second, value.Kind);
+            HasDate = true;
+            HasTime = value.Second != 0 || value.Minute != 0 || value.Hour != 0;
+            AssociatedObject = cal;
         }
     }
 }

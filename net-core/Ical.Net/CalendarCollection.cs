@@ -11,24 +11,28 @@ using Ical.Net.Utility;
 namespace Ical.Net
 {
     /// <summary>
-    /// A list of iCalendars.
+    /// Collection of iCalendars.
     /// </summary>
     public class CalendarCollection : List<Calendar>
     {
-        public static CalendarCollection Load(string iCalendarString)
-            => Load(new StringReader(iCalendarString));
+        public static CalendarCollection Load(string calendarString)
+        {
+            return Load(new StringReader(calendarString));
+        }
 
         /// <summary>
         /// Loads an <see cref="Calendar"/> from an open stream.
         /// </summary>
-        /// <param name="s">The stream from which to load the <see cref="Calendar"/> object</param>
+        /// <param name="stream">The stream from which to load the <see cref="Calendar"/> object</param>
         /// <returns>An <see cref="Calendar"/> object</returns>
-        public static CalendarCollection Load(Stream s)
-            => Load(new StreamReader(s, Encoding.UTF8));
-
-        public static CalendarCollection Load(TextReader tr)
+        public static CalendarCollection Load(Stream stream)
         {
-            var calendars = SimpleDeserializer.Default.Deserialize(tr).OfType<Calendar>();
+            return Load(new StreamReader(stream, Encoding.UTF8));
+        }
+
+        public static CalendarCollection Load(TextReader reader)
+        {
+            var calendars = SimpleDeserializer.Default.Deserialize(reader).OfType<Calendar>();
             var collection = new CalendarCollection();
             collection.AddRange(calendars);
             return collection;
@@ -36,96 +40,10 @@ namespace Ical.Net
 
         public void ClearEvaluation()
         {
-            foreach (var iCal in this)
+            foreach (var calendar in this)
             {
-                iCal.ClearEvaluation();
+                calendar.ClearEvaluation();
             }
-        }
-
-        public HashSet<Occurrence> GetOccurrences(IDateTime dt)
-        {
-            var occurrences = new HashSet<Occurrence>();
-            foreach (var iCal in this)
-            {
-                occurrences.UnionWith(iCal.GetOccurrences(dt));
-            }
-            return occurrences;
-        }
-
-        public HashSet<Occurrence> GetOccurrences(DateTime dt)
-        {
-            var occurrences = new HashSet<Occurrence>();
-            foreach (var iCal in this)
-            {
-                occurrences.UnionWith(iCal.GetOccurrences(dt));
-            }
-            return occurrences;
-        }
-
-        public HashSet<Occurrence> GetOccurrences(IDateTime startTime, IDateTime endTime)
-        {
-            var occurrences = new HashSet<Occurrence>();
-            foreach (var iCal in this)
-            {
-                occurrences.UnionWith(iCal.GetOccurrences(startTime, endTime));
-            }
-            return occurrences;
-        }
-
-        public HashSet<Occurrence> GetOccurrences(DateTime startTime, DateTime endTime)
-        {
-            var occurrences = new HashSet<Occurrence>();
-            foreach (var iCal in this)
-            {
-                occurrences.UnionWith(iCal.GetOccurrences(startTime, endTime));
-            }
-            return occurrences;
-        }
-
-        public HashSet<Occurrence> GetOccurrences<T>(IDateTime dt) where T : IRecurringComponent
-        {
-            var occurrences = new HashSet<Occurrence>();
-            foreach (var iCal in this)
-            {
-                occurrences.UnionWith(iCal.GetOccurrences<T>(dt));
-            }
-            return occurrences;
-        }
-
-        public HashSet<Occurrence> GetOccurrences<T>(DateTime dt) where T : IRecurringComponent
-        {
-            var occurrences = new HashSet<Occurrence>();
-            foreach (var iCal in this)
-            {
-                occurrences.UnionWith(iCal.GetOccurrences<T>(dt));
-            }
-            return occurrences;
-        }
-
-        public HashSet<Occurrence> GetOccurrences<T>(IDateTime startTime, IDateTime endTime) where T : IRecurringComponent
-        {
-            var occurrences = new HashSet<Occurrence>();
-            foreach (var iCal in this)
-            {
-                occurrences.UnionWith(iCal.GetOccurrences<T>(startTime, endTime));
-            }
-            return occurrences;
-        }
-
-        public HashSet<Occurrence> GetOccurrences<T>(DateTime startTime, DateTime endTime) where T : IRecurringComponent
-        {
-            var occurrences = new HashSet<Occurrence>();
-            foreach (var iCal in this)
-            {
-                occurrences.UnionWith(iCal.GetOccurrences<T>(startTime, endTime));
-            }
-            return occurrences;
-        }
-
-        private FreeBusy CombineFreeBusy(FreeBusy main, FreeBusy current)
-        {
-            main?.MergeWith(current);
-            return current;
         }
 
         public FreeBusy GetFreeBusy(FreeBusy freeBusyRequest)
@@ -143,9 +61,11 @@ namespace Ical.Net
             return this.Aggregate<Calendar, FreeBusy>(null, (current, iCal) => CombineFreeBusy(current, iCal.GetFreeBusy(organizer, contacts, fromInclusive, toExclusive)));
         }
 
-        public override int GetHashCode() => CollectionHelpers.GetHashCode(this);
-
-        protected bool Equals(CalendarCollection obj) => CollectionHelpers.Equals(this, obj);
+        private FreeBusy CombineFreeBusy(FreeBusy main, FreeBusy current)
+        {
+            main?.MergeWith(current);
+            return current;
+        }
 
         public override bool Equals(object obj)
         {
@@ -153,5 +73,97 @@ namespace Ical.Net
             if (ReferenceEquals(this, obj)) return true;
             return obj.GetType() == GetType() && Equals((CalendarEvent)obj);
         }
+
+        protected bool Equals(CalendarCollection obj)
+        {
+            return CollectionHelpers.Equals(this, obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return CollectionHelpers.GetHashCode(this);
+        }
+
+        public HashSet<Occurrence> GetOccurrences(IDateTime dt)
+        {
+            var occurrences = new HashSet<Occurrence>();
+            foreach (var occurrence in this)
+            {
+                occurrences.UnionWith(occurrence.GetOccurrences(dt));
+            }
+            return occurrences;
+        }
+
+        public HashSet<Occurrence> GetOccurrences(DateTime dt)
+        {
+            var occurrences = new HashSet<Occurrence>();
+            foreach (var occurrence in this)
+            {
+                occurrences.UnionWith(occurrence.GetOccurrences(dt));
+            }
+            return occurrences;
+        }
+
+        public HashSet<Occurrence> GetOccurrences(IDateTime startTime, IDateTime endTime)
+        {
+            var occurrences = new HashSet<Occurrence>();
+            foreach (var occurrence in this)
+            {
+                occurrences.UnionWith(occurrence.GetOccurrences(startTime, endTime));
+            }
+            return occurrences;
+        }
+
+        public HashSet<Occurrence> GetOccurrences(DateTime startTime, DateTime endTime)
+        {
+            var occurrences = new HashSet<Occurrence>();
+            foreach (var occurrence in this)
+            {
+                occurrences.UnionWith(occurrence.GetOccurrences(startTime, endTime));
+            }
+            return occurrences;
+        }
+
+        public HashSet<Occurrence> GetOccurrences<T>(IDateTime dt) where T : IRecurringComponent
+        {
+            var occurrences = new HashSet<Occurrence>();
+            foreach (var occurrence in this)
+            {
+                occurrences.UnionWith(occurrence.GetOccurrences<T>(dt));
+            }
+            return occurrences;
+        }
+
+        public HashSet<Occurrence> GetOccurrences<T>(DateTime dt) where T : IRecurringComponent
+        {
+            var occurrences = new HashSet<Occurrence>();
+            foreach (var occurrence in this)
+            {
+                occurrences.UnionWith(occurrence.GetOccurrences<T>(dt));
+            }
+            return occurrences;
+        }
+
+        public HashSet<Occurrence> GetOccurrences<T>(IDateTime startTime, IDateTime endTime) where T : IRecurringComponent
+        {
+            var occurrences = new HashSet<Occurrence>();
+            foreach (var occurrence in this)
+            {
+                occurrences.UnionWith(occurrence.GetOccurrences<T>(startTime, endTime));
+            }
+            return occurrences;
+        }
+
+        public HashSet<Occurrence> GetOccurrences<T>(DateTime startTime, DateTime endTime) where T : IRecurringComponent
+        {
+            var occurrences = new HashSet<Occurrence>();
+            foreach (var occurrence in this)
+            {
+                occurrences.UnionWith(occurrence.GetOccurrences<T>(startTime, endTime));
+            }
+            return occurrences;
+        }
+
+
     }
 }

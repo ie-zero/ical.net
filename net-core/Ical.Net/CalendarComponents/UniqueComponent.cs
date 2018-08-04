@@ -7,15 +7,15 @@ using Ical.Net.Utility;
 namespace Ical.Net.CalendarComponents
 {
     /// <summary>
-    /// Represents a unique component, a component with a unique UID,
-    /// which can be used to uniquely identify the component.    
+    /// Represents a unique component, a component with a unique UID, which can be used to uniquely
+    /// identify the component.
     /// </summary>
     public class UniqueComponent : CalendarComponent, IUniqueComponent, IComparable<UniqueComponent>
     {
         // TODO: Add AddRelationship() public method.
-        // This method will add the UID of a related component
-        // to the Related_To property, along with any "RELTYPE"
-        // parameter ("PARENT", "CHILD", "SIBLING", or other)
+        //      This method will add the UID of a related component to the Related_To property, 
+        //      along with any "RELTYPE" parameter ("PARENT", "CHILD", "SIBLING", or other)
+
         // TODO: Add RemoveRelationship() public method.        
 
         public UniqueComponent()
@@ -26,24 +26,6 @@ namespace Ical.Net.CalendarComponents
         public UniqueComponent(string name) : base(name)
         {
             EnsureProperties();
-        }
-
-        private void EnsureProperties()
-        {
-            if (string.IsNullOrEmpty(Uid))
-            {
-                // Create a new UID for the component
-                Uid = Guid.NewGuid().ToString();
-            }
-
-            // NOTE: removed setting the 'CREATED' property here since it breaks serialization.
-            // See https://sourceforge.net/projects/dday-ical/forums/forum/656447/topic/3754354
-            if (DtStamp == null)
-            {
-                // icalendar RFC doesn't care about sub-second time resolution, so shave off everything smaller than seconds.
-                var utcNow = DateTime.UtcNow.Truncate(TimeSpan.FromSeconds(1));
-                DtStamp = new CalDateTime(utcNow, "UTC");
-            }
         }
 
         public virtual IList<Attendee> Attendees
@@ -76,27 +58,28 @@ namespace Ical.Net.CalendarComponents
             set => Properties.Set("REQUEST-STATUS", value);
         }
 
+        public virtual string Uid
+        {
+            get => Properties.Get<string>("UID");
+            set => Properties.Set("UID", value);
+        }
+
         public virtual Uri Url
         {
             get => Properties.Get<Uri>("URL");
             set => Properties.Set("URL", value);
         }
 
-        protected override void OnDeserialized(StreamingContext context)
-        {
-            base.OnDeserialized(context);
-
-            EnsureProperties();
-        }
-
         public int CompareTo(UniqueComponent other)
-            => string.Compare(Uid, other.Uid, StringComparison.OrdinalIgnoreCase);
+        {
+            return string.Compare(Uid, other.Uid, StringComparison.OrdinalIgnoreCase);
+        }
 
         public override bool Equals(object obj)
         {
             if (obj is RecurringComponent && obj != this)
             {
-                var r = (RecurringComponent) obj;
+                var r = (RecurringComponent)obj;
                 if (Uid != null)
                 {
                     return Uid.Equals(r.Uid);
@@ -106,12 +89,36 @@ namespace Ical.Net.CalendarComponents
             return base.Equals(obj);
         }
 
-        public override int GetHashCode() => Uid?.GetHashCode() ?? base.GetHashCode();
-
-        public virtual string Uid
+        public override int GetHashCode()
         {
-            get => Properties.Get<string>("UID");
-            set => Properties.Set("UID", value);
+            return Uid?.GetHashCode() ?? base.GetHashCode();
+        }
+
+        protected override void OnDeserialized(StreamingContext context)
+        {
+            base.OnDeserialized(context);
+
+            EnsureProperties();
+        }
+
+        private void EnsureProperties()
+        {
+            if (string.IsNullOrEmpty(Uid))
+            {
+                // Create a new UID for the component
+                Uid = Guid.NewGuid().ToString();
+            }
+
+            // NOTE: removed setting the 'CREATED' property here since it breaks serialization.
+            // See https://sourceforge.net/projects/dday-ical/forums/forum/656447/topic/3754354
+            if (DtStamp == null)
+            {
+                // TODO: Hard-coded DateTime component.
+
+                // iCalendar RFC doesn't care about sub-second time resolution, so shave off everything smaller than seconds.
+                var utcNow = DateTime.UtcNow.Truncate(TimeSpan.FromSeconds(1));
+                DtStamp = new CalDateTime(utcNow, "UTC");
+            }
         }
     }
 }

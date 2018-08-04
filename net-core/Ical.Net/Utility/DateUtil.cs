@@ -10,51 +10,18 @@ namespace Ical.Net.Utility
 {
     internal static class DateUtil
     {
-        public static IDateTime StartOfDay(IDateTime dt)
-            => dt.AddHours(-dt.Hour).AddMinutes(-dt.Minute).AddSeconds(-dt.Second);
+        public static readonly DateTimeZone LocalDateTimeZone = DateTimeZoneProviders.Tzdb.GetSystemDefault();
 
-        public static IDateTime EndOfDay(IDateTime dt)
-            => StartOfDay(dt).AddDays(1).AddTicks(-1);
+        private static readonly Lazy<Dictionary<string, string>> _windowsMapping
+                = new Lazy<Dictionary<string, string>>(InitializeWindowsMappings, LazyThreadSafetyMode.PublicationOnly);
 
-        public static DateTime GetSimpleDateTimeData(IDateTime dt)
-            => DateTime.SpecifyKind(dt.Value, dt.IsUtc ? DateTimeKind.Utc : DateTimeKind.Local);
-
-        public static DateTime SimpleDateTimeToMatch(IDateTime dt, IDateTime toMatch)
+        public static ZonedDateTime AddMonths(ZonedDateTime zonedDateTime, int months)
         {
-            if (toMatch.IsUtc && dt.IsUtc)
-            {
-                return dt.Value;
-            }
-            if (toMatch.IsUtc)
-            {
-                return dt.Value.ToUniversalTime();
-            }
-            if (dt.IsUtc)
-            {
-                return dt.Value.ToLocalTime();
-            }
-            return dt.Value;
-        }
-
-        public static IDateTime MatchTimeZone(IDateTime dt1, IDateTime dt2)
-        {
-            // Associate the date/time with the first.
-            var copy = dt2;
-            copy.AssociateWith(dt1);
-
-            // If the dt1 time does not occur in the same time zone as the
-            // dt2 time, then let's convert it so they can be used in the
-            // same context (i.e. evaluation).
-            if (dt1.TzId != null)
-            {
-                return string.Equals(dt1.TzId, copy.TzId, StringComparison.OrdinalIgnoreCase)
-                    ? copy
-                    : copy.ToTimeZone(dt1.TzId);
-            }
-
-            return dt1.IsUtc
-                ? new CalDateTime(copy.AsUtc)
-                : new CalDateTime(copy.AsSystemLocal);
+            var futureDate = zonedDateTime.Date.PlusMonths(months);
+            var futureLocalDateTime = new LocalDateTime(futureDate.Year, futureDate.Month, futureDate.Day, zonedDateTime.Hour, zonedDateTime.Minute,
+                zonedDateTime.Second);
+            var zonedFutureDate = new ZonedDateTime(futureLocalDateTime, zonedDateTime.Zone, zonedDateTime.Offset);
+            return zonedFutureDate;
         }
 
         public static DateTime AddWeeks(DateTime dt, int interval, DayOfWeek firstDayOfWeek)
@@ -70,6 +37,20 @@ namespace Ical.Net.Utility
             return dt;
         }
 
+        public static ZonedDateTime AddYears(ZonedDateTime zonedDateTime, int years)
+        {
+            var futureDate = zonedDateTime.Date.PlusYears(years);
+            var futureLocalDateTime = new LocalDateTime(futureDate.Year, futureDate.Month, futureDate.Day, zonedDateTime.Hour, zonedDateTime.Minute,
+                zonedDateTime.Second);
+            var zonedFutureDate = new ZonedDateTime(futureLocalDateTime, zonedDateTime.Zone, zonedDateTime.Offset);
+            return zonedFutureDate;
+        }
+
+        public static IDateTime EndOfDay(IDateTime dt)
+        {
+            return StartOfDay(dt).AddDays(1).AddTicks(-1);
+        }
+
         public static DateTime FirstDayOfWeek(DateTime dt, DayOfWeek firstDayOfWeek, out int offset)
         {
             offset = 0;
@@ -81,14 +62,22 @@ namespace Ical.Net.Utility
             return dt;
         }
 
-        private static readonly Lazy<Dictionary<string, string>> _windowsMapping
-            = new Lazy<Dictionary<string, string>>(InitializeWindowsMappings, LazyThreadSafetyMode.PublicationOnly);
+        public static ZonedDateTime FromTimeZoneToTimeZone(DateTime dateTime, string fromZoneId, string toZoneId)
+        {
+            return FromTimeZoneToTimeZone(dateTime, GetZone(fromZoneId), GetZone(toZoneId));
+        }
 
-        private static Dictionary<string, string> InitializeWindowsMappings()
-            => TzdbDateTimeZoneSource.Default.WindowsMapping.PrimaryMapping
-                .ToDictionary(k => k.Key, v => v.Value, StringComparer.OrdinalIgnoreCase);
+        public static ZonedDateTime FromTimeZoneToTimeZone(DateTime dateTime, DateTimeZone fromZone, DateTimeZone toZone)
+        {
+            var oldZone = LocalDateTime.FromDateTime(dateTime).InZoneLeniently(fromZone);
+            var newZone = oldZone.WithZone(toZone);
+            return newZone;
+        }
 
-        public static readonly DateTimeZone LocalDateTimeZone = DateTimeZoneProviders.Tzdb.GetSystemDefault();
+        public static DateTime GetSimpleDateTimeData(IDateTime dt)
+        {
+            return DateTime.SpecifyKind(dt.Value, dt.IsUtc ? DateTimeKind.Utc : DateTimeKind.Local);
+        }
 
         /// <summary>
         /// Use this method to turn a raw string into a NodaTime DateTimeZone. It searches all time zone providers (IANA, BCL, serialization, etc) to see if
@@ -162,24 +151,53 @@ namespace Ical.Net.Utility
             throw new ArgumentException($"Unrecognized time zone id {tzId}");
         }
 
-        public static ZonedDateTime AddYears(ZonedDateTime zonedDateTime, int years)
+        public static bool IsSerializationTimeZone(DateTimeZone zone)
         {
-            var futureDate = zonedDateTime.Date.PlusYears(years);
-            var futureLocalDateTime = new LocalDateTime(futureDate.Year, futureDate.Month, futureDate.Day, zonedDateTime.Hour, zonedDateTime.Minute,
-                zonedDateTime.Second);
-            var zonedFutureDate = new ZonedDateTime(futureLocalDateTime, zonedDateTime.Zone, zonedDateTime.Offset);
-            return zonedFutureDate;
+            return DateTimeZoneProviders.Serialization.GetZoneOrNull(zone.Id) != null;
         }
 
-        public static ZonedDateTime AddMonths(ZonedDateTime zonedDateTime, int months)
+        public static IDateTime MatchTimeZone(IDateTime dt1, IDateTime dt2)
         {
-            var futureDate = zonedDateTime.Date.PlusMonths(months);
-            var futureLocalDateTime = new LocalDateTime(futureDate.Year, futureDate.Month, futureDate.Day, zonedDateTime.Hour, zonedDateTime.Minute,
-                zonedDateTime.Second);
-            var zonedFutureDate = new ZonedDateTime(futureLocalDateTime, zonedDateTime.Zone, zonedDateTime.Offset);
-            return zonedFutureDate;
+            // Associate the date/time with the first.
+            var copy = dt2;
+            copy.AssociateWith(dt1);
+
+            // If the dt1 time does not occur in the same time zone as the
+            // dt2 time, then let's convert it so they can be used in the
+            // same context (i.e. evaluation).
+            if (dt1.TzId != null)
+            {
+                return string.Equals(dt1.TzId, copy.TzId, StringComparison.OrdinalIgnoreCase)
+                    ? copy
+                    : copy.ToTimeZone(dt1.TzId);
+            }
+
+            return dt1.IsUtc
+                ? new CalDateTime(copy.AsUtc)
+                : new CalDateTime(copy.AsSystemLocal);
         }
 
+        public static DateTime SimpleDateTimeToMatch(IDateTime dt, IDateTime toMatch)
+        {
+            if (toMatch.IsUtc && dt.IsUtc)
+            {
+                return dt.Value;
+            }
+            if (toMatch.IsUtc)
+            {
+                return dt.Value.ToUniversalTime();
+            }
+            if (dt.IsUtc)
+            {
+                return dt.Value.ToLocalTime();
+            }
+            return dt.Value;
+        }
+
+        public static IDateTime StartOfDay(IDateTime dt)
+        {
+            return dt.AddHours(-dt.Hour).AddMinutes(-dt.Minute).AddSeconds(-dt.Second);
+        }
         public static ZonedDateTime ToZonedDateTimeLeniently(DateTime dateTime, string tzId)
         {
             var zone = GetZone(tzId);
@@ -188,18 +206,6 @@ namespace Ical.Net.Utility
             return lenientZonedDateTime;
         }
 
-        public static ZonedDateTime FromTimeZoneToTimeZone(DateTime dateTime, string fromZoneId, string toZoneId)
-            => FromTimeZoneToTimeZone(dateTime, GetZone(fromZoneId), GetZone(toZoneId));
-
-        public static ZonedDateTime FromTimeZoneToTimeZone(DateTime dateTime, DateTimeZone fromZone, DateTimeZone toZone)
-        {
-            var oldZone = LocalDateTime.FromDateTime(dateTime).InZoneLeniently(fromZone);
-            var newZone = oldZone.WithZone(toZone);
-            return newZone;
-        }
-
-        public static bool IsSerializationTimeZone(DateTimeZone zone) => DateTimeZoneProviders.Serialization.GetZoneOrNull(zone.Id) != null;
-
         /// <summary>
         /// Truncate to the specified TimeSpan's magnitude. For example, to truncate to the nearest second, use TimeSpan.FromSeconds(1)
         /// </summary>
@@ -207,17 +213,24 @@ namespace Ical.Net.Utility
         /// <param name="timeSpan"></param>
         /// <returns></returns>
         public static DateTime Truncate(this DateTime dateTime, TimeSpan timeSpan)
-            => timeSpan == TimeSpan.Zero
-                ? dateTime
-                : dateTime.AddTicks(-(dateTime.Ticks % timeSpan.Ticks));
+        {
+            return timeSpan == TimeSpan.Zero
+                           ? dateTime
+                           : dateTime.AddTicks(-(dateTime.Ticks % timeSpan.Ticks));
+        }
 
         public static int WeekOfMonth(DateTime d)
         {
             var isExact = d.Day % 7 == 0;
-            var offset = isExact
-                ? 0
-                : 1;
-            return (int) Math.Floor(d.Day / 7.0) + offset;
+            var offset = isExact ? 0 : 1;
+
+            return (int)Math.Floor(d.Day / 7.0) + offset;
+        }
+
+        private static Dictionary<string, string> InitializeWindowsMappings()
+        {
+            return TzdbDateTimeZoneSource.Default.WindowsMapping.PrimaryMapping
+                           .ToDictionary(k => k.Key, v => v.Value, StringComparer.OrdinalIgnoreCase);
         }
     }
 }

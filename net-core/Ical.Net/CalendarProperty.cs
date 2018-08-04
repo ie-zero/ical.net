@@ -28,57 +28,26 @@ namespace Ical.Net
     {
         private List<object> _values = new List<object>();
 
-        /// <summary>
-        /// Returns a list of parameters that are associated with the iCalendar object.
-        /// </summary>
-        public virtual IParameterCollection Parameters { get; protected set; } = new ParameterList();
+        public CalendarProperty() { }
 
-        public CalendarProperty() {}
-
-        public CalendarProperty(string name) : base(name) {}
+        public CalendarProperty(string name) : base(name) { }
 
         public CalendarProperty(string name, object value) : base(name)
         {
             _values.Add(value);
         }
 
-        public CalendarProperty(int line, int col) : base(line, col) {}
+        public CalendarProperty(int line, int col) : base(line, col) { }
 
         /// <summary>
-        /// Adds a parameter to the iCalendar object.
+        /// Returns a list of parameters that are associated with the iCalendar object.
         /// </summary>
-        public virtual void AddParameter(string name, string value)
-        {
-            var p = new CalendarParameter(name, value);
-            Parameters.Add(p);
-        }
-
-        /// <summary>
-        /// Adds a parameter to the iCalendar object.
-        /// </summary>
-        public virtual void AddParameter(CalendarParameter p)
-        {
-            Parameters.Add(p);
-        }
-
-        public override void CopyFrom(ICopyable obj)
-        {
-            base.CopyFrom(obj);
-
-            var p = obj as ICalendarProperty;
-            if (p == null)
-            {
-                return;
-            }
-
-            SetValue(p.Values);
-        }
-
-        public virtual IEnumerable<object> Values => _values;
+        public virtual IParameterCollection Parameters { get; protected set; } = new ParameterList();
 
         public object Value
         {
-            get => _values?.FirstOrDefault();
+            get { return _values?.FirstOrDefault(); }
+
             set
             {
                 if (value == null)
@@ -99,9 +68,53 @@ namespace Ical.Net
             }
         }
 
-        public virtual bool ContainsValue(object value) => _values.Contains(value);
+        public virtual int ValueCount
+        {
+            get { return _values?.Count ?? 0; }
+        }
 
-        public virtual int ValueCount => _values?.Count ?? 0;
+        public virtual IEnumerable<object> Values => _values;
+
+        /// <summary>
+        /// Adds a parameter to the iCalendar object.
+        /// </summary>
+        public virtual void AddParameter(string name, string value)
+        {
+            var p = new CalendarParameter(name, value);
+            Parameters.Add(p);
+        }
+
+        /// <summary>
+        /// Adds a parameter to the iCalendar object.
+        /// </summary>
+        public virtual void AddParameter(CalendarParameter p)
+        {
+            Parameters.Add(p);
+        }
+
+        public virtual void AddValue(object value)
+        {
+            if (value == null)
+            {
+                return;
+            }
+
+            _values.Add(value);
+        }
+
+        public virtual bool ContainsValue(object value)
+        {
+            return _values.Contains(value);
+        }
+
+        public virtual void RemoveValue(object value)
+        {
+            if (value == null)
+            {
+                return;
+            }
+            _values.Remove(value);
+        }
 
         public virtual void SetValue(object value)
         {
@@ -128,23 +141,17 @@ namespace Ical.Net
             _values.AddRange(toAdd);
         }
 
-        public virtual void AddValue(object value)
+        public override void CopyFrom(ICopyable obj)
         {
-            if (value == null)
+            base.CopyFrom(obj);
+
+            var p = obj as ICalendarProperty;
+            if (p == null)
             {
                 return;
             }
 
-            _values.Add(value);
-        }
-
-        public virtual void RemoveValue(object value)
-        {
-            if (value == null)
-            {
-                return;
-            }
-            _values.Remove(value);
+            SetValue(p.Values);
         }
     }
 }

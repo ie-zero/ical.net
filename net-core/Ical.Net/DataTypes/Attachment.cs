@@ -13,30 +13,11 @@ namespace Ical.Net.DataTypes
     /// </summary>
     public class Attachment : EncodableDataType
     {
-        public virtual Uri Uri { get; set; }
-        public virtual byte[] Data { get; }
+        // TODO: Consider sub-classing Attachment class to represent the two distinct types.
 
         private Encoding _valueEncoding = System.Text.Encoding.UTF8;
-        public virtual Encoding ValueEncoding
-        {
-            get => _valueEncoding;
-            set
-            {
-                if (value == null)
-                {
-                    return;
-                }
-                _valueEncoding = value;
-            }
-        }
 
-        public virtual string FormatType
-        {
-            get => Parameters.Get("FMTTYPE");
-            set => Parameters.Set("FMTTYPE", value);
-        }
-
-        public Attachment() {}
+        public Attachment() { }
 
         public Attachment(byte[] value) : this()
         {
@@ -57,6 +38,7 @@ namespace Ical.Net.DataTypes
             var a = serializer.Deserialize(value);
             if (a == null)
             {
+                // TODO: Improve thrown exception.
                 throw new ArgumentException($"{value} is not a valid ATTACH component");
             }
 
@@ -66,12 +48,30 @@ namespace Ical.Net.DataTypes
             Uri = a.Uri;
         }
 
-        public override string ToString()
-            => Data == null
-                ? string.Empty
-                : ValueEncoding.GetString(Data);
+        public virtual byte[] Data { get; }
 
-        //ToDo: See if this can be deleted
+        public virtual string FormatType
+        {
+            get => Parameters.Get("FMTTYPE");
+            set => Parameters.Set("FMTTYPE", value);
+        }
+
+        public virtual Uri Uri { get; set; }
+
+        public virtual Encoding ValueEncoding
+        {
+            get => _valueEncoding;
+            set
+            {
+                if (value == null)
+                {
+                    return;
+                }
+                _valueEncoding = value;
+            }
+        }
+
+        // TODO: See if CopyFrom() method can be deleted.
         public override void CopyFrom(ICopyable obj) { }
 
         protected bool Equals(Attachment other)
@@ -86,7 +86,7 @@ namespace Ical.Net.DataTypes
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            return obj.GetType() == GetType() && Equals((Attachment) obj);
+            return obj.GetType() == GetType() && Equals((Attachment)obj);
         }
 
         public override int GetHashCode()
@@ -98,6 +98,12 @@ namespace Ical.Net.DataTypes
                 hashCode = (hashCode * 397) ^ (ValueEncoding?.GetHashCode() ?? 0);
                 return hashCode;
             }
+        }
+
+        // TODO: Overriding ToString() method does not conform with the way the remaining library is implemented.
+        public override string ToString()
+        {
+            return Data == null ? string.Empty : ValueEncoding.GetString(Data);
         }
     }
 }

@@ -8,13 +8,19 @@ namespace Ical.Net.CalendarComponents
 {
     public class FreeBusy : UniqueComponent, IMergeable
     {
+        public FreeBusy()
+        {
+            Name = Components.Freebusy;
+        }
+
         public static FreeBusy Create(ICalendarObject obj, FreeBusy freeBusyRequest)
         {
             if (!(obj is IGetOccurrencesTyped))
             {
                 return null;
             }
-            var getOccurrences = (IGetOccurrencesTyped) obj;
+
+            var getOccurrences = (IGetOccurrencesTyped)obj;
             var occurrences = getOccurrences.GetOccurrences<CalendarEvent>(freeBusyRequest.Start, freeBusyRequest.End);
             var contacts = new List<string>();
             var isFilteredByAttendees = false;
@@ -117,30 +123,13 @@ namespace Ical.Net.CalendarComponents
             return fb;
         }
 
-        public FreeBusy()
-        {
-            Name = Components.Freebusy;
-        }
-
-        public virtual IList<FreeBusyEntry> Entries
-        {
-            get => Properties.GetMany<FreeBusyEntry>("FREEBUSY");
-            set => Properties.Set("FREEBUSY", value);
-        }
-
-        public virtual IDateTime DtStart
-        {
-            get => Properties.Get<IDateTime>("DTSTART");
-            set => Properties.Set("DTSTART", value);
-        }
-
         public virtual IDateTime DtEnd
         {
             get => Properties.Get<IDateTime>("DTEND");
             set => Properties.Set("DTEND", value);
         }
 
-        public virtual IDateTime Start
+        public virtual IDateTime DtStart
         {
             get => Properties.Get<IDateTime>("DTSTART");
             set => Properties.Set("DTSTART", value);
@@ -150,6 +139,18 @@ namespace Ical.Net.CalendarComponents
         {
             get => Properties.Get<IDateTime>("DTEND");
             set => Properties.Set("DTEND", value);
+        }
+
+        public virtual IList<FreeBusyEntry> Entries
+        {
+            get => Properties.GetMany<FreeBusyEntry>("FREEBUSY");
+            set => Properties.Set("FREEBUSY", value);
+        }
+
+        public virtual IDateTime Start
+        {
+            get => Properties.Get<IDateTime>("DTSTART");
+            set => Properties.Set("DTSTART", value);
         }
 
         public virtual FreeBusyStatus GetFreeBusyStatus(Period period)

@@ -26,25 +26,15 @@ namespace Ical.Net.CalendarComponents
     {
         internal const string ComponentName = "VEVENT";
 
+        private EventEvaluator _evaluator;
+
         /// <summary>
-        /// The start date/time of the event.
-        /// <note>
-        /// If the duration has not been set, but
-        /// the start/end time of the event is available,
-        /// the duration is automatically determined.
-        /// Likewise, if the end date/time has not been
-        /// set, but a start and duration are available,
-        /// the end date/time will be extrapolated.
-        /// </note>
+        /// Constructs an Event object, with an iCalObject
+        /// (usually an iCalendar object) as its parent.
         /// </summary>
-        public override IDateTime DtStart
+        public CalendarEvent()
         {
-            get => base.DtStart;
-            set
-            {
-                base.DtStart = value;
-                ExtrapolateTimes();
-            }
+            Initialize();
         }
 
         /// <summary>
@@ -60,7 +50,8 @@ namespace Ical.Net.CalendarComponents
         /// </summary>
         public virtual IDateTime DtEnd
         {
-            get => Properties.Get<IDateTime>("DTEND");
+            get { return Properties.Get<IDateTime>("DTEND"); }
+
             set
             {
                 if (!Equals(DtEnd, value))
@@ -72,29 +63,51 @@ namespace Ical.Net.CalendarComponents
         }
 
         /// <summary>
-        /// The duration of the event.
+        /// The start date/time of the event.
         /// <note>
-        /// If a start time and duration is available,
-        /// the end time is automatically determined.
-        /// Likewise, if the end time and duration is
-        /// available, but a start time is not determined,
-        /// the start time will be extrapolated from
-        /// available information.
+        /// If the duration has not been set, but
+        /// the start/end time of the event is available,
+        /// the duration is automatically determined.
+        /// Likewise, if the end date/time has not been
+        /// set, but a start and duration are available,
+        /// the end date/time will be extrapolated.
         /// </note>
         /// </summary>
-        // NOTE: Duration is not supported by all systems,
-        // (i.e. iPhone) and cannot co-exist with DtEnd.
-        // RFC 5545 states:
-        //
-        //      ; either 'dtend' or 'duration' may appear in
-        //      ; a 'eventprop', but 'dtend' and 'duration'
-        //      ; MUST NOT occur in the same 'eventprop'
-        //
-        // Therefore, Duration is not serialized, as DtEnd
-        // should always be extrapolated from the duration.
+        public override IDateTime DtStart
+        {
+            get { return base.DtStart; }
+
+            set
+            {
+                base.DtStart = value;
+                ExtrapolateTimes();
+            }
+        }
+
+        /// <summary>
+        /// The duration of the event.
+        ///
+        /// If a start time and duration is available, the end time is automatically determined.
+        /// Likewise, if the end time and duration is available, but a start time is not determined,
+        /// the start time will be extrapolated from available information.
+        /// </summary>
+        /// <remarks>
+        /// Duration is not supported by all systems, (i.e. iPhone) and cannot co-exist with <see
+        /// cref="DtEnd"/> 
+        /// RFC 5545 states:
+        ///
+        ///     ; either 'dtend' or 'duration' may appear in 
+        ///     ; a 'eventprop', but 'dtend' and 'duration'
+        ///     ; MUST NOT occur in the same 'eventprop'
+        ///
+        /// Therefore, Duration is not serialized, as <see cref="DtEnd"/> should always be
+        /// extrapolated from the duration.
+        /// </remarks>
+
         public virtual TimeSpan Duration
         {
-            get => Properties.Get<TimeSpan>("DURATION");
+            get { return Properties.Get<TimeSpan>("DURATION"); }
+
             set
             {
                 if (!Equals(Duration, value))
@@ -115,11 +128,34 @@ namespace Ical.Net.CalendarComponents
         }
 
         /// <summary>
+        /// The geographic location (lat/long) of the event.
+        /// </summary>
+        public GeographicLocation GeographicLocation
+        {
+            get => Properties.Get<GeographicLocation>("GEO");
+            set => Properties.Set("GEO", value);
+        }
+
+        /// <summary>
+        /// Determines whether or not the <see cref="CalendarEvent"/> is actively displayed
+        /// as an upcoming or occurred event.
+        /// </summary>
+        /// <returns>True if the event has not been cancelled, False otherwise.</returns>
+        public virtual bool IsActive
+        {
+            get
+            {
+                return string.Equals(Status, EventStatus.Cancelled, EventStatus.Comparison);
+            }
+        }
+
+        /// <summary>
         /// Returns true if the event is an all-day event.
         /// </summary>
         public virtual bool IsAllDay
         {
-            get => !Start.HasTime;
+            get { return !Start.HasTime; }
+
             set
             {
                 // Set whether or not the start date/time
@@ -139,15 +175,6 @@ namespace Ical.Net.CalendarComponents
                     End = Start.AddDays(1);
                 }
             }
-        }
-
-        /// <summary>
-        /// The geographic location (lat/long) of the event.
-        /// </summary>
-        public GeographicLocation GeographicLocation
-        {
-            get => Properties.Get<GeographicLocation>("GEO");
-            set => Properties.Set("GEO", value);
         }
 
         /// <summary>
@@ -192,89 +219,25 @@ namespace Ical.Net.CalendarComponents
             set => Properties.Set(TransparencyType.Key, value);
         }
 
-        private EventEvaluator _mEvaluator;
-
-        /// <summary>
-        /// Constructs an Event object, with an iCalObject
-        /// (usually an iCalendar object) as its parent.
-        /// </summary>
-        public CalendarEvent()
-        {
-            Initialize();
-        }
-
-        private void Initialize()
-        {
-            Name = EventStatus.Name;
-
-            _mEvaluator = new EventEvaluator(this);
-            SetService(_mEvaluator);
-        }
-
-        /// <summary>
-        /// Use this method to determine if an event occurs on a given date.
-        /// <note type="caution">
-        ///     This event should be called only after the Evaluate
-        ///     method has calculated the dates for which this event occurs.
-        /// </note>
-        /// </summary>
-        /// <param name="dateTime">The date to test.</param>
-        /// <returns>True if the event occurs on the <paramref name="dateTime"/> provided, False otherwise.</returns>
-        public virtual bool OccursOn(IDateTime dateTime)
-        {
-            return _mEvaluator.Periods.Any(p => p.StartTime.Date == dateTime.Date || // It's the start date OR
-                                                (p.StartTime.Date <= dateTime.Date && // It's after the start date AND
-                                                 (p.EndTime.HasTime && p.EndTime.Date >= dateTime.Date || // an end time was specified, and it's after the test date
-                                                  (!p.EndTime.HasTime && p.EndTime.Date > dateTime.Date))));
-        }
-
-        /// <summary>
-        /// Use this method to determine if an event begins at a given date and time.
-        /// </summary>
-        /// <param name="dateTime">The date and time to test.</param>
-        /// <returns>True if the event begins at the given date and time</returns>
-        public virtual bool OccursAt(IDateTime dateTime)
-        {
-            return _mEvaluator.Periods.Any(p => p.StartTime.Equals(dateTime));
-        }
-
-        /// <summary>
-        /// Determines whether or not the <see cref="CalendarEvent"/> is actively displayed
-        /// as an upcoming or occurred event.
-        /// </summary>
-        /// <returns>True if the event has not been cancelled, False otherwise.</returns>
-        public virtual bool IsActive => string.Equals(Status, EventStatus.Cancelled, EventStatus.Comparison);
-
         protected override bool EvaluationIncludesReferenceDate => true;
 
-        protected override void OnDeserializing(StreamingContext context)
+        public int CompareTo(CalendarEvent other)
         {
-            base.OnDeserializing(context);
-
-            Initialize();
-        }
-
-        protected override void OnDeserialized(StreamingContext context)
-        {
-            base.OnDeserialized(context);
-
-            ExtrapolateTimes();
-        }
-
-        private void ExtrapolateTimes()
-        {
-            if (DtEnd == null && DtStart != null && Duration != default(TimeSpan))
+            if (DtStart.Equals(other.DtStart))
             {
-                DtEnd = DtStart.Add(Duration);
+                return 0;
             }
-            else if (Duration == default(TimeSpan) && DtStart != null && DtEnd != null)
+            if (DtStart.LessThan(other.DtStart))
             {
-                Duration = DtEnd.Subtract(DtStart);
+                return -1;
             }
-            else if (DtStart == null && Duration != default(TimeSpan) && DtEnd != null)
+            if (DtStart.GreaterThan(other.DtStart))
             {
-                DtStart = DtEnd.Subtract(Duration);
+                return 1;
             }
+
+            // TODO: CompareTo(T) should NOT throw exceptions. 
+            throw new Exception("An error occurred while comparing two CalDateTimes.");
         }
 
         protected bool Equals(CalendarEvent other)
@@ -361,21 +324,69 @@ namespace Ical.Net.CalendarComponents
             }
         }
 
-        public int CompareTo(CalendarEvent other)
+        /// <summary>
+        /// Use this method to determine if an event begins at a given date and time.
+        /// </summary>
+        /// <param name="dateTime">The date and time to test.</param>
+        /// <returns>True if the event begins at the given date and time</returns>
+        public virtual bool OccursAt(IDateTime dateTime)
         {
-            if (DtStart.Equals(other.DtStart))
+            return _evaluator.Periods.Any(p => p.StartTime.Equals(dateTime));
+        }
+
+        /// <summary>
+        /// Use this method to determine if an event occurs on a given date.
+        /// <note type="caution">
+        ///     This event should be called only after the Evaluate
+        ///     method has calculated the dates for which this event occurs.
+        /// </note>
+        /// </summary>
+        /// <param name="dateTime">The date to test.</param>
+        /// <returns>True if the event occurs on the <paramref name="dateTime"/> provided, False otherwise.</returns>
+        public virtual bool OccursOn(IDateTime dateTime)
+        {
+            return _evaluator.Periods.Any(p => p.StartTime.Date == dateTime.Date || // It's the start date OR
+                                                (p.StartTime.Date <= dateTime.Date && // It's after the start date AND
+                                                 (p.EndTime.HasTime && p.EndTime.Date >= dateTime.Date || // an end time was specified, and it's after the test date
+                                                  (!p.EndTime.HasTime && p.EndTime.Date > dateTime.Date))));
+        }
+
+        protected override void OnDeserialized(StreamingContext context)
+        {
+            base.OnDeserialized(context);
+
+            ExtrapolateTimes();
+        }
+
+        protected override void OnDeserializing(StreamingContext context)
+        {
+            base.OnDeserializing(context);
+
+            Initialize();
+        }
+
+        private void ExtrapolateTimes()
+        {
+            if (DtEnd == null && DtStart != null && Duration != default(TimeSpan))
             {
-                return 0;
+                DtEnd = DtStart.Add(Duration);
             }
-            if (DtStart.LessThan(other.DtStart))
+            else if (Duration == default(TimeSpan) && DtStart != null && DtEnd != null)
             {
-                return -1;
+                Duration = DtEnd.Subtract(DtStart);
             }
-            if (DtStart.GreaterThan(other.DtStart))
+            else if (DtStart == null && Duration != default(TimeSpan) && DtEnd != null)
             {
-                return 1;
+                DtStart = DtEnd.Subtract(Duration);
             }
-            throw new Exception("An error occurred while comparing two CalDateTimes.");
+        }
+
+        private void Initialize()
+        {
+            Name = EventStatus.Name;
+
+            _evaluator = new EventEvaluator(this);
+            SetService(_evaluator);
         }
     }
 }

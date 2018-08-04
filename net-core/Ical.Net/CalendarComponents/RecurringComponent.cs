@@ -19,11 +19,35 @@ namespace Ical.Net.CalendarComponents
     /// </remarks>
     public class RecurringComponent : UniqueComponent, IRecurringComponent
     {
-        public static IEnumerable<IRecurringComponent> SortByDate(IEnumerable<IRecurringComponent> list) => SortByDate<IRecurringComponent>(list);
+        public RecurringComponent()
+        {
+            Initialize();
+            EnsureProperties();
+        }
 
-        public static IEnumerable<TRecurringComponent> SortByDate<TRecurringComponent>(IEnumerable<TRecurringComponent> list) => list.OrderBy(d => d);
+        public RecurringComponent(string name) : base(name)
+        {
+            Initialize();
+            EnsureProperties();
+        }
 
-        protected virtual bool EvaluationIncludesReferenceDate => false;
+        private void Initialize()
+        {
+            SetService(new RecurringEvaluator(this));
+        }
+
+        private void EnsureProperties()
+        {
+            if (!Properties.ContainsKey("SEQUENCE"))
+            {
+                Sequence = 0;
+            }
+        }
+
+        /// <summary>
+        /// A list of <see cref="Alarm"/>s for this recurring component.
+        /// </summary>
+        public virtual ICalendarObjectList<Alarm> Alarms => new CalendarObjectListProxy<Alarm>(Children);
 
         public virtual IList<Attachment> Attachments
         {
@@ -100,16 +124,16 @@ namespace Ical.Net.CalendarComponents
             set => Properties.Set("RDATE", value);
         }
 
-        public virtual IList<RecurrencePattern> RecurrenceRules
-        {
-            get => Properties.GetMany<RecurrencePattern>("RRULE");
-            set => Properties.Set("RRULE", value);
-        }
-
         public virtual IDateTime RecurrenceId
         {
             get => Properties.Get<IDateTime>("RECURRENCE-ID");
             set => Properties.Set("RECURRENCE-ID", value);
+        }
+
+        public virtual IList<RecurrencePattern> RecurrenceRules
+        {
+            get => Properties.GetMany<RecurrencePattern>("RRULE");
+            set => Properties.Set("RRULE", value);
         }
 
         public virtual IList<string> RelatedComponents
@@ -139,58 +163,24 @@ namespace Ical.Net.CalendarComponents
             set => Properties.Set("SUMMARY", value);
         }
 
-        /// <summary>
-        /// A list of <see cref="Alarm"/>s for this recurring component.
-        /// </summary>
-        public virtual ICalendarObjectList<Alarm> Alarms => new CalendarObjectListProxy<Alarm>(Children);
+        protected virtual bool EvaluationIncludesReferenceDate => false;
 
-        public RecurringComponent()
+        // TODO: SortByDate() - Possibly obsolete method.
+        public static IEnumerable<IRecurringComponent> SortByDate(IEnumerable<IRecurringComponent> list)
         {
-            Initialize();
-            EnsureProperties();
+            return SortByDate<IRecurringComponent>(list);
         }
 
-        public RecurringComponent(string name) : base(name)
+        // TODO: SortByDate() - Possibly obsolete method.
+        public static IEnumerable<TRecurringComponent> SortByDate<TRecurringComponent>(IEnumerable<TRecurringComponent> list)
         {
-            Initialize();
-            EnsureProperties();
+            return list.OrderBy(d => d);
         }
 
-        private void Initialize() => SetService(new RecurringEvaluator(this));
-
-        private void EnsureProperties()
+        public virtual void ClearEvaluation()
         {
-            if (!Properties.ContainsKey("SEQUENCE"))
-            {
-                Sequence = 0;
-            }
+            RecurrenceUtil.ClearEvaluation(this);
         }
-
-        protected override void OnDeserializing(StreamingContext context)
-        {
-            base.OnDeserializing(context);
-
-            Initialize();
-        }
-
-        public virtual void ClearEvaluation() => RecurrenceUtil.ClearEvaluation(this);
-
-        public virtual HashSet<Occurrence> GetOccurrences(IDateTime dt) => RecurrenceUtil.GetOccurrences(this, dt, EvaluationIncludesReferenceDate);
-
-        public virtual HashSet<Occurrence> GetOccurrences(DateTime dt)
-            => RecurrenceUtil.GetOccurrences(this, new CalDateTime(dt), EvaluationIncludesReferenceDate);
-
-        public virtual HashSet<Occurrence> GetOccurrences(IDateTime startTime, IDateTime endTime)
-            => RecurrenceUtil.GetOccurrences(this, startTime, endTime, EvaluationIncludesReferenceDate);
-
-        public virtual HashSet<Occurrence> GetOccurrences(DateTime startTime, DateTime endTime)
-            => RecurrenceUtil.GetOccurrences(this, new CalDateTime(startTime), new CalDateTime(endTime), EvaluationIncludesReferenceDate);
-
-        public virtual IList<AlarmOccurrence> PollAlarms() => PollAlarms(null, null);
-
-        public virtual IList<AlarmOccurrence> PollAlarms(IDateTime startTime, IDateTime endTime)
-            => Alarms?.SelectMany(a => a.Poll(startTime, endTime)).ToList()
-                ?? new List<AlarmOccurrence>();
 
         protected bool Equals(RecurringComponent other)
         {
@@ -237,6 +227,44 @@ namespace Ical.Net.CalendarComponents
                 hashCode = (hashCode * 397) ^ CollectionHelpers.GetHashCode(RecurrenceRules);
                 return hashCode;
             }
+        }
+
+        public virtual HashSet<Occurrence> GetOccurrences(IDateTime dt)
+        {
+            return RecurrenceUtil.GetOccurrences(this, dt, EvaluationIncludesReferenceDate);
+        }
+
+        public virtual HashSet<Occurrence> GetOccurrences(DateTime dt)
+        {
+            return RecurrenceUtil.GetOccurrences(this, new CalDateTime(dt), EvaluationIncludesReferenceDate);
+        }
+
+        public virtual HashSet<Occurrence> GetOccurrences(IDateTime startTime, IDateTime endTime)
+        {
+            return RecurrenceUtil.GetOccurrences(this, startTime, endTime, EvaluationIncludesReferenceDate);
+        }
+
+        public virtual HashSet<Occurrence> GetOccurrences(DateTime startTime, DateTime endTime)
+        {
+            return RecurrenceUtil.GetOccurrences(this, new CalDateTime(startTime), new CalDateTime(endTime), EvaluationIncludesReferenceDate);
+        }
+
+        public virtual IList<AlarmOccurrence> PollAlarms()
+        {
+            return PollAlarms(null, null);
+        }
+
+        public virtual IList<AlarmOccurrence> PollAlarms(IDateTime startTime, IDateTime endTime)
+        {
+            return Alarms?.SelectMany(a => a.Poll(startTime, endTime)).ToList()
+                           ?? new List<AlarmOccurrence>();
+        }
+
+        protected override void OnDeserializing(StreamingContext context)
+        {
+            base.OnDeserializing(context);
+
+            Initialize();
         }
     }
 }

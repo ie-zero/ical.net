@@ -5,12 +5,16 @@ using Ical.Net.DataTypes;
 namespace Ical.Net.CalendarComponents
 {
     /// <summary>
-    /// A class that represents an RFC 2445 VALARM component.
-    /// FIXME: move GetOccurrences() logic into an AlarmEvaluator.
+    /// A class that represents an RFC 2445 VALARM component.  
     /// </summary>    
     public class Alarm : CalendarComponent
     {
-        //ToDo: Implement IEquatable
+        public Alarm()
+        {
+            Name = Components.Alarm;
+            Occurrences = new List<AlarmOccurrence>();
+        }
+
         public virtual string Action
         {
             get => Properties.Get<string>(AlarmAction.Key);
@@ -61,18 +65,14 @@ namespace Ical.Net.CalendarComponents
 
         protected virtual IList<AlarmOccurrence> Occurrences { get; set; }
 
-        public Alarm()
-        {
-            Name = Components.Alarm;
-            Occurrences = new List<AlarmOccurrence>();
-        }
-
         /// <summary>
         /// Gets a list of alarm occurrences for the given recurring component, <paramref name="rc"/>
         /// that occur between <paramref name="fromDate"/> and <paramref name="toDate"/>.
         /// </summary>
         public virtual IList<AlarmOccurrence> GetOccurrences(IRecurringComponent rc, IDateTime fromDate, IDateTime toDate)
         {
+            // TODO: Move GetOccurrences() logic into an AlarmEvaluator.
+
             Occurrences.Clear();
 
             if (Trigger == null)
@@ -135,12 +135,15 @@ namespace Ical.Net.CalendarComponents
         }
 
         /// <summary>
-        /// Polls the <see cref="Alarm"/> component for alarms that have been triggered
-        /// since the provided <paramref name="start"/> date/time.  If <paramref name="start"/>
-        /// is null, all triggered alarms will be returned.
+        /// Polls the <see cref="Alarm"/> component for alarms that have been triggered since the
+        /// provided <paramref name="start"/> date/time.
+        ///
+        /// If <paramref name="start"/> is null, all triggered alarms will be returned.
         /// </summary>
         /// <param name="start">The earliest date/time to poll trigered alarms for.</param>
-        /// <returns>A list of <see cref="AlarmOccurrence"/> objects, each containing a triggered alarm.</returns>
+        /// <returns>
+        /// A list of <see cref="AlarmOccurrence"/> objects, each containing a triggered alarm.
+        /// </returns>
         public virtual IList<AlarmOccurrence> Poll(IDateTime start, IDateTime end)
         {
             var results = new List<AlarmOccurrence>();
@@ -157,16 +160,15 @@ namespace Ical.Net.CalendarComponents
         }
 
         /// <summary>
-        /// Handles the repetitions that occur from the <c>REPEAT</c> and
-        /// <c>DURATION</c> properties.  Each recurrence of the alarm will
-        /// have its own set of generated repetitions.
+        /// Handles the repetitions that occur from the <c>REPEAT</c> and <c>DURATION</c> properties.
+        /// Each recurrence of the alarm will have its own set of generated repetitions.
         /// </summary>
         protected virtual void AddRepeatedItems()
         {
             var len = Occurrences.Count;
-            for (var i = 0; i < len; i++)
+            for (var index = 0; index < len; index++)
             {
-                var ao = Occurrences[i];
+                var ao = Occurrences[index];
                 var alarmTime = ao.DateTime.Copy<IDateTime>();
 
                 for (var j = 0; j < Repeat; j++)

@@ -42,18 +42,39 @@ namespace Ical.Net
             _values = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         }
 
-        protected override void OnDeserializing(StreamingContext context)
+        public virtual string Value
         {
-            base.OnDeserializing(context);
-
-            Initialize();
+            get { return Values?.FirstOrDefault(); }
+            set { SetValue(value); }
         }
 
-        public override void CopyFrom(ICopyable c)
+        public virtual int ValueCount
         {
-            base.CopyFrom(c);
+            get { return _values?.Count ?? 0; }
+        }
 
-            var p = c as CalendarParameter;
+        public virtual IEnumerable<string> Values => _values;
+
+        public virtual void AddValue(string value)
+        {
+            if (!IsValidValue(value))
+            {
+                return;
+            }
+
+            _values.Add(value);
+        }
+
+        public virtual bool ContainsValue(string value)
+        {
+            return _values.Contains(value);
+        }
+
+        public override void CopyFrom(ICopyable copyable)
+        {
+            base.CopyFrom(copyable);
+
+            var p = copyable as CalendarParameter;
             if (p?.Values == null)
             {
                 return;
@@ -61,12 +82,6 @@ namespace Ical.Net
 
             _values = new HashSet<string>(p.Values.Where(IsValidValue), StringComparer.OrdinalIgnoreCase);
         }
-
-        public virtual IEnumerable<string> Values => _values;
-
-        public virtual bool ContainsValue(string value) => _values.Contains(value);
-
-        public virtual int ValueCount => _values?.Count ?? 0;
 
         public virtual void SetValue(string value)
         {
@@ -80,26 +95,21 @@ namespace Ical.Net
             _values.UnionWith(values.Where(IsValidValue));
         }
 
-        private bool IsValidValue(string value) => !string.IsNullOrWhiteSpace(value);
-
-        public virtual void AddValue(string value)
-        {
-            if (!IsValidValue(value))
-            {
-                return;
-            }
-            _values.Add(value);
-        }
-
         public virtual void RemoveValue(string value)
         {
             _values.Remove(value);
         }
 
-        public virtual string Value
+        protected override void OnDeserializing(StreamingContext context)
         {
-            get => Values?.FirstOrDefault();
-            set => SetValue(value);
+            base.OnDeserializing(context);
+
+            Initialize();
+        }
+
+        private bool IsValidValue(string value)
+        {
+            return !string.IsNullOrWhiteSpace(value);
         }
     }
 }

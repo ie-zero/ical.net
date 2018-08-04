@@ -12,11 +12,6 @@ namespace Ical.Net
         private ICalendarObjectList<ICalendarObject> _children;
         private ServiceProvider _serviceProvider;
 
-        internal CalendarObject()
-        {
-            Initialize();
-        }
-
         public CalendarObject(string name) : this()
         {
             Name = name;
@@ -28,75 +23,21 @@ namespace Ical.Net
             Column = col;
         }
 
+        internal CalendarObject()
+        {
+            Initialize();
+        }
+
         private void Initialize()
         {
-            //ToDo: I'm fairly certain this is ONLY used for null checking. If so, maybe it can just be a bool? CalendarObjectList is an empty object, and
-            //ToDo: its constructor parameter is ignored
+            // TODO: I'm fairly certain this is ONLY used for null checking. 
+            //      If so, maybe it can just be a bool? CalendarObjectList is an empty object, and its constructor 
+            //      parameter is ignored.
             _children = new CalendarObjectList(this);
             _serviceProvider = new ServiceProvider();
 
             _children.ItemAdded += Children_ItemAdded;
         }
-
-        [OnDeserializing]
-        internal void DeserializingInternal(StreamingContext context) => OnDeserializing(context);
-
-        [OnDeserialized]
-        internal void DeserializedInternal(StreamingContext context) => OnDeserialized(context);
-
-        protected virtual void OnDeserializing(StreamingContext context) => Initialize();
-
-        protected virtual void OnDeserialized(StreamingContext context) {}
-
-        private void Children_ItemAdded(object sender, ObjectEventArgs<ICalendarObject, int> e) => e.First.Parent = this;
-
-        protected bool Equals(CalendarObject other) => string.Equals(Name, other.Name, StringComparison.OrdinalIgnoreCase);
-
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            return obj.GetType() == GetType() && Equals((CalendarObject) obj);
-        }
-
-        public override int GetHashCode() => Name?.GetHashCode() ?? 0;
-
-        public override void CopyFrom(ICopyable c)
-        {
-            var obj = c as ICalendarObject;
-            if (obj == null)
-            {
-                return;
-            }
-
-            // Copy the name and basic information
-            Name = obj.Name;
-            Parent = obj.Parent;
-            Line = obj.Line;
-            Column = obj.Column;
-
-            // Add each child
-            Children.Clear();
-            foreach (var child in obj.Children)
-            {
-                this.AddChild(child);
-            }
-        }
-
-        /// <summary>
-        /// Returns the parent iCalObject that owns this one.
-        /// </summary>
-        public virtual ICalendarObject Parent { get; set; }
-
-        /// <summary>
-        /// A collection of iCalObjects that are children of the current object.
-        /// </summary>
-        public virtual ICalendarObjectList<ICalendarObject> Children => _children;
-
-        /// <summary>
-        /// Gets or sets the name of the iCalObject.  For iCalendar components, this is the RFC 5545 name of the component.
-        /// </summary>        
-        public virtual string Name { get; set; }
 
         /// <summary>
         /// Returns the <see cref="Calendar"/> that this DDayiCalObject belongs to.
@@ -113,33 +54,136 @@ namespace Ical.Net
 
                 return obj as Calendar;
             }
-            protected set { }
+
+            protected set
+            {
+                // TODO: FIX Required - Calendar property silently does nothing.
+            }
         }
 
-        public virtual int Line { get; set; }
+        /// <summary>
+        /// A collection of iCalObjects that are children of the current object.
+        /// </summary>
+        public virtual ICalendarObjectList<ICalendarObject> Children => _children;
 
         public virtual int Column { get; set; }
 
-        public virtual object GetService(Type serviceType) => _serviceProvider.GetService(serviceType);
-
-        public virtual object GetService(string name) => _serviceProvider.GetService(name);
-
-        public virtual T GetService<T>() => _serviceProvider.GetService<T>();
-
-        public virtual T GetService<T>(string name) => _serviceProvider.GetService<T>(name);
-
-        public virtual void SetService(string name, object obj) => _serviceProvider.SetService(name, obj);
-
-        public virtual void SetService(object obj) => _serviceProvider.SetService(obj);
-
-        public virtual void RemoveService(Type type) => _serviceProvider.RemoveService(type);
-
-        public virtual void RemoveService(string name) => _serviceProvider.RemoveService(name);
+        public virtual int Line { get; set; }
 
         public virtual string Group
         {
-            get => Name;
-            set => Name = value;
+            get { return Name; }
+            set { Name = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the name of the iCalObject.  For iCalendar components, this is the RFC 5545 name of the component.
+        /// </summary>        
+        public virtual string Name { get; set; }
+
+        /// <summary>
+        /// Returns the parent iCalObject that owns this one.
+        /// </summary>
+        public virtual ICalendarObject Parent { get; set; }
+
+        public override void CopyFrom(ICopyable copyable)
+        {
+            var calendarObject = copyable as ICalendarObject;
+            if (calendarObject == null) return;
+
+            // Copy the name and basic information
+            Name = calendarObject.Name;
+            Parent = calendarObject.Parent;
+            Line = calendarObject.Line;
+            Column = calendarObject.Column;
+
+            // Add each child
+            Children.Clear();
+            foreach (var child in calendarObject.Children)
+            {
+                this.AddChild(child);
+            }
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            return obj.GetType() == GetType() && Equals((CalendarObject)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return Name?.GetHashCode() ?? 0;
+        }
+
+        public virtual object GetService(Type serviceType)
+        {
+            return _serviceProvider.GetService(serviceType);
+        }
+
+        public virtual object GetService(string name)
+        {
+            return _serviceProvider.GetService(name);
+        }
+
+        public virtual T GetService<T>()
+        {
+            return _serviceProvider.GetService<T>();
+        }
+
+        public virtual T GetService<T>(string name)
+        {
+            return _serviceProvider.GetService<T>(name);
+        }
+
+        public virtual void RemoveService(Type type)
+        {
+            _serviceProvider.RemoveService(type);
+        }
+
+        public virtual void RemoveService(string name)
+        {
+            _serviceProvider.RemoveService(name);
+        }
+
+        public virtual void SetService(string name, object obj)
+        {
+            _serviceProvider.SetService(name, obj);
+        }
+
+        public virtual void SetService(object obj)
+        {
+            _serviceProvider.SetService(obj);
+        }
+
+        [OnDeserialized]
+        internal void DeserializedInternal(StreamingContext context)
+        {
+            OnDeserialized(context);
+        }
+
+        [OnDeserializing]
+        internal void DeserializingInternal(StreamingContext context)
+        {
+            OnDeserializing(context);
+        }
+
+        protected bool Equals(CalendarObject other)
+        {
+            return string.Equals(Name, other.Name, StringComparison.OrdinalIgnoreCase);
+        }
+
+        protected virtual void OnDeserialized(StreamingContext context) { }
+
+        protected virtual void OnDeserializing(StreamingContext context)
+        {
+            Initialize();
+        }
+
+        private void Children_ItemAdded(object sender, ObjectEventArgs<ICalendarObject, int> e)
+        {
+            e.First.Parent = this;
         }
     }
 }
