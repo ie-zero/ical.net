@@ -38,22 +38,7 @@ namespace Ical.Net
             FreeBusy = new UniqueComponentListProxy<FreeBusy>(Children);
             TimeZones = new CalendarObjectListProxy<VTimeZone>(Children);
         }
-
-        /// <summary>
-        /// A collection of <see cref="Components.Event"/> components in the iCalendar.
-        /// </summary>
-        public IUniqueComponentList<CalendarEvent> Events { get; private set; }
-
-        /// <summary>
-        /// A collection of <see cref="CalendarComponents.FreeBusy"/> components in the iCalendar.
-        /// </summary>
-        public IUniqueComponentList<FreeBusy> FreeBusy { get; private set; }
-
-        /// <summary>
-        /// A collection of <see cref="Journal"/> components in the iCalendar.
-        /// </summary>
-        public ICalendarObjectList<Journal> Journals { get; private set; }
-
+        
         public string Method
         {
             get => Properties.Get<string>("METHOD");
@@ -78,11 +63,6 @@ namespace Ical.Net
             set => Properties.Set("X-DDAY-ICAL-RECURRENCE-RESTRICTION", value);
         }
 
-        public IEnumerable<IRecurrable> RecurringItems
-        {
-            get { return Children.OfType<IRecurrable>(); }
-        }
-
         public string Version
         {
             get => Properties.Get<string>("VERSION");
@@ -95,17 +75,38 @@ namespace Ical.Net
             set => Properties.Set("CALSCALE", value);
         }
 
+
+        public IUniqueComponentList<IUniqueComponent> UniqueComponents { get; private set; }
+
         /// <summary>
-        /// A collection of VTimeZone components in the iCalendar.
+        /// A collection of <see cref="Components.Event"/> components in the iCalendar.
         /// </summary>
-        public ICalendarObjectList<VTimeZone> TimeZones { get; private set; }
+        public IUniqueComponentList<CalendarEvent> Events { get; private set; }
 
         /// <summary>
         /// A collection of <see cref="Todo"/> components in the iCalendar.
         /// </summary>
         public IUniqueComponentList<Todo> Todos { get; private set; }
 
-        public IUniqueComponentList<IUniqueComponent> UniqueComponents { get; private set; }
+        /// <summary>
+        /// A collection of <see cref="Journal"/> components in the iCalendar.
+        /// </summary>
+        public ICalendarObjectList<Journal> Journals { get; private set; }
+
+        /// <summary>
+        /// A collection of <see cref="CalendarComponents.FreeBusy"/> components in the iCalendar.
+        /// </summary>
+        public IUniqueComponentList<FreeBusy> FreeBusy { get; private set; }
+
+        /// <summary>
+        /// A collection of VTimeZone components in the iCalendar.
+        /// </summary>
+        public ICalendarObjectList<VTimeZone> TimeZones { get; private set; }
+
+        public IEnumerable<IRecurrable> RecurringItems
+        {
+            get { return Children.OfType<IRecurrable>(); }
+        }
 
         public static Calendar Load(string iCalendarString)
         {
