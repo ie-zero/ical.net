@@ -14,13 +14,6 @@ namespace Ical.Net
 {
     public class Calendar : CalendarComponent, IGetOccurrencesTyped, IGetFreeBusy, IMergeable
     {
-        private IUniqueComponentList<IUniqueComponent> _uniqueComponents;
-        private IUniqueComponentList<CalendarEvent> _events;
-        private IUniqueComponentList<Todo> _todos;
-        private ICalendarObjectList<Journal> _journals;
-        private IUniqueComponentList<FreeBusy> _freeBusy;
-        private ICalendarObjectList<VTimeZone> _timeZones;
-
         /// <summary>
         /// To load an existing an iCalendar object, use one of the provided LoadFromXXX methods.
         /// <example>
@@ -38,28 +31,28 @@ namespace Ical.Net
 
         private void Initialize()
         {
-            _uniqueComponents = new UniqueComponentListProxy<IUniqueComponent>(Children);
-            _events = new UniqueComponentListProxy<CalendarEvent>(Children);
-            _todos = new UniqueComponentListProxy<Todo>(Children);
-            _journals = new CalendarObjectListProxy<Journal>(Children);
-            _freeBusy = new UniqueComponentListProxy<FreeBusy>(Children);
-            _timeZones = new CalendarObjectListProxy<VTimeZone>(Children);
+            UniqueComponents = new UniqueComponentListProxy<IUniqueComponent>(Children);
+            Events = new UniqueComponentListProxy<CalendarEvent>(Children);
+            Todos = new UniqueComponentListProxy<Todo>(Children);
+            Journals = new CalendarObjectListProxy<Journal>(Children);
+            FreeBusy = new UniqueComponentListProxy<FreeBusy>(Children);
+            TimeZones = new CalendarObjectListProxy<VTimeZone>(Children);
         }
 
         /// <summary>
         /// A collection of <see cref="Components.Event"/> components in the iCalendar.
         /// </summary>
-        public IUniqueComponentList<CalendarEvent> Events => _events;
+        public IUniqueComponentList<CalendarEvent> Events { get; private set; }
 
         /// <summary>
         /// A collection of <see cref="CalendarComponents.FreeBusy"/> components in the iCalendar.
         /// </summary>
-        public IUniqueComponentList<FreeBusy> FreeBusy => _freeBusy;
+        public IUniqueComponentList<FreeBusy> FreeBusy { get; private set; }
 
         /// <summary>
         /// A collection of <see cref="Journal"/> components in the iCalendar.
         /// </summary>
-        public ICalendarObjectList<Journal> Journals => _journals;
+        public ICalendarObjectList<Journal> Journals { get; private set; }
 
         public string Method
         {
@@ -105,14 +98,14 @@ namespace Ical.Net
         /// <summary>
         /// A collection of VTimeZone components in the iCalendar.
         /// </summary>
-        public ICalendarObjectList<VTimeZone> TimeZones => _timeZones;
+        public ICalendarObjectList<VTimeZone> TimeZones { get; private set; }
 
         /// <summary>
         /// A collection of <see cref="Todo"/> components in the iCalendar.
         /// </summary>
-        public IUniqueComponentList<Todo> Todos => _todos;
+        public IUniqueComponentList<Todo> Todos { get; private set; }
 
-        public IUniqueComponentList<IUniqueComponent> UniqueComponents => _uniqueComponents;
+        public IUniqueComponentList<IUniqueComponent> UniqueComponents { get; private set; }
 
         public static Calendar Load(string iCalendarString)
         {
@@ -281,35 +274,6 @@ namespace Ical.Net
                 hashCode = (hashCode * 397) ^ CollectionHelpers.GetHashCode(TimeZones);
                 return hashCode;
             }
-        }
-
-        /// <summary>
-        /// Evaluates component recurrences for the given range of time.
-        /// <example>
-        ///     For example, if you are displaying a month-view for January 2007,
-        ///     you would want to evaluate recurrences for Jan. 1, 2007 to Jan. 31, 2007
-        ///     to display relevant information for those dates.
-        /// </example>
-        /// </summary>
-        /// <param name="fromDate">The beginning date/time of the range to test.</param>
-        /// <param name="toDate">The end date/time of the range to test.</param>
-        [Obsolete("This method is no longer supported.  Use GetOccurrences() instead.")]
-        public void Evaluate(IDateTime fromDate, IDateTime toDate)
-        {
-            throw new NotSupportedException("Evaluate() is no longer supported as a public method.  Use GetOccurrences() instead.");
-        }
-
-        /// <summary>
-        /// Evaluates component recurrences for the given range of time, for
-        /// the type of recurring component specified.
-        /// </summary>
-        /// <typeparam name="T">The type of component to be evaluated for recurrences.</typeparam>
-        /// <param name="fromDate">The beginning date/time of the range to test.</param>
-        /// <param name="toDate">The end date/time of the range to test.</param>
-        [Obsolete("This method is no longer supported.  Use GetOccurrences() instead.")]
-        public void Evaluate<T>(IDateTime fromDate, IDateTime toDate)
-        {
-            throw new NotSupportedException("Evaluate() is no longer supported as a public method.  Use GetOccurrences() instead.");
         }
 
         public FreeBusy GetFreeBusy(FreeBusy freeBusyRequest)
