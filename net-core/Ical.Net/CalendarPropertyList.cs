@@ -15,9 +15,9 @@ namespace Ical.Net
             ItemAdded += CalendarPropertyList_ItemAdded;
         }
 
-        private void CalendarPropertyList_ItemAdded(object sender, ObjectEventArgs<ICalendarProperty, int> e)
+        private void CalendarPropertyList_ItemAdded(object sender, ItemProcessedEventArgs<ICalendarProperty> e)
         {
-            e.First.Parent = _parent;
+            e.Item.Parent = _parent;
         }
 
         public ICalendarProperty this[string name]

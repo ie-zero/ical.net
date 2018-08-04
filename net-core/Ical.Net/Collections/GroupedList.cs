@@ -45,11 +45,11 @@ namespace Ical.Net.Collections
             return null;
         }
 
-        public event EventHandler<ObjectEventArgs<TItem, int>> ItemAdded;
+        public event EventHandler<ItemProcessedEventArgs<TItem>> ItemAdded;
 
         protected void OnItemAdded(TItem obj, int index)
         {
-            ItemAdded?.Invoke(this, new ObjectEventArgs<TItem, int>(obj, index));
+            ItemAdded?.Invoke(this, new ItemProcessedEventArgs<TItem>(obj, index));
         }
 
         public void Add(TItem item)

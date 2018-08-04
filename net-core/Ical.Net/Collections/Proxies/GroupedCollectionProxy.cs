@@ -21,17 +21,17 @@ namespace Ical.Net.Collections.Proxies
             SetProxiedObject(realObject);
         }
 
-        public event EventHandler<ObjectEventArgs<TNew, int>> ItemAdded;
-        public event EventHandler<ObjectEventArgs<TNew, int>> ItemRemoved;
+        public event EventHandler<ItemProcessedEventArgs<TNew>> ItemAdded;
+        public event EventHandler<ItemProcessedEventArgs<TNew>> ItemRemoved;
 
         protected void OnItemAdded(TNew item, int index)
         {
-            ItemAdded?.Invoke(this, new ObjectEventArgs<TNew, int>(item, index));
+            ItemAdded?.Invoke(this, new ItemProcessedEventArgs<TNew>(item, index));
         }
 
         protected void OnItemRemoved(TNew item, int index)
         {
-            ItemRemoved?.Invoke(this, new ObjectEventArgs<TNew, int>(item, index));
+            ItemRemoved?.Invoke(this, new ItemProcessedEventArgs<TNew>(item, index));
         }
 
         public bool Remove(TGroup group) => RealObject.Remove(group);

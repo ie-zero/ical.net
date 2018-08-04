@@ -175,9 +175,9 @@ namespace Ical.Net
             Initialize();
         }
 
-        private void Children_ItemAdded(object sender, ObjectEventArgs<ICalendarObject, int> e)
+        private void Children_ItemAdded(object sender, ItemProcessedEventArgs<ICalendarObject> e)
         {
-            e.First.Parent = this;
+            e.Item.Parent = this;
         }
     }
 }
