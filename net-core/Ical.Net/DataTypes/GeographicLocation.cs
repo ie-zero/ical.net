@@ -1,4 +1,7 @@
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Ical.Net.CalendarComponents;
 using Ical.Net.Serialization.DataTypes;
 
@@ -30,31 +33,6 @@ namespace Ical.Net.DataTypes
         public double Longitude { get; set; }
 
         // TODO: See if CopyFrom() method can be deleted.
-        public override void CopyFrom(ICopyable obj) {}
-
-        protected bool Equals(GeographicLocation other)
-        {
-            return Latitude.Equals(other.Latitude) && Longitude.Equals(other.Longitude);
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            return obj.GetType() == GetType() && Equals((GeographicLocation)obj);
-        }
-
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                return (Latitude.GetHashCode() * 397) ^ Longitude.GetHashCode();
-            }
-        }
-
-        public override string ToString()
-        {
-            return Latitude.ToString("0.000000") + ";" + Longitude.ToString("0.000000");
-        }
+        public override void CopyFrom(ICopyable obj) {}        
     }
 }
