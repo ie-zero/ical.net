@@ -11,20 +11,17 @@ namespace Ical.Net.DataTypes
     [DebuggerDisplay("{Value}")]
     public class Organizer : EncodableDataType
     {
-        public virtual Uri SentBy
+        public Organizer() { }
+
+        public Organizer(string value) : this()
         {
-            get => new Uri(Parameters.Get("SENT-BY"));
-            set
+            if (string.IsNullOrWhiteSpace(value))
             {
-                if (value != null)
-                {
-                    Parameters.Set("SENT-BY", value.OriginalString);
-                }
-                else
-                {
-                    Parameters.Set("SENT-BY", (string) null);
-                }
+                return;
             }
+
+            var serializer = new OrganizerSerializer();
+            CopyFrom(serializer.Deserialize(new StringReader(value)) as ICopyable);
         }
 
         public virtual string CommonName
@@ -44,27 +41,43 @@ namespace Ical.Net.DataTypes
                 }
                 else
                 {
-                    Parameters.Set("DIR", (string) null);
+                    Parameters.Set("DIR", (string)null);
+                }
+            }
+        }
+
+        public virtual Uri SentBy
+        {
+            get => new Uri(Parameters.Get("SENT-BY"));
+            set
+            {
+                if (value != null)
+                {
+                    Parameters.Set("SENT-BY", value.OriginalString);
+                }
+                else
+                {
+                    Parameters.Set("SENT-BY", (string) null);
                 }
             }
         }
 
         public virtual Uri Value { get; set; }
 
-        public Organizer() {}
-
-        public Organizer(string value) : this()
+        public override void CopyFrom(ICopyable copyable)
         {
-            if (string.IsNullOrWhiteSpace(value))
-            {
-                return;
-            }
+            base.CopyFrom(copyable);
 
-            var serializer = new OrganizerSerializer();
-            CopyFrom(serializer.Deserialize(new StringReader(value)) as ICopyable);
+            if (copyable is Organizer o)
+            {
+                Value = o.Value;
+            }
         }
 
-        protected bool Equals(Organizer other) => Equals(Value, other.Value);
+        protected bool Equals(Organizer other)
+        {
+            return Equals(Value, other.Value);
+        }
 
         public override bool Equals(object obj)
         {
@@ -80,20 +93,12 @@ namespace Ical.Net.DataTypes
             {
                 return false;
             }
-            return Equals((Organizer) obj);
+            return Equals((Organizer)obj);
         }
 
-        public override int GetHashCode() => Value?.GetHashCode() ?? 0;
-
-        public override void CopyFrom(ICopyable obj)
+        public override int GetHashCode()
         {
-            base.CopyFrom(obj);
-
-            var o = obj as Organizer;
-            if (o != null)
-            {
-                Value = o.Value;
-            }
+            return Value?.GetHashCode() ?? 0;
         }
     }
 }

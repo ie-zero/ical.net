@@ -10,29 +10,7 @@ namespace Ical.Net.DataTypes
     /// </summary>
     public class StatusCode : EncodableDataType
     {
-        public int[] Parts { get; private set; }
-
-        public int Primary
-        {
-            get
-            {
-                if (Parts.Length > 0)
-                {
-                    return Parts[0];
-                }
-                return 0;
-            }
-        }
-
-        public int Secondary => Parts.Length > 1
-            ? Parts[1]
-            : 0;
-
-        public int Tertiary => Parts.Length > 2
-            ? Parts[2]
-            : 0;
-
-        public StatusCode() {}
+        public StatusCode() { }
 
         public StatusCode(int[] parts)
         {
@@ -45,20 +23,38 @@ namespace Ical.Net.DataTypes
             CopyFrom(serializer.Deserialize(new StringReader(value)) as ICopyable);
         }
 
-        public override void CopyFrom(ICopyable obj)
+        public int[] Parts { get; private set; }
+
+        public int Primary
         {
-            base.CopyFrom(obj);
-            if (obj is StatusCode)
+            get { return Parts.Length > 0 ? Parts[0] : 0; }
+        }
+
+        public int Secondary
+        {
+            get { return Parts.Length > 1 ? Parts[1] : 0; }
+        }
+
+        public int Tertiary
+        {
+            get { return Parts.Length > 2 ? Parts[2] : 0; }
+        }
+
+        public override void CopyFrom(ICopyable copyable)
+        {
+            base.CopyFrom(copyable);
+            if (copyable is StatusCode)
             {
-                var sc = (StatusCode) obj;
+                var sc = (StatusCode) copyable;
                 Parts = new int[sc.Parts.Length];
                 sc.Parts.CopyTo(Parts, 0);
             }
         }
 
-        public override string ToString() => new StatusCodeSerializer().SerializeToString(this);
-
-        protected bool Equals(StatusCode other) => Parts.SequenceEqual(other.Parts);
+        protected bool Equals(StatusCode other)
+        {
+            return Parts.SequenceEqual(other.Parts);
+        }
 
         public override bool Equals(object obj)
         {
@@ -74,9 +70,17 @@ namespace Ical.Net.DataTypes
             {
                 return false;
             }
-            return Equals((StatusCode) obj);
+            return Equals((StatusCode)obj);
         }
 
-        public override int GetHashCode() => CollectionHelpers.GetHashCode(Parts);
+        public override int GetHashCode()
+        {
+            return CollectionHelpers.GetHashCode(Parts);
+        }
+
+        public override string ToString()
+        {
+            return new StatusCodeSerializer().SerializeToString(this);
+        }
     }
 }

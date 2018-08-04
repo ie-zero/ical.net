@@ -5,13 +5,10 @@ namespace Ical.Net.DataTypes
 {
     public class Occurrence : IComparable<Occurrence>
     {
-        public Period Period { get; set; }
-        public IRecurrable Source { get; set; }
-
-        public Occurrence(Occurrence ao)
+        public Occurrence(Occurrence occurrence)
         {
-            Period = ao.Period;
-            Source = ao.Source;
+            Period = occurrence.Period;
+            Source = occurrence.Source;
         }
 
         public Occurrence(IRecurrable recurrable, Period period)
@@ -20,7 +17,19 @@ namespace Ical.Net.DataTypes
             Period = period;
         }
 
-        public bool Equals(Occurrence other) => Equals(Period, other.Period) && Equals(Source, other.Source);
+        public Period Period { get; set; }
+
+        public IRecurrable Source { get; set; }
+
+        public int CompareTo(Occurrence other)
+        {
+            return Period.CompareTo(other.Period);
+        }
+
+        public bool Equals(Occurrence other)
+        {
+            return Equals(Period, other.Period) && Equals(Source, other.Source);
+        }
 
         public override bool Equals(object obj)
         {
@@ -41,20 +50,18 @@ namespace Ical.Net.DataTypes
 
         public override string ToString()
         {
-            var s = "Occurrence";
+            var output = "Occurrence";
             if (Source != null)
             {
-                s = Source.GetType().Name + " ";
+                output = Source.GetType().Name + " ";
             }
 
             if (Period != null)
             {
-                s += "(" + Period.StartTime + ")";
+                output += "(" + Period.StartTime + ")";
             }
 
-            return s;
+            return output;
         }
-
-        public int CompareTo(Occurrence other) => Period.CompareTo(other.Period);
     }
 }

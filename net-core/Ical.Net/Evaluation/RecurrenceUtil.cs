@@ -14,8 +14,63 @@ namespace Ical.Net.Evaluation
             evaluator?.Clear();
         }
 
-        public static HashSet<Occurrence> GetOccurrences(IRecurrable recurrable, IDateTime dt, bool includeReferenceDateInResults) => GetOccurrences(recurrable,
-            new CalDateTime(dt.AsSystemLocal.Date), new CalDateTime(dt.AsSystemLocal.Date.AddDays(1).AddSeconds(-1)), includeReferenceDateInResults);
+        public static bool?[] GetExpandBehaviorList(RecurrencePattern pattern)
+        {
+            // See the table in RFC 5545 Section 3.3.10 (Page 43).
+            switch (pattern.Frequency)
+            {
+                case FrequencyType.Minutely:
+                    return new bool?[] { false, null, false, false, false, false, false, true, false };
+
+                case FrequencyType.Hourly:
+                    return new bool?[] { false, null, false, false, false, false, true, true, false };
+
+                case FrequencyType.Daily:
+                    return new bool?[] { false, null, null, false, false, true, true, true, false };
+
+                case FrequencyType.Weekly:
+                    return new bool?[] { false, null, null, null, true, true, true, true, false };
+
+                case FrequencyType.Monthly: {
+                    var row = new bool?[] { false, null, null, true, true, true, true, true, false };
+
+                    // Limit if BYMONTHDAY is present; otherwise, special expand for MONTHLY.
+                    if (pattern.ByMonthDay.Count > 0)
+                    {
+                        row[4] = false;
+                    }
+
+                    return row;
+                }
+
+                case FrequencyType.Yearly:{
+                    var row = new bool?[] { true, true, true, true, true, true, true, true, false };
+
+                    // Limit if BYYEARDAY or BYMONTHDAY is present; otherwise,
+                    // special expand for WEEKLY if BYWEEKNO present; otherwise,
+                    // special expand for MONTHLY if BYMONTH present; otherwise,
+                    // special expand for YEARLY.
+                    if (pattern.ByYearDay.Count > 0 || pattern.ByMonthDay.Count > 0)
+                    {
+                        row[4] = false;
+                    }
+
+                    return row;
+                }
+
+                default:
+                    return new bool?[] { false, null, false, false, false, false, false, false, false };
+            }
+        }
+
+        public static HashSet<Occurrence> GetOccurrences(IRecurrable recurrable, IDateTime dt, bool includeReferenceDateInResults)
+        {
+            return GetOccurrences(
+                    recurrable,
+                    new CalDateTime(dt.AsSystemLocal.Date), 
+                    new CalDateTime(dt.AsSystemLocal.Date.AddDays(1).AddSeconds(-1)), 
+                    includeReferenceDateInResults);
+        }
 
         public static HashSet<Occurrence> GetOccurrences(IRecurrable recurrable, IDateTime periodStart, IDateTime periodEnd, bool includeReferenceDateInResults)
         {
@@ -45,51 +100,6 @@ namespace Ical.Net.Evaluation
 
             var occurrences = new HashSet<Occurrence>(otherOccurrences);
             return occurrences;
-        }
-
-        public static bool?[] GetExpandBehaviorList(RecurrencePattern p)
-        {
-            // See the table in RFC 5545 Section 3.3.10 (Page 43).
-            switch (p.Frequency)
-            {
-                case FrequencyType.Minutely:
-                    return new bool?[] {false, null, false, false, false, false, false, true, false};
-                case FrequencyType.Hourly:
-                    return new bool?[] {false, null, false, false, false, false, true, true, false};
-                case FrequencyType.Daily:
-                    return new bool?[] {false, null, null, false, false, true, true, true, false};
-                case FrequencyType.Weekly:
-                    return new bool?[] {false, null, null, null, true, true, true, true, false};
-                case FrequencyType.Monthly:
-                {
-                    var row = new bool?[] {false, null, null, true, true, true, true, true, false};
-
-                    // Limit if BYMONTHDAY is present; otherwise, special expand for MONTHLY.
-                    if (p.ByMonthDay.Count > 0)
-                    {
-                        row[4] = false;
-                    }
-
-                    return row;
-                }
-                case FrequencyType.Yearly:
-                {
-                    var row = new bool?[] {true, true, true, true, true, true, true, true, false};
-
-                    // Limit if BYYEARDAY or BYMONTHDAY is present; otherwise,
-                    // special expand for WEEKLY if BYWEEKNO present; otherwise,
-                    // special expand for MONTHLY if BYMONTH present; otherwise,
-                    // special expand for YEARLY.
-                    if (p.ByYearDay.Count > 0 || p.ByMonthDay.Count > 0)
-                    {
-                        row[4] = false;
-                    }
-
-                    return row;
-                }
-                default:
-                    return new bool?[] {false, null, false, false, false, false, false, false, false};
-            }
         }
     }
 }

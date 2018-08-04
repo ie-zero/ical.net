@@ -8,17 +8,7 @@ namespace Ical.Net.DataTypes
     /// </summary>
     public class UtcOffset : EncodableDataType
     {
-        public TimeSpan Offset { get; }
-
-        public bool Positive => Offset >= TimeSpan.Zero;
-
-        public int Hours => Math.Abs(Offset.Hours);
-
-        public int Minutes => Math.Abs(Offset.Minutes);
-
-        public int Seconds => Math.Abs(Offset.Seconds);
-
-        public UtcOffset() {}
+        public UtcOffset() { }
 
         public UtcOffset(string value) : this()
         {
@@ -30,15 +20,42 @@ namespace Ical.Net.DataTypes
             Offset = ts;
         }
 
-        public static implicit operator UtcOffset(TimeSpan ts) => new UtcOffset(ts);
+        public int Hours
+        {
+            get { return Math.Abs(Offset.Hours); }
+        }
 
-        public static explicit operator TimeSpan(UtcOffset o) => o.Offset;
+        public int Minutes
+        {
+            get { return Math.Abs(Offset.Minutes); }
+        }
 
-        public virtual DateTime ToUtc(DateTime dt) => DateTime.SpecifyKind(dt.Add(-Offset), DateTimeKind.Utc);
+        public TimeSpan Offset { get; }
 
-        public virtual DateTime ToLocal(DateTime dt) => DateTime.SpecifyKind(dt.Add(Offset), DateTimeKind.Local);
+        public bool Positive
+        {
+            get { return Offset >= TimeSpan.Zero; }
+        }
 
-        protected bool Equals(UtcOffset other) => Offset == other.Offset;
+        public int Seconds
+        {
+            get { return Math.Abs(Offset.Seconds); }
+        }
+
+        public static explicit operator TimeSpan(UtcOffset o)
+        {
+            return o.Offset;
+        }
+
+        public static implicit operator UtcOffset(TimeSpan ts)
+        {
+            return new UtcOffset(ts);
+        }
+
+        protected bool Equals(UtcOffset other)
+        {
+            return Offset == other.Offset;
+        }
 
         public override bool Equals(object obj)
         {
@@ -54,11 +71,27 @@ namespace Ical.Net.DataTypes
             {
                 return false;
             }
-            return Equals((UtcOffset) obj);
+            return Equals((UtcOffset)obj);
         }
 
-        public override int GetHashCode() => Offset.GetHashCode();
+        public override int GetHashCode()
+        {
+            return Offset.GetHashCode();
+        }
 
-        public override string ToString() => (Positive ? "+" : "-") + Hours.ToString("00") + Minutes.ToString("00") + (Seconds != 0 ? Seconds.ToString("00") : string.Empty);
+        public virtual DateTime ToLocal(DateTime dt)
+        {
+            return DateTime.SpecifyKind(dt.Add(Offset), DateTimeKind.Local);
+        }
+
+        public override string ToString()
+        {
+            return (Positive ? "+" : "-") + Hours.ToString("00") + Minutes.ToString("00") + (Seconds != 0 ? Seconds.ToString("00") : string.Empty);
+        }
+
+        public virtual DateTime ToUtc(DateTime dt)
+        {
+            return DateTime.SpecifyKind(dt.Add(-Offset), DateTimeKind.Utc);
+        }
     }
 }

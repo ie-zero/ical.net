@@ -6,11 +6,11 @@ namespace Ical.Net.Evaluation
 {
     public class PeriodListEvaluator : Evaluator
     {
-        private readonly PeriodList _mPeriodList;
+        private readonly PeriodList _periodList;
 
         public PeriodListEvaluator(PeriodList rdt)
         {
-            _mPeriodList = rdt;
+            _periodList = rdt;
         }
 
         public override HashSet<Period> Evaluate(IDateTime referenceDate, DateTime periodStart, DateTime periodEnd, bool includeReferenceDateInResults)
@@ -19,7 +19,7 @@ namespace Ical.Net.Evaluation
 
             if (includeReferenceDateInResults)
             {
-                Period p = new Period(referenceDate);
+                var p = new Period(referenceDate);
                 periods.Add(p);
             }
 
@@ -28,7 +28,7 @@ namespace Ical.Net.Evaluation
                 return periods;
             }
 
-            periods.UnionWith(_mPeriodList);
+            periods.UnionWith(_periodList);
             return periods;
         }
     }

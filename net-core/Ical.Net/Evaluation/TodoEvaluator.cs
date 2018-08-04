@@ -9,44 +9,11 @@ namespace Ical.Net.Evaluation
 {
     public class TodoEvaluator : RecurringEvaluator
     {
-        protected Todo Todo => Recurrable as Todo;
+        public TodoEvaluator(Todo todo) : base(todo) { }
 
-        public TodoEvaluator(Todo todo) : base(todo) {}
-
-        public void EvaluateToPreviousOccurrence(IDateTime completedDate, IDateTime currDt)
+        protected Todo Todo
         {
-            var beginningDate = completedDate.Copy<IDateTime>();
-
-            if (Todo.RecurrenceRules != null)
-            {
-                foreach (var rrule in Todo.RecurrenceRules)
-                {
-                    DetermineStartingRecurrence(rrule, ref beginningDate);
-                }
-            }
-            if (Todo.RecurrenceDates != null)
-            {
-                foreach (var rdate in Todo.RecurrenceDates)
-                {
-                    DetermineStartingRecurrence(rdate, ref beginningDate);
-                }
-            }
-            if (Todo.ExceptionRules != null)
-            {
-                foreach (var exrule in Todo.ExceptionRules)
-                {
-                    DetermineStartingRecurrence(exrule, ref beginningDate);
-                }
-            }
-            if (Todo.ExceptionDates != null)
-            {
-                foreach (var exdate in Todo.ExceptionDates)
-                {
-                    DetermineStartingRecurrence(exdate, ref beginningDate);
-                }
-            }
-
-            Evaluate(Todo.Start, DateUtil.GetSimpleDateTimeData(beginningDate), DateUtil.GetSimpleDateTimeData(currDt).AddTicks(1), true);
+            get { return Recurrable as Todo; }
         }
 
         public void DetermineStartingRecurrence(PeriodList rdate, ref IDateTime referenceDateTime)
@@ -98,6 +65,42 @@ namespace Ical.Net.Evaluation
                 }
             }
             return Periods;
+        }
+
+        public void EvaluateToPreviousOccurrence(IDateTime completedDate, IDateTime currDt)
+        {
+            var beginningDate = completedDate.Copy<IDateTime>();
+
+            if (Todo.RecurrenceRules != null)
+            {
+                foreach (var rrule in Todo.RecurrenceRules)
+                {
+                    DetermineStartingRecurrence(rrule, ref beginningDate);
+                }
+            }
+            if (Todo.RecurrenceDates != null)
+            {
+                foreach (var rdate in Todo.RecurrenceDates)
+                {
+                    DetermineStartingRecurrence(rdate, ref beginningDate);
+                }
+            }
+            if (Todo.ExceptionRules != null)
+            {
+                foreach (var exrule in Todo.ExceptionRules)
+                {
+                    DetermineStartingRecurrence(exrule, ref beginningDate);
+                }
+            }
+            if (Todo.ExceptionDates != null)
+            {
+                foreach (var exdate in Todo.ExceptionDates)
+                {
+                    DetermineStartingRecurrence(exdate, ref beginningDate);
+                }
+            }
+
+            Evaluate(Todo.Start, DateUtil.GetSimpleDateTimeData(beginningDate), DateUtil.GetSimpleDateTimeData(currDt).AddTicks(1), true);
         }
     }
 }

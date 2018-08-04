@@ -7,13 +7,13 @@ namespace Ical.Net.Evaluation
 {
     public class TimeZoneInfoEvaluator : RecurringEvaluator
     {
+        public TimeZoneInfoEvaluator(IRecurrable tzi) : base(tzi) { }
+
         protected VTimeZoneInfo TimeZoneInfo
         {
             get => Recurrable as VTimeZoneInfo;
             set => Recurrable = value;
         }
-
-        public TimeZoneInfoEvaluator(IRecurrable tzi) : base(tzi) { }
 
         public override HashSet<Period> Evaluate(IDateTime referenceDate, DateTime periodStart, DateTime periodEnd, bool includeReferenceDateInResults)
         {

@@ -9,10 +9,6 @@ namespace Ical.Net.DataTypes
     /// </summary>
     public class WeekDay : EncodableDataType
     {
-        public virtual int Offset { get; set; } = int.MinValue;
-
-        public virtual DayOfWeek DayOfWeek { get; set; }
-
         public WeekDay()
         {
             Offset = int.MinValue;
@@ -28,12 +24,51 @@ namespace Ical.Net.DataTypes
             Offset = num;
         }
 
-        public WeekDay(DayOfWeek day, FrequencyOccurrence type) : this(day, (int) type) {}
+        public WeekDay(DayOfWeek day, FrequencyOccurrence type) : this(day, (int)type) { }
 
         public WeekDay(string value)
         {
             var serializer = new WeekDaySerializer();
             CopyFrom(serializer.Deserialize(new StringReader(value)) as ICopyable);
+        }
+
+        public virtual DayOfWeek DayOfWeek { get; set; }
+
+        public virtual int Offset { get; set; } = int.MinValue;
+
+        public int CompareTo(object obj)
+        {
+            WeekDay bd = null;
+            if (obj is string)
+            {
+                bd = new WeekDay(obj.ToString());
+            }
+            else if (obj is WeekDay)
+            {
+                bd = (WeekDay)obj;
+            }
+
+            if (bd == null)
+            {
+                throw new ArgumentException();
+            }
+            var compare = DayOfWeek.CompareTo(bd.DayOfWeek);
+            if (compare == 0)
+            {
+                compare = Offset.CompareTo(bd.Offset);
+            }
+            return compare;
+        }
+
+        public override void CopyFrom(ICopyable copyable)
+        {
+            base.CopyFrom(copyable);
+            if (copyable is WeekDay)
+            {
+                var bd = (WeekDay)copyable;
+                Offset = bd.Offset;
+                DayOfWeek = bd.DayOfWeek;
+            }
         }
 
         public override bool Equals(object obj)
@@ -47,41 +82,9 @@ namespace Ical.Net.DataTypes
             return ds.Offset == Offset && ds.DayOfWeek == DayOfWeek;
         }
 
-        public override int GetHashCode() => Offset.GetHashCode() ^ DayOfWeek.GetHashCode();
-
-        public override void CopyFrom(ICopyable obj)
+        public override int GetHashCode()
         {
-            base.CopyFrom(obj);
-            if (obj is WeekDay)
-            {
-                var bd = (WeekDay) obj;
-                Offset = bd.Offset;
-                DayOfWeek = bd.DayOfWeek;
-            }
-        }
-
-        public int CompareTo(object obj)
-        {
-            WeekDay bd = null;
-            if (obj is string)
-            {
-                bd = new WeekDay(obj.ToString());
-            }
-            else if (obj is WeekDay)
-            {
-                bd = (WeekDay) obj;
-            }
-
-            if (bd == null)
-            {
-                throw new ArgumentException();
-            }
-            var compare = DayOfWeek.CompareTo(bd.DayOfWeek);
-            if (compare == 0)
-            {
-                compare = Offset.CompareTo(bd.Offset);
-            }
-            return compare;
+            return Offset.GetHashCode() ^ DayOfWeek.GetHashCode();
         }
     }
 }

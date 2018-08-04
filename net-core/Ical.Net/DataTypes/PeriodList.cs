@@ -14,11 +14,6 @@ namespace Ical.Net.DataTypes
     /// </summary>
     public class PeriodList : EncodableDataType, IList<Period>
     {
-        public string TzId { get; set; }
-        public int Count => Periods.Count;
-
-        protected IList<Period> Periods { get; set; } = new List<Period>();
-
         public PeriodList()
         {
             SetService(new PeriodListEvaluator(this));
@@ -30,23 +25,19 @@ namespace Ical.Net.DataTypes
             CopyFrom(serializer.Deserialize(new StringReader(value)) as ICopyable);
         }
 
-        public override void CopyFrom(ICopyable obj)
+        public int Count => Periods.Count;
+
+        public bool IsReadOnly => Periods.IsReadOnly;
+
+        public string TzId { get; set; }
+
+        protected IList<Period> Periods { get; set; } = new List<Period>();
+
+        public Period this[int index]
         {
-            base.CopyFrom(obj);
-            if (!(obj is PeriodList list))
-            {
-                return;
-            }
-
-            foreach (var p in list)
-            {
-                Add(p);
-            }
+            get => Periods[index];
+            set => Periods[index] = value;
         }
-
-        public override string ToString() => new PeriodListSerializer().SerializeToString(this);
-
-        public void Add(IDateTime dt) => Periods.Add(new Period(dt));
 
         public static Dictionary<string, List<Period>> GetGroupedPeriods(IList<PeriodList> periodLists)
         {
@@ -80,8 +71,65 @@ namespace Ical.Net.DataTypes
             return grouped.ToDictionary(k => k.Key, v => v.Value.OrderBy(d => d.StartTime).ToList());
         }
 
-        protected bool Equals(PeriodList other) => string.Equals(TzId, other.TzId, StringComparison.OrdinalIgnoreCase)
-            && CollectionHelpers.Equals(Periods, other.Periods);
+        public void Add(IDateTime dt)
+        {
+            Periods.Add(new Period(dt));
+        }
+
+        public void Add(Period item)
+        {
+            Periods.Add(item);
+        }
+
+        public void Clear()
+        {
+            Periods.Clear();
+        }
+
+        public bool Contains(Period item)
+        {
+            return Periods.Contains(item);
+        }
+
+        public override void CopyFrom(ICopyable copyable)
+        {
+            base.CopyFrom(copyable);
+            if (!(copyable is PeriodList list))
+            {
+                return;
+            }
+
+            foreach (var p in list)
+            {
+                Add(p);
+            }
+        }
+
+        public void CopyTo(Period[] array, int arrayIndex)
+        {
+            Periods.CopyTo(array, arrayIndex);
+        }
+
+        public IEnumerator<Period> GetEnumerator()
+        {
+            return Periods.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return Periods.GetEnumerator();
+        }
+
+        public override string ToString()
+        {
+            return new PeriodListSerializer().SerializeToString(this);
+        }
+
+        protected bool Equals(PeriodList other)
+        {
+            return string.Equals(TzId, other.TzId, StringComparison.OrdinalIgnoreCase)
+                && CollectionHelpers.Equals(Periods, other.Periods);
+        }
 
         public override bool Equals(object obj)
         {
@@ -100,22 +148,24 @@ namespace Ical.Net.DataTypes
             }
         }
 
-        public Period this[int index]
+        public int IndexOf(Period item)
         {
-            get => Periods[index];
-            set => Periods[index] = value;
+            return Periods.IndexOf(item);
         }
 
-        public bool Remove(Period item) => Periods.Remove(item);
-        public bool IsReadOnly => Periods.IsReadOnly;
-        public int IndexOf(Period item) => Periods.IndexOf(item);
-        public void Insert(int index, Period item) => Periods.Insert(index, item);
-        public void RemoveAt(int index) => Periods.RemoveAt(index);
-        public void Add(Period item) => Periods.Add(item);
-        public void Clear() => Periods.Clear();
-        public bool Contains(Period item) => Periods.Contains(item);
-        public void CopyTo(Period[] array, int arrayIndex) => Periods.CopyTo(array, arrayIndex);
-        public IEnumerator<Period> GetEnumerator() => Periods.GetEnumerator();
-        IEnumerator IEnumerable.GetEnumerator() => Periods.GetEnumerator();
+        public void Insert(int index, Period item)
+        {
+            Periods.Insert(index, item);
+        }
+
+        public bool Remove(Period item)
+        {
+            return Periods.Remove(item);
+        }
+
+        public void RemoveAt(int index)
+        {
+            Periods.RemoveAt(index);
+        }
     }
 }

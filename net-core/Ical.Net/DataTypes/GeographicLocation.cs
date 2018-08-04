@@ -11,10 +11,7 @@ namespace Ical.Net.DataTypes
     [DebuggerDisplay("{Latitude};{Longitude}")]
     public class GeographicLocation : EncodableDataType
     {
-        public double Latitude { get; set; }
-        public double Longitude { get; set; }
-
-        public GeographicLocation() {}
+        public GeographicLocation() { }
 
         public GeographicLocation(string value) : this()
         {
@@ -28,11 +25,17 @@ namespace Ical.Net.DataTypes
             Longitude = longitude;
         }
 
+        public double Latitude { get; set; }
+
+        public double Longitude { get; set; }
+
+        // TODO: See if CopyFrom() method can be deleted.
         public override void CopyFrom(ICopyable obj) {}
 
-        public override string ToString() => Latitude.ToString("0.000000") + ";" + Longitude.ToString("0.000000");
-
-        protected bool Equals(GeographicLocation other) => Latitude.Equals(other.Latitude) && Longitude.Equals(other.Longitude);
+        protected bool Equals(GeographicLocation other)
+        {
+            return Latitude.Equals(other.Latitude) && Longitude.Equals(other.Longitude);
+        }
 
         public override bool Equals(object obj)
         {
@@ -47,6 +50,11 @@ namespace Ical.Net.DataTypes
             {
                 return (Latitude.GetHashCode() * 397) ^ Longitude.GetHashCode();
             }
+        }
+
+        public override string ToString()
+        {
+            return Latitude.ToString("0.000000") + ";" + Longitude.ToString("0.000000");
         }
     }
 }

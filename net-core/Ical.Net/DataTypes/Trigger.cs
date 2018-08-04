@@ -10,17 +10,30 @@ namespace Ical.Net.DataTypes
     /// </summary>    
     public class Trigger : EncodableDataType
     {
-        private IDateTime _mDateTime;
-        private TimeSpan? _mDuration;
-        private string _mRelated = TriggerRelation.Start;
+        private IDateTime _dateTime;
+        private TimeSpan? _duration;
+        private string _related = TriggerRelation.Start;
+
+        public Trigger() { }
+
+        public Trigger(TimeSpan ts)
+        {
+            Duration = ts;
+        }
+
+        public Trigger(string value) : this()
+        {
+            var serializer = new TriggerSerializer();
+            CopyFrom(serializer.Deserialize(new StringReader(value)) as ICopyable);
+        }
 
         public virtual IDateTime DateTime
         {
-            get => _mDateTime;
+            get => _dateTime;
             set
             {
-                _mDateTime = value;
-                if (_mDateTime == null)
+                _dateTime = value;
+                if (_dateTime == null)
                 {
                     return;
                 }
@@ -32,17 +45,17 @@ namespace Ical.Net.DataTypes
                 Duration = null;
 
                 // Do not allow timeless date/time values
-                _mDateTime.HasTime = true;
+                _dateTime.HasTime = true;
             }
         }
 
         public virtual TimeSpan? Duration
         {
-            get => _mDuration;
+            get => _duration;
             set
             {
-                _mDuration = value;
-                if (_mDuration != null)
+                _duration = value;
+                if (_duration != null)
                 {
                     // NOTE: see above.
 
@@ -52,25 +65,15 @@ namespace Ical.Net.DataTypes
             }
         }
 
+        public virtual bool IsRelative
+        {
+            get { return _duration != null; }
+        }
+
         public virtual string Related
         {
-            get => _mRelated;
-            set => _mRelated = value;
-        }
-
-        public virtual bool IsRelative => _mDuration != null;
-
-        public Trigger() {}
-
-        public Trigger(TimeSpan ts)
-        {
-            Duration = ts;
-        }
-
-        public Trigger(string value) : this()
-        {
-            var serializer = new TriggerSerializer();
-            CopyFrom(serializer.Deserialize(new StringReader(value)) as ICopyable);
+            get => _related;
+            set => _related = value;
         }
 
         public override void CopyFrom(ICopyable obj)
@@ -87,7 +90,10 @@ namespace Ical.Net.DataTypes
             Related = t.Related;
         }
 
-        protected bool Equals(Trigger other) => Equals(_mDateTime, other._mDateTime) && _mDuration.Equals(other._mDuration) && _mRelated == other._mRelated;
+        protected bool Equals(Trigger other)
+        {
+            return Equals(_dateTime, other._dateTime) && _duration.Equals(other._duration) && _related == other._related;
+        }
 
         public override bool Equals(object obj)
         {
@@ -103,16 +109,16 @@ namespace Ical.Net.DataTypes
             {
                 return false;
             }
-            return Equals((Trigger) obj);
+            return Equals((Trigger)obj);
         }
 
         public override int GetHashCode()
         {
             unchecked
             {
-                var hashCode = _mDateTime?.GetHashCode() ?? 0;
-                hashCode = (hashCode * 397) ^ _mDuration.GetHashCode();
-                hashCode = (hashCode * 397) ^ _mRelated?.GetHashCode() ?? 0;
+                var hashCode = _dateTime?.GetHashCode() ?? 0;
+                hashCode = (hashCode * 397) ^ _duration.GetHashCode();
+                hashCode = (hashCode * 397) ^ _related?.GetHashCode() ?? 0;
                 return hashCode;
             }
         }
