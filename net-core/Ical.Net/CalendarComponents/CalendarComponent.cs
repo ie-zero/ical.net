@@ -28,12 +28,12 @@ namespace Ical.Net.CalendarComponents
         /// <summary>
         /// Returns a list of properties that are associated with the iCalendar object.
         /// </summary>
-        public virtual CalendarPropertyList Properties { get; protected set; }
+        public CalendarPropertyList Properties { get; protected set; }
 
         /// <summary>
         /// Adds a property to this component.
         /// </summary>
-        public virtual void AddProperty(string name, string value)
+        public void AddProperty(string name, string value)
         {
             AddProperty(new CalendarProperty(name, value));
         }
@@ -41,7 +41,7 @@ namespace Ical.Net.CalendarComponents
         /// <summary>
         /// Adds a property to this component.
         /// </summary>
-        public virtual void AddProperty(ICalendarProperty property)
+        public void AddProperty(ICalendarProperty property)
         {
             property.Parent = this;
             Properties.Set(property.Name, property.Value);

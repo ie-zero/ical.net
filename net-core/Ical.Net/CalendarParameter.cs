@@ -42,20 +42,20 @@ namespace Ical.Net
             _values = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         }
 
-        public virtual string Value
+        public string Value
         {
             get { return Values?.FirstOrDefault(); }
             set { SetValue(value); }
         }
 
-        public virtual int ValueCount
+        public int ValueCount
         {
             get { return _values?.Count ?? 0; }
         }
 
-        public virtual IEnumerable<string> Values => _values;
+        public IEnumerable<string> Values => _values;
 
-        public virtual void AddValue(string value)
+        public void AddValue(string value)
         {
             if (!IsValidValue(value))
             {
@@ -65,7 +65,7 @@ namespace Ical.Net
             _values.Add(value);
         }
 
-        public virtual bool ContainsValue(string value)
+        public bool ContainsValue(string value)
         {
             return _values.Contains(value);
         }
@@ -83,19 +83,19 @@ namespace Ical.Net
             _values = new HashSet<string>(p.Values.Where(IsValidValue), StringComparer.OrdinalIgnoreCase);
         }
 
-        public virtual void SetValue(string value)
+        public void SetValue(string value)
         {
             _values.Add(value);
         }
 
-        public virtual void SetValue(IEnumerable<string> values)
+        public void SetValue(IEnumerable<string> values)
         {
             // Remove all previous values
             _values.Clear();
             _values.UnionWith(values.Where(IsValidValue));
         }
 
-        public virtual void RemoveValue(string value)
+        public void RemoveValue(string value)
         {
             _values.Remove(value);
         }

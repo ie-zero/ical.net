@@ -48,7 +48,7 @@ namespace Ical.Net.CalendarComponents
         /// will be extrapolated.
         /// </note>
         /// </summary>
-        public virtual IDateTime DtEnd
+        public IDateTime DtEnd
         {
             get { return Properties.Get<IDateTime>("DTEND"); }
 
@@ -104,7 +104,7 @@ namespace Ical.Net.CalendarComponents
         /// extrapolated from the duration.
         /// </remarks>
 
-        public virtual TimeSpan Duration
+        public TimeSpan Duration
         {
             get { return Properties.Get<TimeSpan>("DURATION"); }
 
@@ -121,7 +121,7 @@ namespace Ical.Net.CalendarComponents
         /// <summary>
         /// An alias to the DtEnd field (i.e. end date/time).
         /// </summary>
-        public virtual IDateTime End
+        public IDateTime End
         {
             get => DtEnd;
             set => DtEnd = value;
@@ -141,7 +141,7 @@ namespace Ical.Net.CalendarComponents
         /// as an upcoming or occurred event.
         /// </summary>
         /// <returns>True if the event has not been cancelled, False otherwise.</returns>
-        public virtual bool IsActive
+        public bool IsActive
         {
             get
             {
@@ -152,7 +152,7 @@ namespace Ical.Net.CalendarComponents
         /// <summary>
         /// Returns true if the event is an all-day event.
         /// </summary>
-        public virtual bool IsAllDay
+        public bool IsAllDay
         {
             get { return !Start.HasTime; }
 
@@ -191,7 +191,7 @@ namespace Ical.Net.CalendarComponents
         /// <example>Conference room #2</example>
         /// <example>Projector</example>
         /// </summary>
-        public virtual IList<string> Resources
+        public IList<string> Resources
         {
             get => Properties.GetMany<string>("RESOURCES");
             set => Properties.Set("RESOURCES", value ?? new List<string>());
@@ -329,7 +329,7 @@ namespace Ical.Net.CalendarComponents
         /// </summary>
         /// <param name="dateTime">The date and time to test.</param>
         /// <returns>True if the event begins at the given date and time</returns>
-        public virtual bool OccursAt(IDateTime dateTime)
+        public bool OccursAt(IDateTime dateTime)
         {
             return _evaluator.Periods.Any(p => p.StartTime.Equals(dateTime));
         }
@@ -343,7 +343,7 @@ namespace Ical.Net.CalendarComponents
         /// </summary>
         /// <param name="dateTime">The date to test.</param>
         /// <returns>True if the event occurs on the <paramref name="dateTime"/> provided, False otherwise.</returns>
-        public virtual bool OccursOn(IDateTime dateTime)
+        public bool OccursOn(IDateTime dateTime)
         {
             return _evaluator.Periods.Any(p => p.StartTime.Date == dateTime.Date || // It's the start date OR
                                                 (p.StartTime.Date <= dateTime.Date && // It's after the start date AND

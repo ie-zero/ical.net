@@ -46,7 +46,7 @@ namespace Ical.Net.CalendarComponents
 
         public HashSet<VTimeZoneInfo> TimeZoneInfos { get; set; }
 
-        public virtual string TzId
+        public string TzId
         {
             get
             {
@@ -87,7 +87,7 @@ namespace Ical.Net.CalendarComponents
             }
         }
 
-        public virtual Uri Url
+        public Uri Url
         {
             get => _url ?? (_url = Properties.Get<Uri>("TZURL"));
             set

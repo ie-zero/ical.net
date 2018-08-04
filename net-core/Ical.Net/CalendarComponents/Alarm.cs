@@ -15,61 +15,61 @@ namespace Ical.Net.CalendarComponents
             Occurrences = new List<AlarmOccurrence>();
         }
 
-        public virtual string Action
+        public string Action
         {
             get => Properties.Get<string>(AlarmAction.Key);
             set => Properties.Set(AlarmAction.Key, value);
         }
 
-        public virtual Attachment Attachment
+        public Attachment Attachment
         {
             get => Properties.Get<Attachment>("ATTACH");
             set => Properties.Set("ATTACH", value);
         }
 
-        public virtual IList<Attendee> Attendees
+        public IList<Attendee> Attendees
         {
             get => Properties.GetMany<Attendee>("ATTENDEE");
             set => Properties.Set("ATTENDEE", value);
         }
 
-        public virtual string Description
+        public string Description
         {
             get => Properties.Get<string>("DESCRIPTION");
             set => Properties.Set("DESCRIPTION", value);
         }
 
-        public virtual TimeSpan Duration
+        public TimeSpan Duration
         {
             get => Properties.Get<TimeSpan>("DURATION");
             set => Properties.Set("DURATION", value);
         }
 
-        public virtual int Repeat
+        public int Repeat
         {
             get => Properties.Get<int>("REPEAT");
             set => Properties.Set("REPEAT", value);
         }
 
-        public virtual string Summary
+        public string Summary
         {
             get => Properties.Get<string>("SUMMARY");
             set => Properties.Set("SUMMARY", value);
         }
 
-        public virtual Trigger Trigger
+        public Trigger Trigger
         {
             get => Properties.Get<Trigger>(TriggerRelation.Key);
             set => Properties.Set(TriggerRelation.Key, value);
         }
 
-        protected virtual IList<AlarmOccurrence> Occurrences { get; set; }
+        protected IList<AlarmOccurrence> Occurrences { get; set; }
 
         /// <summary>
         /// Gets a list of alarm occurrences for the given recurring component, <paramref name="rc"/>
         /// that occur between <paramref name="fromDate"/> and <paramref name="toDate"/>.
         /// </summary>
-        public virtual IList<AlarmOccurrence> GetOccurrences(IRecurringComponent rc, IDateTime fromDate, IDateTime toDate)
+        public IList<AlarmOccurrence> GetOccurrences(IRecurringComponent rc, IDateTime fromDate, IDateTime toDate)
         {
             // TODO: Move GetOccurrences() logic into an AlarmEvaluator.
 
@@ -144,7 +144,7 @@ namespace Ical.Net.CalendarComponents
         /// <returns>
         /// A list of <see cref="AlarmOccurrence"/> objects, each containing a triggered alarm.
         /// </returns>
-        public virtual IList<AlarmOccurrence> Poll(IDateTime start, IDateTime end)
+        public IList<AlarmOccurrence> Poll(IDateTime start, IDateTime end)
         {
             var results = new List<AlarmOccurrence>();
 
@@ -163,7 +163,7 @@ namespace Ical.Net.CalendarComponents
         /// Handles the repetitions that occur from the <c>REPEAT</c> and <c>DURATION</c> properties.
         /// Each recurrence of the alarm will have its own set of generated repetitions.
         /// </summary>
-        protected virtual void AddRepeatedItems()
+        protected void AddRepeatedItems()
         {
             var len = Occurrences.Count;
             for (var index = 0; index < len; index++)

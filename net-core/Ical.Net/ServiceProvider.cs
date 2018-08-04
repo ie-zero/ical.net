@@ -10,19 +10,19 @@ namespace Ical.Net
         private readonly IDictionary<string, object> _namedServices = new Dictionary<string, object>();
         private readonly IDictionary<Type, object> _typedServices = new Dictionary<Type, object>();
 
-        public virtual object GetService(Type serviceType)
+        public object GetService(Type serviceType)
         {
             _typedServices.TryGetValue(serviceType, out object service);
             return service;
         }
 
-        public virtual object GetService(string name)
+        public object GetService(string name)
         {
             _namedServices.TryGetValue(name, out object service);
             return service;
         }
 
-        public virtual T GetService<T>()
+        public T GetService<T>()
         {
             var service = GetService(typeof(T));
             if (service is T)
@@ -32,7 +32,7 @@ namespace Ical.Net
             return default(T);
         }
 
-        public virtual T GetService<T>(string name)
+        public T GetService<T>(string name)
         {
             var service = GetService(name);
             if (service is T)
@@ -42,7 +42,7 @@ namespace Ical.Net
             return default(T);
         }
 
-        public virtual void RemoveService(Type type)
+        public void RemoveService(Type type)
         {
             if (type != null)
             {
@@ -59,7 +59,7 @@ namespace Ical.Net
             }
         }
 
-        public virtual void RemoveService(string name)
+        public void RemoveService(string name)
         {
             if (_namedServices.ContainsKey(name))
             {
@@ -67,7 +67,7 @@ namespace Ical.Net
             }
         }
 
-        public virtual void SetService(string name, object obj)
+        public void SetService(string name, object obj)
         {
             if (!string.IsNullOrEmpty(name) && obj != null)
             {
@@ -75,7 +75,7 @@ namespace Ical.Net
             }
         }
 
-        public virtual void SetService(object obj)
+        public void SetService(object obj)
         {
             if (obj != null)
             {

@@ -41,7 +41,7 @@ namespace Ical.Net
         /// <summary>
         /// Returns a list of parameters that are associated with the iCalendar object.
         /// </summary>
-        public virtual IParameterCollection Parameters { get; protected set; } = new ParameterList();
+        public IParameterCollection Parameters { get; protected set; } = new ParameterList();
 
         public object Value
         {
@@ -67,17 +67,17 @@ namespace Ical.Net
             }
         }
 
-        public virtual int ValueCount
+        public int ValueCount
         {
             get { return _values?.Count ?? 0; }
         }
 
-        public virtual IEnumerable<object> Values => _values;
+        public IEnumerable<object> Values => _values;
 
         /// <summary>
         /// Adds a parameter to the iCalendar object.
         /// </summary>
-        public virtual void AddParameter(string name, string value)
+        public void AddParameter(string name, string value)
         {
             var p = new CalendarParameter(name, value);
             Parameters.Add(p);
@@ -86,12 +86,12 @@ namespace Ical.Net
         /// <summary>
         /// Adds a parameter to the iCalendar object.
         /// </summary>
-        public virtual void AddParameter(CalendarParameter p)
+        public void AddParameter(CalendarParameter p)
         {
             Parameters.Add(p);
         }
 
-        public virtual void AddValue(object value)
+        public void AddValue(object value)
         {
             if (value == null)
             {
@@ -101,12 +101,12 @@ namespace Ical.Net
             _values.Add(value);
         }
 
-        public virtual bool ContainsValue(object value)
+        public bool ContainsValue(object value)
         {
             return _values.Contains(value);
         }
 
-        public virtual void RemoveValue(object value)
+        public void RemoveValue(object value)
         {
             if (value == null)
             {
@@ -115,7 +115,7 @@ namespace Ical.Net
             _values.Remove(value);
         }
 
-        public virtual void SetValue(object value)
+        public void SetValue(object value)
         {
             if (_values.Count == 0)
             {
@@ -132,7 +132,7 @@ namespace Ical.Net
             }
         }
 
-        public virtual void SetValue(IEnumerable<object> values)
+        public void SetValue(IEnumerable<object> values)
         {
             // Remove all previous values
             _values.Clear();

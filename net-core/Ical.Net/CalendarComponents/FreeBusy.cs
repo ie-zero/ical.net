@@ -123,37 +123,37 @@ namespace Ical.Net.CalendarComponents
             return fb;
         }
 
-        public virtual IDateTime DtEnd
+        public IDateTime DtEnd
         {
             get => Properties.Get<IDateTime>("DTEND");
             set => Properties.Set("DTEND", value);
         }
 
-        public virtual IDateTime DtStart
+        public IDateTime DtStart
         {
             get => Properties.Get<IDateTime>("DTSTART");
             set => Properties.Set("DTSTART", value);
         }
 
-        public virtual IDateTime End
+        public IDateTime End
         {
             get => Properties.Get<IDateTime>("DTEND");
             set => Properties.Set("DTEND", value);
         }
 
-        public virtual IList<FreeBusyEntry> Entries
+        public IList<FreeBusyEntry> Entries
         {
             get => Properties.GetMany<FreeBusyEntry>("FREEBUSY");
             set => Properties.Set("FREEBUSY", value);
         }
 
-        public virtual IDateTime Start
+        public IDateTime Start
         {
             get => Properties.Get<IDateTime>("DTSTART");
             set => Properties.Set("DTSTART", value);
         }
 
-        public virtual FreeBusyStatus GetFreeBusyStatus(Period period)
+        public FreeBusyStatus GetFreeBusyStatus(Period period)
         {
             var status = FreeBusyStatus.Free;
             if (period == null)
@@ -168,7 +168,7 @@ namespace Ical.Net.CalendarComponents
             return status;
         }
 
-        public virtual FreeBusyStatus GetFreeBusyStatus(IDateTime dt)
+        public FreeBusyStatus GetFreeBusyStatus(IDateTime dt)
         {
             var status = FreeBusyStatus.Free;
             if (dt == null)
@@ -183,7 +183,7 @@ namespace Ical.Net.CalendarComponents
             return status;
         }
 
-        public virtual void MergeWith(IMergeable obj)
+        public void MergeWith(IMergeable obj)
         {
             if (!(obj is FreeBusy fb))
             {
