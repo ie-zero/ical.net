@@ -27,14 +27,14 @@ namespace Ical.Net.Serialization
                 // objects weren't pushed onto a stack referenced by a static variable.
                 var ctx = new SerializationContext
                 {
-                    _mServiceProvider = _default._mServiceProvider
+                    _serviceProvider = _default._serviceProvider
                 };
                 return ctx;
             }
         }
 
-        private readonly Stack<WeakReference> _mStack = new Stack<WeakReference>();
-        private ServiceProvider _mServiceProvider = new ServiceProvider();
+        private readonly Stack<WeakReference> _stack = new Stack<WeakReference>();
+        private ServiceProvider _serviceProvider = new ServiceProvider();
 
         public SerializationContext()
         {
@@ -50,15 +50,15 @@ namespace Ical.Net.Serialization
         {
             if (item != null)
             {
-                _mStack.Push(new WeakReference(item));
+                _stack.Push(new WeakReference(item));
             }
         }
 
         public object Pop()
         {
-            if (_mStack.Count > 0)
+            if (_stack.Count > 0)
             {
-                var r = _mStack.Pop();
+                var r = _stack.Pop();
                 if (r.IsAlive)
                 {
                     return r.Target;
@@ -69,9 +69,9 @@ namespace Ical.Net.Serialization
 
         public object Peek()
         {
-            if (_mStack.Count > 0)
+            if (_stack.Count > 0)
             {
-                var r = _mStack.Peek();
+                var r = _stack.Peek();
                 if (r.IsAlive)
                 {
                     return r.Target;
@@ -80,32 +80,44 @@ namespace Ical.Net.Serialization
             return null;
         }
 
-        public object GetService(Type serviceType) => _mServiceProvider.GetService(serviceType);
+        public object GetService(Type serviceType)
+        {
+            return _serviceProvider.GetService(serviceType);
+        }
 
-        public object GetService(string name) => _mServiceProvider.GetService(name);
+        public object GetService(string name)
+        {
+            return _serviceProvider.GetService(name);
+        }
 
-        public T GetService<T>() => _mServiceProvider.GetService<T>();
+        public T GetService<T>()
+        {
+            return _serviceProvider.GetService<T>();
+        }
 
-        public T GetService<T>(string name) => _mServiceProvider.GetService<T>(name);
+        public T GetService<T>(string name)
+        {
+            return _serviceProvider.GetService<T>(name);
+        }
 
         public void SetService(string name, object obj)
         {
-            _mServiceProvider.SetService(name, obj);
+            _serviceProvider.SetService(name, obj);
         }
 
         public void SetService(object obj)
         {
-            _mServiceProvider.SetService(obj);
+            _serviceProvider.SetService(obj);
         }
 
         public void RemoveService(Type type)
         {
-            _mServiceProvider.RemoveService(type);
+            _serviceProvider.RemoveService(type);
         }
 
         public void RemoveService(string name)
         {
-            _mServiceProvider.RemoveService(name);
+            _serviceProvider.RemoveService(name);
         }
     }
 }
