@@ -48,21 +48,11 @@ namespace Ical.Net
             set { SetValue(value); }
         }
 
-        public int ValueCount
-        {
-            get { return _values?.Count ?? 0; }
-        }
-
-        public IEnumerable<string> Values => _values;
+        public IEnumerable<string> Values => _values.ToList().AsReadOnly();
 
         public void AddValue(string value)
         {
-            if (!IsValidValue(value))
-            {
-                return;
-            }
-
-            _values.Add(value);
+            if (IsValidValue(value)){ _values.Add(value); }
         }
 
         public bool ContainsValue(string value)

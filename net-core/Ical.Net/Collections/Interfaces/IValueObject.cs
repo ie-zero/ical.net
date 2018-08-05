@@ -11,6 +11,5 @@ namespace Ical.Net.Collections.Interfaces
         void SetValue(IEnumerable<T> values);
         void AddValue(T value);
         void RemoveValue(T value);
-        int ValueCount { get; }
     }
 }

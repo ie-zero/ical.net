@@ -69,7 +69,7 @@ namespace Ical.Net.Collections.Proxies
         private IEnumerator<TNewValue> GetEnumeratorInternal()
         {
             return Items
-                .Where(o => o.ValueCount > 0)
+                .Where(o => o.Values.Count() > 0)
                 .SelectMany(o => o.Values.OfType<TNewValue>())
                 .GetEnumerator();
         }
@@ -106,7 +106,7 @@ namespace Ical.Net.Collections.Proxies
                 .CopyTo(array, arrayIndex);
         }
         
-        public int Count => Items.Sum(o => o.ValueCount);
+        public int Count => Items.Sum(o => o.Values.Count());
 
         public bool IsReadOnly => false;
 
