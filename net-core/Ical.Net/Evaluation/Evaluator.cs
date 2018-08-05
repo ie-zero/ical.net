@@ -34,7 +34,7 @@ namespace Ical.Net.Evaluation
             Initialize();
         }
 
-        public virtual ICalendarObject AssociatedObject
+        public ICalendarObject AssociatedObject
         {
             get => _associatedObject ?? _associatedDataType?.AssociatedObject;
             protected set => _associatedObject = value;
@@ -42,19 +42,19 @@ namespace Ical.Net.Evaluation
 
         public System.Globalization.Calendar Calendar { get; private set; }
 
-        public virtual DateTime EvaluationEndBounds
+        public DateTime EvaluationEndBounds
         {
             get => _evaluationEndBounds;
             set => _evaluationEndBounds = value;
         }
 
-        public virtual DateTime EvaluationStartBounds
+        public DateTime EvaluationStartBounds
         {
             get => _evaluationStartBounds;
             set => _evaluationStartBounds = value;
         }
 
-        public virtual HashSet<Period> Periods => MPeriods;
+        public HashSet<Period> Periods => MPeriods;
 
         public virtual void Clear()
         {
