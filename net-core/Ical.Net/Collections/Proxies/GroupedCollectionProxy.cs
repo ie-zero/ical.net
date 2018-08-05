@@ -10,7 +10,7 @@ namespace Ical.Net.Collections.Proxies
     /// </summary>
     public class GroupedCollectionProxy<TGroup, TOriginal, TNew> :
         IGroupedCollection<TGroup, TNew>
-        where TOriginal : class, IGroupedObject<TGroup>
+        where TOriginal : class, IGroupedObject
         where TNew : class, TOriginal
     {
         private readonly Func<TNew, bool> _predicate;

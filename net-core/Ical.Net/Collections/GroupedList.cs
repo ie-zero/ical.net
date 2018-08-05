@@ -10,7 +10,7 @@ namespace Ical.Net.Collections
     /// </summary>
     public class GroupedList<T> :
         IGroupedList<T>
-        where T : class, IGroupedObject<string>
+        where T : class, IGroupedObject
     {
         private readonly List<IMultiLinkedList<T>> _lists = new List<IMultiLinkedList<T>>();
         private readonly Dictionary<string, IMultiLinkedList<T>> _dictionary = new Dictionary<string, IMultiLinkedList<T>>();

@@ -5,7 +5,7 @@ namespace Ical.Net.Collections
 {
     public interface IGroupedCollection<TGroup, TItem> :
         ICollection<TItem>
-        where TItem : class, IGroupedObject<TGroup>
+        where TItem : class, IGroupedObject
     {
         /// <summary>
         /// Fired after an item is added to the collection.

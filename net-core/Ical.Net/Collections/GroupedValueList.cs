@@ -8,7 +8,7 @@ namespace Ical.Net.Collections
 {
     public class GroupedValueList<TInterface, TItem, TValueType> :
         GroupedList<TInterface>
-        where TInterface : class, IGroupedObject<string>, IValueObject<TValueType>
+        where TInterface : class, IGroupedObject, IValueObject<TValueType>
         where TItem : new()        
     {
         public void Set(string group, TValueType value)
