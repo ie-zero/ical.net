@@ -74,40 +74,20 @@ namespace Ical.Net
         /// </summary>
         public void AddParameter(string name, string value)
         {
-            var p = new CalendarParameter(name, value);
-            Parameters.Add(p);
+            Parameters.Add(new CalendarParameter(name, value));
         }
 
         /// <summary>
         /// Adds a parameter to the iCalendar object.
         /// </summary>
-        public void AddParameter(CalendarParameter p)
+        public void AddParameter(CalendarParameter parameter)
         {
-            Parameters.Add(p);
-        }
-
-        public void AddValue(object value)
-        {
-            if (value == null)
-            {
-                return;
-            }
-
-            _values.Add(value);
+            Parameters.Add(parameter);
         }
 
         public bool ContainsValue(object value)
         {
             return _values.Contains(value);
-        }
-
-        public void RemoveValue(object value)
-        {
-            if (value == null)
-            {
-                return;
-            }
-            _values.Remove(value);
         }
 
         public void SetValue(object value)
@@ -129,23 +109,30 @@ namespace Ical.Net
 
         public void SetValue(IEnumerable<object> values)
         {
-            // Remove all previous values
             _values.Clear();
-            var toAdd = values ?? Enumerable.Empty<object>();
-            _values.AddRange(toAdd);
+            _values.AddRange(values ?? Enumerable.Empty<object>());
         }
 
-        public override void CopyFrom(ICopyable obj)
+        public void AddValue(object value)
         {
-            base.CopyFrom(obj);
+            if (value == null) { return; }
+            _values.Add(value);
+        }
 
-            var p = obj as ICalendarProperty;
-            if (p == null)
-            {
-                return;
-            }
+        public void RemoveValue(object value)
+        {
+            if (value == null) { return; }
+            _values.Remove(value);
+        }
 
-            SetValue(p.Values);
+        public override void CopyFrom(ICopyable copyable)
+        {
+            base.CopyFrom(copyable);
+
+            var property = copyable as ICalendarProperty;
+            if (property == null) { return; }
+
+            SetValue(property.Values);
         }
     }
 }
