@@ -20,6 +20,13 @@ namespace Ical.Net.DataTypes
             Offset = ts;
         }
 
+        public TimeSpan Offset { get; }
+
+        public bool Positive
+        {
+            get { return Offset >= TimeSpan.Zero; }
+        }
+
         public int Hours
         {
             get { return Math.Abs(Offset.Hours); }
@@ -28,13 +35,6 @@ namespace Ical.Net.DataTypes
         public int Minutes
         {
             get { return Math.Abs(Offset.Minutes); }
-        }
-
-        public TimeSpan Offset { get; }
-
-        public bool Positive
-        {
-            get { return Offset >= TimeSpan.Zero; }
         }
 
         public int Seconds
@@ -84,11 +84,13 @@ namespace Ical.Net.DataTypes
             return (Positive ? "+" : "-") + Hours.ToString("00") + Minutes.ToString("00") + (Seconds != 0 ? Seconds.ToString("00") : string.Empty);
         }
 
+        // TODO: Review ToLocal() method. The naming/logic appear to be flawed.
         public DateTime ToLocal(DateTime dt)
         {
             return DateTime.SpecifyKind(dt.Add(Offset), DateTimeKind.Local);
         }
 
+        // TODO: Review ToUtc() method. The naming/logic appear to be flawed.
         public DateTime ToUtc(DateTime dt)
         {
             return DateTime.SpecifyKind(dt.Add(-Offset), DateTimeKind.Utc);
