@@ -9,7 +9,7 @@ namespace Ical.Net.Collections
     /// A list of objects that are keyed.
     /// </summary>
     public class GroupedList<T> :
-        IGroupedList<string, T>
+        IGroupedList<T>
         where T : class, IGroupedObject<string>
     {
         private readonly List<IMultiLinkedList<T>> _lists = new List<IMultiLinkedList<T>>();

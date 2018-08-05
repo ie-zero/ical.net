@@ -497,7 +497,7 @@ END:VCALENDAR
         {
             var iCal = Calendar.Load(IcsFiles.Property1);
 
-            IList<ICalendarProperty> props = iCal.Properties.AllOf("VERSION").ToList();
+            IList<CalendarProperty> props = iCal.Properties.AllOf("VERSION").ToList();
             Assert.AreEqual(2, props.Count);
 
             for (var i = 0; i < props.Count; i++)

@@ -3,7 +3,7 @@ using Ical.Net.Collections;
 
 namespace Ical.Net
 {
-    public class CalendarPropertyList : GroupedValueList<ICalendarProperty, CalendarProperty, object>
+    public class CalendarPropertyList : GroupedValueList<CalendarProperty, CalendarProperty, object>
     {
         private readonly ICalendarObject _parent;
 
@@ -15,7 +15,7 @@ namespace Ical.Net
             ItemAdded += CalendarPropertyList_ItemAdded;
         }
 
-        private void CalendarPropertyList_ItemAdded(object sender, ItemProcessedEventArgs<ICalendarProperty> e)
+        private void CalendarPropertyList_ItemAdded(object sender, ItemProcessedEventArgs<CalendarProperty> e)
         {
             e.Item.Parent = _parent;
         }

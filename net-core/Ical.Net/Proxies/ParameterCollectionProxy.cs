@@ -11,7 +11,7 @@ namespace Ical.Net.Proxies
         protected GroupedValueList<CalendarParameter, CalendarParameter, string> Parameters
             => RealObject as GroupedValueList<CalendarParameter, CalendarParameter, string>;
 
-        public ParameterCollectionProxy(IGroupedList<string, CalendarParameter> realObject) : base(realObject) {}
+        public ParameterCollectionProxy(IGroupedList<CalendarParameter> realObject) : base(realObject) {}
 
         public virtual void SetParent(ICalendarObject parent)
         {
