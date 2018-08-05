@@ -3,42 +3,42 @@ using System.Collections.Generic;
 
 namespace Ical.Net.Collections
 {
-    public interface IGroupedCollection<TGroup, TItem> :
-        ICollection<TItem>
-        where TItem : class, IGroupedObject
+    public interface IGroupedCollection<T> :
+        ICollection<T>
+        where T : class, IGroupedObject
     {
         /// <summary>
         /// Fired after an item is added to the collection.
         /// </summary>
-        event EventHandler<ItemProcessedEventArgs<TItem>> ItemAdded;
+        event EventHandler<ItemProcessedEventArgs<T>> ItemAdded;
 
         /// <summary>
         /// Removes all items with the matching group from the collection.
         /// </summary>        
         /// <returns>True if the object was removed, false otherwise.</returns>
-        bool Remove(TGroup group);
+        bool Remove(string group);
 
         /// <summary>
         /// Clears all items matching the specified group.
         /// </summary>
-        void Clear(TGroup group);
+        void Clear(string group);
         
         /// <summary>
         /// Returns true if the list contains at least one 
         /// object with a matching group, false otherwise.
         /// </summary>
-        bool ContainsKey(TGroup group);
+        bool ContainsKey(string group);
 
         /// <summary>
         /// Returns the number of objects in the list
         /// with a matching group.
         /// </summary>
-        int CountOf(TGroup group);
+        int CountOf(string group);
         
         /// <summary>
         /// Returns a list of objects that
         /// match the specified group.
         /// </summary>
-        IEnumerable<TItem> AllOf(TGroup group);
+        IEnumerable<T> AllOf(string group);
     }
 }

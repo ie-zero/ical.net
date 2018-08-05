@@ -6,7 +6,7 @@ using Ical.Net.Collections.Proxies;
 
 namespace Ical.Net.Proxies
 {
-    public class ParameterCollectionProxy : GroupedCollectionProxy<string, CalendarParameter, CalendarParameter>, IParameterCollection
+    public class ParameterCollectionProxy : GroupedCollectionProxy<CalendarParameter, CalendarParameter>, IParameterCollection
     {
         protected GroupedValueList<CalendarParameter, CalendarParameter, string> Parameters
             => RealObject as GroupedValueList<CalendarParameter, CalendarParameter, string>;

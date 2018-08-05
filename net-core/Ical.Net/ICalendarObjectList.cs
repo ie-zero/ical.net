@@ -2,9 +2,9 @@
 
 namespace Ical.Net
 {
-    public interface ICalendarObjectList<TType> :
-        IGroupedCollection<string, TType> where TType : class, ICalendarObject
+    public interface ICalendarObjectList<T> :
+        IGroupedCollection<T> where T : class, ICalendarObject
     {
-        TType this[int index] { get; }
+        T this[int index] { get; }
     }
 }

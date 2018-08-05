@@ -3,7 +3,7 @@ using System.Collections.Generic;
 namespace Ical.Net.Collections
 {
     public interface IGroupedList<TItem> :
-        IGroupedCollection<string, TItem>,
+        IGroupedCollection<TItem>,
         IList<TItem>
         where TItem : class, IGroupedObject
     {

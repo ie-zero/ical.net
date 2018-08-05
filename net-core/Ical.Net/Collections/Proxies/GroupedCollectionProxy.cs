@@ -8,14 +8,14 @@ namespace Ical.Net.Collections.Proxies
     /// <summary>
     /// A proxy for a keyed list.
     /// </summary>
-    public class GroupedCollectionProxy<TGroup, TOriginal, TNew> :
-        IGroupedCollection<TGroup, TNew>
+    public class GroupedCollectionProxy<TOriginal, TNew> :
+        IGroupedCollection<TNew>
         where TOriginal : class, IGroupedObject
         where TNew : class, TOriginal
     {
         private readonly Func<TNew, bool> _predicate;
 
-        public GroupedCollectionProxy(IGroupedCollection<TGroup, TOriginal> realObject, Func<TNew, bool> predicate = null)
+        public GroupedCollectionProxy(IGroupedCollection<TOriginal> realObject, Func<TNew, bool> predicate = null)
         {
             _predicate = predicate ?? (o => true);
             SetProxiedObject(realObject);
@@ -34,18 +34,18 @@ namespace Ical.Net.Collections.Proxies
             ItemRemoved?.Invoke(this, new ItemProcessedEventArgs<TNew>(item, index));
         }
 
-        public bool Remove(TGroup group) => RealObject.Remove(group);
+        public bool Remove(string group) => RealObject.Remove(group);
 
-        public void Clear(TGroup group)
+        public void Clear(string group)
         {
             RealObject.Clear(group);
         }
 
-        public bool ContainsKey(TGroup group) => RealObject.ContainsKey(group);
+        public bool ContainsKey(string group) => RealObject.ContainsKey(group);
 
-        public int CountOf(TGroup group) => RealObject.OfType<TGroup>().Count();
+        public int CountOf(string group) => RealObject.OfType<string>().Count();
 
-        public IEnumerable<TNew> AllOf(TGroup group) => RealObject
+        public IEnumerable<TNew> AllOf(string group) => RealObject
             .AllOf(group)
             .OfType<TNew>()
             .Where(_predicate);
@@ -97,9 +97,9 @@ namespace Ical.Net.Collections.Proxies
             .OfType<TNew>()
             .GetEnumerator();
 
-        public IGroupedCollection<TGroup, TOriginal> RealObject { get; private set; }
+        public IGroupedCollection<TOriginal> RealObject { get; private set; }
 
-        public void SetProxiedObject(IGroupedCollection<TGroup, TOriginal> realObject)
+        public void SetProxiedObject(IGroupedCollection<TOriginal> realObject)
         {
             RealObject = realObject;
         }
