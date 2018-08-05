@@ -49,16 +49,6 @@ namespace Ical.Net
 
         public IEnumerable<string> Values => _values.ToList().AsReadOnly();
 
-        public void AddValue(string value)
-        {
-            if (IsValidValue(value)){ _values.Add(value); }
-        }
-
-        public bool ContainsValue(string value)
-        {
-            return _values.Contains(value);
-        }
-
         public override void CopyFrom(ICopyable copyable)
         {
             base.CopyFrom(copyable);
@@ -70,6 +60,11 @@ namespace Ical.Net
             }
 
             _values = new HashSet<string>(p.Values.Where(IsValidValue), StringComparer.OrdinalIgnoreCase);
+        }
+
+        public bool ContainsValue(string value)
+        {
+            return _values.Contains(value);
         }
 
         public void SetValue(string value)
@@ -84,9 +79,19 @@ namespace Ical.Net
             _values.UnionWith(values.Where(IsValidValue));
         }
 
+        public void AddValue(string value)
+        {
+            if (IsValidValue(value)) { _values.Add(value); }
+        }
+
         public void RemoveValue(string value)
         {
             _values.Remove(value);
+        }
+
+        private bool IsValidValue(string value)
+        {
+            return !string.IsNullOrWhiteSpace(value);
         }
 
         protected override void OnDeserializing(StreamingContext context)
@@ -94,11 +99,6 @@ namespace Ical.Net
             base.OnDeserializing(context);
 
             Initialize();
-        }
-
-        private bool IsValidValue(string value)
-        {
-            return !string.IsNullOrWhiteSpace(value);
         }
     }
 }
