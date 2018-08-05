@@ -13,11 +13,8 @@ namespace Ical.Net.Collections.Proxies
         where TOriginal : class, IGroupedObject
         where TNew : class, TOriginal
     {
-        private readonly Func<TNew, bool> _predicate;
-
-        public GroupedCollectionProxy(IGroupedCollection<TOriginal> realObject, Func<TNew, bool> predicate = null)
+        public GroupedCollectionProxy(IGroupedCollection<TOriginal> realObject)
         {
-            _predicate = predicate ?? (o => true);
             SetProxiedObject(realObject);
         }
 
@@ -47,8 +44,7 @@ namespace Ical.Net.Collections.Proxies
 
         public IEnumerable<TNew> AllOf(string group) => RealObject
             .AllOf(group)
-            .OfType<TNew>()
-            .Where(_predicate);
+            .OfType<TNew>();
 
         public void Add(TNew item)
         {
