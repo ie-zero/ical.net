@@ -67,12 +67,7 @@ namespace Ical.Net
             }
         }
 
-        public int ValueCount
-        {
-            get { return _values?.Count ?? 0; }
-        }
-
-        public IEnumerable<object> Values => _values;
+        public IEnumerable<object> Values => _values?.AsReadOnly();
 
         /// <summary>
         /// Adds a parameter to the iCalendar object.
