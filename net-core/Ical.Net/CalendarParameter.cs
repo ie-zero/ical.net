@@ -45,7 +45,6 @@ namespace Ical.Net
         public string Value
         {
             get { return Values?.FirstOrDefault(); }
-            set { SetValue(value); }
         }
 
         public IEnumerable<string> Values => _values.ToList().AsReadOnly();
@@ -75,12 +74,12 @@ namespace Ical.Net
 
         public void SetValue(string value)
         {
+            _values.Clear();
             _values.Add(value);
         }
 
         public void SetValue(IEnumerable<string> values)
         {
-            // Remove all previous values
             _values.Clear();
             _values.UnionWith(values.Where(IsValidValue));
         }
