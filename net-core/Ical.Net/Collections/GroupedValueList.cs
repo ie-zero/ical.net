@@ -7,7 +7,7 @@ using Ical.Net.Collections.Proxies;
 namespace Ical.Net.Collections
 {
     public class GroupedValueList<TInterface, TItem, TValueType> :
-        GroupedList<string, TInterface>
+        GroupedList<TInterface>
         where TInterface : class, IGroupedObject<string>, IValueObject<TValueType>
         where TItem : new()        
     {
