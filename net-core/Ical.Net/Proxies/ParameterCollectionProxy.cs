@@ -8,8 +8,8 @@ namespace Ical.Net.Proxies
 {
     public class ParameterCollectionProxy : GroupedCollectionProxy<CalendarParameter, CalendarParameter>, IParameterCollection
     {
-        protected GroupedValueList<CalendarParameter, CalendarParameter, string> Parameters
-            => RealObject as GroupedValueList<CalendarParameter, CalendarParameter, string>;
+        protected GroupedValueList<CalendarParameter, string> Parameters
+            => RealObject as GroupedValueList<CalendarParameter, string>;
 
         public ParameterCollectionProxy(IGroupedList<CalendarParameter> realObject) : base(realObject) {}
 
@@ -33,7 +33,7 @@ namespace Ical.Net.Proxies
             return parameter?.Value;
         }
 
-        public IList<string> GetMany(string name) => new GroupedValueListProxy<CalendarParameter, CalendarParameter, string, string>(Parameters, name);
+        public IList<string> GetMany(string name) => new GroupedValueListProxy<CalendarParameter, string, string>(Parameters, name);
 
         public void Set(string name, string value)
         {

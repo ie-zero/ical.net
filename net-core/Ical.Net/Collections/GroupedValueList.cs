@@ -6,10 +6,9 @@ using Ical.Net.Collections.Proxies;
 
 namespace Ical.Net.Collections
 {
-    public class GroupedValueList<TInterface, TItem, TValueType> :
-        GroupedList<TInterface>
-        where TInterface : class, IGroupedObject, IValueObject<TValueType>
-        where TItem : new()        
+    public class GroupedValueList<TItem, TValueType> :
+        GroupedList<TItem>
+        where TItem : class, IGroupedObject, IValueObject<TValueType>, new()        
     {
         public void Set(string group, TValueType value)
         {
@@ -25,7 +24,7 @@ namespace Ical.Net.Collections
             }
 
             // No matching item was found, add a new item to the list
-            var obj = Activator.CreateInstance(typeof(TItem)) as TInterface;
+            var obj = Activator.CreateInstance(typeof(TItem)) as TItem;
             obj.Group = group;
             Add(obj);
             obj.SetValue(values);
@@ -46,7 +45,7 @@ namespace Ical.Net.Collections
 
         public IList<TType> GetMany<TType>(string group)
         {
-            return new GroupedValueListProxy<TInterface, TItem, TValueType, TType>(this, group);
+            return new GroupedValueListProxy<TItem, TValueType, TType>(this, group);
         }
     }
 }

@@ -9,21 +9,20 @@ namespace Ical.Net.Collections.Proxies
     /// <summary>
     /// A proxy for a keyed list.
     /// </summary>
-    public class GroupedValueListProxy<TInterface, TItem, TOriginalValue, TNewValue> : IList<TNewValue>
-        where TInterface : class, IGroupedObject, IValueObject<TOriginalValue>
-        where TItem : new()        
+    public class GroupedValueListProxy<TItem, TOriginalValue, TNewValue> : IList<TNewValue>
+        where TItem : class, IGroupedObject, IValueObject<TOriginalValue>, new()        
     {
-        private readonly GroupedValueList<TInterface, TItem, TOriginalValue> _realObject;
+        private readonly GroupedValueList<TItem, TOriginalValue> _realObject;
         private readonly string _group;
-        private TInterface _container;
+        private TItem _container;
 
-        public GroupedValueListProxy(GroupedValueList<TInterface, TItem, TOriginalValue> realObject, string group)
+        public GroupedValueListProxy(GroupedValueList<TItem, TOriginalValue> realObject, string group)
         {
             _realObject = realObject;
             _group = group;
         }
 
-        private TInterface EnsureContainer()
+        private TItem EnsureContainer()
         {
             if (_container != null)
             {
@@ -34,17 +33,17 @@ namespace Ical.Net.Collections.Proxies
             _container = Items.FirstOrDefault();
 
             // If no item is found, create a new object and add it to the list
-            if (!Equals(_container, default(TInterface)))
+            if (!Equals(_container, default(TItem)))
             {
                 return _container;
             }
             var container = new TItem();
-            if (!(container is TInterface))
+            if (!(container is TItem))
             {
-                throw new Exception("Could not create a container for the value - the container is not of type " + typeof(TInterface).Name);
+                throw new Exception("Could not create a container for the value - the container is not of type " + typeof(TItem).Name);
             }
 
-            _container = (TInterface)(object)container;
+            _container = (TItem)(object)container;
             _container.Group = _group;
             _realObject.Add(_container);
             return _container;
@@ -225,7 +224,7 @@ namespace Ical.Net.Collections.Proxies
             }
         }
 
-        public IEnumerable<TInterface> Items => _group == null
+        public IEnumerable<TItem> Items => _group == null
             ? _realObject
             : _realObject.AllOf(_group);
     }

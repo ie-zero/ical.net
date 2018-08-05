@@ -3,7 +3,7 @@ using Ical.Net.Collections;
 
 namespace Ical.Net
 {
-    public class CalendarPropertyList : GroupedValueList<CalendarProperty, CalendarProperty, object>
+    public class CalendarPropertyList : GroupedValueList<CalendarProperty, object>
     {
         private readonly ICalendarObject _parent;
 
