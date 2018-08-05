@@ -47,24 +47,24 @@ namespace Ical.Net
         {
             get { return _values?.FirstOrDefault(); }
 
-            set
-            {
-                if (value == null)
-                {
-                    _values = null;
-                    return;
-                }
+            //set
+            //{
+            //    if (value == null)
+            //    {
+            //        _values = null;
+            //        return;
+            //    }
 
-                if (_values != null && _values.Count > 0)
-                {
-                    _values[0] = value;
-                }
-                else
-                {
-                    _values?.Clear();
-                    _values?.Add(value);
-                }
-            }
+            //    if (_values != null && _values.Count > 0)
+            //    {
+            //        _values[0] = value;
+            //    }
+            //    else
+            //    {
+            //        _values?.Clear();
+            //        _values?.Add(value);
+            //    }
+            //}
         }
 
         public IEnumerable<object> Values => _values?.AsReadOnly();
