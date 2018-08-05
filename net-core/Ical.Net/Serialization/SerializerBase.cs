@@ -6,27 +6,18 @@ namespace Ical.Net.Serialization
 {
     public abstract class SerializerBase : IStringSerializer
     {
-        private SerializationContext _mSerializationContext;
+        public SerializerBase() : this(SerializationContext.Default) { }
 
-        protected SerializerBase()
+        public SerializerBase(SerializationContext ctx)
         {
-            _mSerializationContext = SerializationContext.Default;
+            SerializationContext = ctx;
         }
 
-        protected SerializerBase(SerializationContext ctx)
-        {
-            _mSerializationContext = ctx;
-        }
-
-        public SerializationContext SerializationContext
-        {
-            get => _mSerializationContext;
-            set => _mSerializationContext = value;
-        }
+        public SerializationContext SerializationContext { get; set; }
 
         public abstract Type TargetType { get; }
         public abstract string SerializeToString(object obj);
-        public abstract object Deserialize(TextReader tr);
+        public abstract object Deserialize(TextReader reader);
 
         public object Deserialize(Stream stream, Encoding encoding)
         {
@@ -67,9 +58,15 @@ namespace Ical.Net.Serialization
             }
         }
 
-        public object GetService(Type serviceType) => SerializationContext?.GetService(serviceType);
+        public object GetService(Type serviceType)
+        {
+            return SerializationContext?.GetService(serviceType);
+        }
 
-        public object GetService(string name) => SerializationContext?.GetService(name);
+        public object GetService(string name)
+        {
+            return SerializationContext?.GetService(name);
+        }
 
         public T GetService<T>()
         {
