@@ -12,8 +12,6 @@ namespace Ical.Net.Serialization
     {
         protected virtual IComparer<ICalendarProperty> PropertySorter => new PropertyAlphabetizer();
 
-        public ComponentSerializer() { }
-
         public ComponentSerializer(SerializationContext ctx) : base(ctx) { }
 
         public override Type TargetType => typeof(CalendarComponent);

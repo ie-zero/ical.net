@@ -1,4 +1,5 @@
 using System;
+using Ical.Net.Serialization;
 using Ical.Net.Serialization.DataTypes;
 
 namespace Ical.Net.DataTypes
@@ -179,7 +180,7 @@ namespace Ical.Net.DataTypes
 
         public override string ToString()
         {
-            var periodSerializer = new PeriodSerializer();
+            var periodSerializer = new PeriodSerializer(SerializationContext.Default);
             return periodSerializer.SerializeToString(this);
         }
 

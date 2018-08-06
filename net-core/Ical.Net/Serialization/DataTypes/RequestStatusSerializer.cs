@@ -8,8 +8,6 @@ namespace Ical.Net.Serialization.DataTypes
 {
     public class RequestStatusSerializer : StringSerializer
     {
-        public RequestStatusSerializer() { }
-
         public RequestStatusSerializer(SerializationContext ctx) : base(ctx) { }
 
         public override Type TargetType => typeof (RequestStatus);

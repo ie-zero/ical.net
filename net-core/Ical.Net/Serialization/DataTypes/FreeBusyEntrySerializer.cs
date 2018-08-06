@@ -6,8 +6,6 @@ namespace Ical.Net.Serialization.DataTypes
 {
     public class FreeBusyEntrySerializer : PeriodSerializer
     {
-        public FreeBusyEntrySerializer() { }
-
         public FreeBusyEntrySerializer(SerializationContext ctx) : base(ctx) { }
 
         public override Type TargetType => typeof (FreeBusyEntry);

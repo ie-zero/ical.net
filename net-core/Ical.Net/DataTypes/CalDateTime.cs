@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using Ical.Net.Serialization;
 using Ical.Net.Serialization.DataTypes;
 using Ical.Net.Utility;
 using NodaTime;
@@ -66,7 +67,7 @@ namespace Ical.Net.DataTypes
 
         public CalDateTime(string value)
         {
-            var serializer = new DateTimeSerializer();
+            var serializer = new DateTimeSerializer(new SerializationContext());
             CopyFrom(serializer.Deserialize(new StringReader(value)) as ICopyable);
         }
 

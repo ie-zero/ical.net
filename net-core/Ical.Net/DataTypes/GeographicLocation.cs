@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Ical.Net.CalendarComponents;
+using Ical.Net.Serialization;
 using Ical.Net.Serialization.DataTypes;
 
 namespace Ical.Net.DataTypes
@@ -18,7 +19,7 @@ namespace Ical.Net.DataTypes
 
         public GeographicLocation(string value) : this()
         {
-            var serializer = new GeographicLocationSerializer();
+            var serializer = new GeographicLocationSerializer(SerializationContext.Default);
             serializer.Deserialize(value);
         }
 

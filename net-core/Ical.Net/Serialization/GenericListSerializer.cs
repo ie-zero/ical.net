@@ -6,12 +6,13 @@ using System.Reflection;
 
 namespace Ical.Net.Serialization
 {
+    [Obsolete("No references found within the library.")]
     public class GenericListSerializer : SerializerBase
     {
         private readonly Type _innerType;
         private readonly Type _objectType;
 
-        public GenericListSerializer(Type objectType)
+        public GenericListSerializer(SerializationContext context, Type objectType) : base(context)
         {
             _innerType = objectType.GetGenericArguments()[0];
 

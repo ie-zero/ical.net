@@ -7,8 +7,6 @@ namespace Ical.Net.Serialization.DataTypes
 {
     public class TimeSpanSerializer : SerializerBase
     {
-        public TimeSpanSerializer() { }
-
         public TimeSpanSerializer(SerializationContext ctx) : base(ctx) { }
 
         public override Type TargetType => typeof (TimeSpan);

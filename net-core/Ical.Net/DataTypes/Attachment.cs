@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Text;
+using Ical.Net.Serialization;
 using Ical.Net.Serialization.DataTypes;
 using Ical.Net.Utility;
 
@@ -34,7 +35,7 @@ namespace Ical.Net.DataTypes
                 return;
             }
 
-            var serializer = new AttachmentSerializer();
+            var serializer = new AttachmentSerializer(SerializationContext.Default);
             var a = serializer.Deserialize(value);
             if (a == null)
             {

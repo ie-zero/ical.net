@@ -1,4 +1,5 @@
 using System.IO;
+using Ical.Net.Serialization;
 using Ical.Net.Serialization.DataTypes;
 
 namespace Ical.Net.DataTypes
@@ -16,7 +17,7 @@ namespace Ical.Net.DataTypes
 
         public RequestStatus(string value) : this()
         {
-            var serializer = new RequestStatusSerializer();
+            var serializer = new RequestStatusSerializer(SerializationContext.Default);
             CopyFrom(serializer.Deserialize(new StringReader(value)) as ICopyable);
         }
 
@@ -93,7 +94,7 @@ namespace Ical.Net.DataTypes
 
         public override string ToString()
         {
-            var serializer = new RequestStatusSerializer();
+            var serializer = new RequestStatusSerializer(SerializationContext.Default);
             return serializer.SerializeToString(this);
         }
     }

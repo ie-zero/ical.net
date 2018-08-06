@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Ical.Net.Evaluation;
+using Ical.Net.Serialization;
 using Ical.Net.Serialization.DataTypes;
 using Ical.Net.Utility;
 
@@ -38,7 +39,7 @@ namespace Ical.Net.DataTypes
             {
                 return;
             }
-            var serializer = new RecurrencePatternSerializer();
+            var serializer = new RecurrencePatternSerializer(SerializationContext.Default);
             CopyFrom(serializer.Deserialize(new StringReader(value)) as ICopyable);
         }
 
@@ -220,7 +221,7 @@ namespace Ical.Net.DataTypes
 
         public override string ToString()
         {
-            var serializer = new RecurrencePatternSerializer();
+            var serializer = new RecurrencePatternSerializer(SerializationContext.Default);
             return serializer.SerializeToString(this);
         }
 

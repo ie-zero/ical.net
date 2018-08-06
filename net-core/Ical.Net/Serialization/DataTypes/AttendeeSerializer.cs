@@ -6,8 +6,6 @@ namespace Ical.Net.Serialization.DataTypes
 {
     public class AttendeeSerializer : StringSerializer
     {
-        public AttendeeSerializer() { }
-
         public AttendeeSerializer(SerializationContext ctx) : base(ctx) { }
 
         public override Type TargetType => typeof (Attendee);

@@ -1,5 +1,6 @@
 using System.IO;
 using System.Linq;
+using Ical.Net.Serialization;
 using Ical.Net.Serialization.DataTypes;
 using Ical.Net.Utility;
 
@@ -19,7 +20,7 @@ namespace Ical.Net.DataTypes
 
         public StatusCode(string value) : this()
         {
-            var serializer = new StatusCodeSerializer();
+            var serializer = new StatusCodeSerializer(SerializationContext.Default);
             CopyFrom(serializer.Deserialize(new StringReader(value)) as ICopyable);
         }
 
@@ -80,7 +81,7 @@ namespace Ical.Net.DataTypes
 
         public override string ToString()
         {
-            return new StatusCodeSerializer().SerializeToString(this);
+            return new StatusCodeSerializer(SerializationContext.Default).SerializeToString(this);
         }
     }
 }

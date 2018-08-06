@@ -71,8 +71,16 @@ namespace Ical.Net.CoreUnitTests
             Duration = TimeSpan.FromHours(1),
         };
 
-        private static string SerializeEvent(CalendarEvent e) => new CalendarSerializer().SerializeToString(new Calendar { Events = { e } });
+        private static string SerializeEvent(CalendarEvent e)
+        {
+            return SerializeCalendar(new Calendar { Events = { e } });
+        }
 
+        private static string SerializeCalendar(Calendar calendarObject)
+        {
+            var serializer = new CalendarSerializer(SerializationContext.Default);
+            return serializer.SerializeToString(calendarObject);
+        }
 
         public static IEnumerable<ITestCaseData> Event_TestCases()
         {

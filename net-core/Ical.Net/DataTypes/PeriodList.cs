@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Ical.Net.Evaluation;
+using Ical.Net.Serialization;
 using Ical.Net.Serialization.DataTypes;
 using Ical.Net.Utility;
 
@@ -21,7 +22,7 @@ namespace Ical.Net.DataTypes
 
         public PeriodList(string value) : this()
         {
-            var serializer = new PeriodListSerializer();
+            var serializer = new PeriodListSerializer(SerializationContext.Default);
             CopyFrom(serializer.Deserialize(new StringReader(value)) as ICopyable);
         }
 
@@ -124,7 +125,7 @@ namespace Ical.Net.DataTypes
 
         public override string ToString()
         {
-            return new PeriodListSerializer().SerializeToString(this);
+            return new PeriodListSerializer(SerializationContext.Default).SerializeToString(this);
         }
 
         protected bool Equals(PeriodList other)

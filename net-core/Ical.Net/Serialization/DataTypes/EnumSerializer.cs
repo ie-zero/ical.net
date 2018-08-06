@@ -8,11 +8,6 @@ namespace Ical.Net.Serialization.DataTypes
     {
         private readonly Type _mEnumType;
 
-        public EnumSerializer(Type enumType)
-        {
-            _mEnumType = enumType;
-        }
-
         public EnumSerializer(Type enumType, SerializationContext ctx) : base(ctx)
         {
             _mEnumType = enumType;

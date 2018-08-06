@@ -6,8 +6,6 @@ namespace Ical.Net.Serialization.DataTypes
 {
     public class OrganizerSerializer : StringSerializer
     {
-        public OrganizerSerializer() { }
-
         public OrganizerSerializer(SerializationContext ctx) : base(ctx) { }
 
         public override Type TargetType => typeof (Organizer);

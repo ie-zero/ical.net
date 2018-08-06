@@ -7,8 +7,6 @@ namespace Ical.Net.Serialization.DataTypes
 {
     public class PeriodSerializer : EncodableDataTypeSerializer
     {
-        public PeriodSerializer() { }
-
         public PeriodSerializer(SerializationContext ctx) : base(ctx) { }
 
         public override Type TargetType => typeof (Period);

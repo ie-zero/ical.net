@@ -6,8 +6,6 @@ namespace Ical.Net.Serialization
 {
     public abstract class SerializerBase : IStringSerializer, IServiceProvider
     {
-        public SerializerBase() : this(SerializationContext.Default) { }
-
         public SerializerBase(SerializationContext ctx)
         {
             SerializationContext = ctx;
