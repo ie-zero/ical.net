@@ -18,7 +18,6 @@ namespace Ical.Net.DataTypes
         private Uri _sentBy;
         private string _type;
 
-        // TODO: Possibly obsolete. Consider removing.
         public Attendee() { }
 
         public Attendee(Uri attendee)
@@ -30,8 +29,7 @@ namespace Ical.Net.DataTypes
         {
             if (!Uri.IsWellFormedUriString(attendeeUri, UriKind.Absolute))
             {
-                // TODO: Improve thrown exception.
-                throw new ArgumentException("attendeeUri");
+                throw new ArgumentException("Uri should be well formed", nameof(attendeeUri));
             }
             Value = new Uri(attendeeUri);
         }

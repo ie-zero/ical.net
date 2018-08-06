@@ -76,8 +76,7 @@ namespace Ical.Net.Evaluation
         {
             if (interval == 0)
             {
-                // TODO: Use more specific exception
-                throw new Exception("Cannot evaluate with an interval of zero.  Please use an interval other than zero.");
+                throw new ArgumentException("Interval cannot be be zero", nameof(interval));
             }
 
             var old = dt;
@@ -105,8 +104,7 @@ namespace Ical.Net.Evaluation
                     dt = old.AddDays(-old.DayOfYear + 1).AddYears(interval);
                     break;
                 default:
-                    // TODO: Use more specific exception
-                    throw new Exception("FrequencyType.NONE cannot be evaluated. Please specify a FrequencyType before evaluating the recurrence.");
+                    throw new InvalidOperationException($"Invalid FrequencyType ({nameof(pattern.Frequency)}). Specify a valid FrequencyType before evaluating the recurrence.");
             }
         }
 

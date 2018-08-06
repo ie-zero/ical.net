@@ -218,15 +218,13 @@ namespace Ical.Net.CalendarComponents
         {
             if (matchedIntervals == null || !matchedIntervals.Any())
             {
-                // TODO: Improve thrown exception.
-                throw new ArgumentException("No intervals found in matchedIntervals");
+                throw new ArgumentException($"No intervals found in {nameof(matchedIntervals)}", nameof(matchedIntervals));
             }
 
             var oldestInterval = matchedIntervals.OrderBy(x => x.Start).FirstOrDefault();
             if (oldestInterval == null)
             {
-                // TODO: Improve thrown exception.
-                throw new InvalidOperationException("oldestInterval was not found");
+                throw new InvalidOperationException($"{nameof(oldestInterval)} was not found");
             }
 
             var previousInterval = intervals.SingleOrDefault(x => (x.HasEnd ? x.End : Instant.MaxValue) == oldestInterval.Start);

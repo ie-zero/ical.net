@@ -39,8 +39,7 @@ namespace Ical.Net.DataTypes
             var a = serializer.Deserialize(value);
             if (a == null)
             {
-                // TODO: Improve thrown exception.
-                throw new ArgumentException($"{value} is not a valid ATTACH component");
+                throw new ArgumentException($"The supplied value should be a valid ATTACH component", nameof(value));
             }
 
             ValueEncoding = a.ValueEncoding;

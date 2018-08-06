@@ -19,15 +19,12 @@ namespace Ical.Net.DataTypes
         {
             if (end != null && end.LessThanOrEqual(start))
             {
-                // TODO: Improve thrown exception.
-                throw new ArgumentException($"Start time ( {start} ) must come before the end time ( {end} )");
+                throw new ArgumentException($"Start time ({start}) must come before the end time ({end})");
             }
 
             StartTime = start;
-            if (end == null)
-            {
-                return;
-            }
+
+            if (end == null) { return; }
             EndTime = end;
             Duration = end.Subtract(start);
         }
@@ -36,8 +33,7 @@ namespace Ical.Net.DataTypes
         {
             if (duration < TimeSpan.Zero)
             {
-                // TODO: Improve thrown exception.
-                throw new ArgumentException($"Duration ( ${duration} ) cannot be less than zero");
+                throw new ArgumentException($"Duration (${duration}) cannot be less than zero", nameof(duration));
             }
 
             StartTime = start;
