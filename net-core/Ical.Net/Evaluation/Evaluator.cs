@@ -8,30 +8,26 @@ namespace Ical.Net.Evaluation
 {
     public abstract class Evaluator : IEvaluator
     {
-        // TODO: Fix 'MPeriods' name.
-        protected HashSet<Period> MPeriods;
         private readonly ICalendarDataType _associatedDataType;
         private ICalendarObject _associatedObject;
-        private DateTime _evaluationEndBounds = DateTime.MinValue;
-        private DateTime _evaluationStartBounds = DateTime.MaxValue;
 
         protected Evaluator()
         {
-            Initialize();
+            Calendar = CultureInfo.CurrentCulture.Calendar;
+
+            Periods = new HashSet<Period>();
+            EvaluationStartBounds = DateTime.MaxValue;
+            EvaluationEndBounds = DateTime.MinValue;
         }
 
-        protected Evaluator(ICalendarObject associatedObject)
+        protected Evaluator(ICalendarObject associatedObject) : this()
         {
             _associatedObject = associatedObject;
-
-            Initialize();
         }
 
-        protected Evaluator(ICalendarDataType dataType)
+        protected Evaluator(ICalendarDataType dataType) : this()
         {
             _associatedDataType = dataType;
-
-            Initialize();
         }
 
         public ICalendarObject AssociatedObject
@@ -42,35 +38,18 @@ namespace Ical.Net.Evaluation
 
         public System.Globalization.Calendar Calendar { get; private set; }
 
-        public DateTime EvaluationEndBounds
-        {
-            get => _evaluationEndBounds;
-            set => _evaluationEndBounds = value;
-        }
-
-        public DateTime EvaluationStartBounds
-        {
-            get => _evaluationStartBounds;
-            set => _evaluationStartBounds = value;
-        }
-
-        public HashSet<Period> Periods => MPeriods;
+        public HashSet<Period> Periods { get; private set; }
+        public DateTime EvaluationEndBounds { get; protected set; } 
+        public DateTime EvaluationStartBounds { get; protected set; }
 
         public virtual void Clear()
         {
-            _evaluationStartBounds = DateTime.MaxValue;
-            _evaluationEndBounds = DateTime.MinValue;
-            MPeriods.Clear();
+            EvaluationStartBounds = DateTime.MaxValue;
+            EvaluationEndBounds = DateTime.MinValue;
+            Periods.Clear();
         }
 
         public abstract HashSet<Period> Evaluate(IDateTime referenceDate, DateTime periodStart, DateTime periodEnd, bool includeReferenceDateInResults);
-
-        protected IDateTime ConvertToIDateTime(DateTime dt, IDateTime referenceDate)
-        {
-            IDateTime newDt = new CalDateTime(dt, referenceDate.TzId);
-            newDt.AssociateWith(referenceDate);
-            return newDt;
-        }
 
         protected void IncrementDate(ref DateTime dt, RecurrencePattern pattern, int interval)
         {
@@ -106,12 +85,6 @@ namespace Ical.Net.Evaluation
                 default:
                     throw new InvalidOperationException($"Invalid FrequencyType ({nameof(pattern.Frequency)}). Specify a valid FrequencyType before evaluating the recurrence.");
             }
-        }
-
-        private void Initialize()
-        {
-            Calendar = CultureInfo.CurrentCulture.Calendar;
-            MPeriods = new HashSet<Period>();
         }
     }
 }

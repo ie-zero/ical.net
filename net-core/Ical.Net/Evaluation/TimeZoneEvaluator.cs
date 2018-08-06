@@ -128,5 +128,12 @@ namespace Ical.Net.Evaluation
 
             return Periods;
         }
+
+        private IDateTime ConvertToIDateTime(DateTime dt, IDateTime referenceDate)
+        {
+            IDateTime newDt = new CalDateTime(dt, referenceDate.TzId);
+            newDt.AssociateWith(referenceDate);
+            return newDt;
+        }
     }
 }
