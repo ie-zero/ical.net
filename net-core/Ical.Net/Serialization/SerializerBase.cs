@@ -13,7 +13,7 @@ namespace Ical.Net.Serialization
             SerializationContext = ctx;
         }
 
-        public SerializationContext SerializationContext { get; set; }
+        public SerializationContext SerializationContext { get; }
 
         public abstract Type TargetType { get; }
         public abstract string SerializeToString(object obj);
