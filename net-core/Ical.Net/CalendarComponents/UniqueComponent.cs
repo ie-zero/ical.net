@@ -103,12 +103,21 @@ namespace Ical.Net.CalendarComponents
 
         private void EnsureProperties()
         {
+            CreateUidIfEmpty();
+            CreateTimestampIfEmpty();
+        }
+
+        private void CreateUidIfEmpty()
+        {
             if (string.IsNullOrEmpty(Uid))
             {
                 // Create a new UID for the component
                 Uid = Guid.NewGuid().ToString();
             }
+        }
 
+        private void CreateTimestampIfEmpty()
+        {
             // NOTE: removed setting the 'CREATED' property here since it breaks serialization.
             // See https://sourceforge.net/projects/dday-ical/forums/forum/656447/topic/3754354
             if (DtStamp == null)
