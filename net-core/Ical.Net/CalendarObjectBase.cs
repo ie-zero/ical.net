@@ -4,7 +4,7 @@ namespace Ical.Net
 {
     // TODO: CalendarObjectBase has a single descendant class (CalendarObject). Consider merging.
 
-    public class CalendarObjectBase : ICopyable, ILoadable
+    public abstract class CalendarObjectBase : ICopyable, ILoadable
     {
         public CalendarObjectBase()
         {

@@ -3,6 +3,8 @@ using System.Runtime.Serialization;
 
 namespace Ical.Net.CalendarComponents
 {
+    // TODO: Consider converting CalendarComponent class to abstract. 
+
     /// <summary>
     /// This class is used by the parsing framework for iCalendar components.
     /// Generally, you should not need to use this class directly.
