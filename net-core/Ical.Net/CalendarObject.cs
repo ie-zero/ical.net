@@ -33,8 +33,6 @@ namespace Ical.Net
             Children.ItemAdded += Children_ItemAdded;
         }
 
-        public event EventHandler Loaded;
-
         /// <summary>
         /// Returns the <see cref="Calendar"/> that this DDayiCalObject belongs to.
         /// </summary>
@@ -74,13 +72,7 @@ namespace Ical.Net
         /// </summary>
         public ICalendarObjectList<ICalendarObject> Children { get; private set; }
 
-        public bool IsLoaded { get; private set; }
-
-        public void OnLoaded()
-        {
-            IsLoaded = true;
-            Loaded?.Invoke(this, EventArgs.Empty);
-        }
+        public bool IsLoaded { get; }
 
         /// <summary>
         /// Creates a copy of the object.
