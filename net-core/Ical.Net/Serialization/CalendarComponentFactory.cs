@@ -6,37 +6,34 @@ namespace Ical.Net.Serialization
     {
         public ICalendarComponent Build(string objectName)
         {
-            ICalendarComponent c;
             var name = objectName.ToUpper();
 
             switch (name)
             {
                 case ComponentName.Alarm:
-                    c = new Alarm();
-                    break;
+                    return new Alarm();
+
                 case ComponentName.Event:
-                    c = new CalendarEvent();
-                    break;
+                    return new CalendarEvent();
+
                 case ComponentName.Freebusy:
-                    c = new FreeBusy();
-                    break;
+                    return new FreeBusy();
+
                 case ComponentName.Journal:
-                    c = new Journal();
-                    break;
+                    return new Journal();
+
                 case ComponentName.Timezone:
-                    c = new VTimeZone();
-                    break;
+                    return new VTimeZone();
+
                 case ComponentName.Todo:
-                    c = new Todo();
-                    break;
+                    return new Todo();
+
                 case ComponentName.Calendar:
-                    c = new Calendar();
-                    break;
+                    return new Calendar();
+
                 default:
-                    c = new CalendarComponent(name);
-                    break;
+                    return new CalendarComponent(name);
             }
-            return c;
         }
     }
 }
