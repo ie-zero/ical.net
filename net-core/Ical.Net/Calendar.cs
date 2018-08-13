@@ -12,7 +12,7 @@ using Ical.Net.Utility;
 
 namespace Ical.Net
 {
-    public class Calendar : CalendarComponent, IGetOccurrencesTyped, IGetFreeBusy, IMergeable
+    public class Calendar : CalendarComponent, IGetOccurrencesTyped, IMergeable
     {
         /// <summary>
         /// To load an existing an iCalendar object, use one of the provided LoadFromXXX methods.
