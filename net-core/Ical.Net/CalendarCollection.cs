@@ -17,7 +17,10 @@ namespace Ical.Net
     {
         public static CalendarCollection Load(string calendarString)
         {
-            return Load(new StringReader(calendarString));
+            using (var reader = new StringReader(calendarString))
+            { 
+                return Load(reader);
+            }
         }
 
         /// <summary>
@@ -27,7 +30,10 @@ namespace Ical.Net
         /// <returns>An <see cref="Calendar"/> object</returns>
         public static CalendarCollection Load(Stream stream)
         {
-            return Load(new StreamReader(stream, Encoding.UTF8));
+            using (var reader = new StreamReader(stream, Encoding.UTF8))
+            {
+                return Load(reader);
+            }
         }
 
         public static CalendarCollection Load(TextReader reader)
