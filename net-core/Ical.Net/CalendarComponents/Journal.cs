@@ -10,10 +10,7 @@ namespace Ical.Net.CalendarComponents
         /// <summary>
         /// Constructs an Journal object, usually an <see cref="ICalendarObject"/>, as its parent.
         /// </summary>
-        public Journal()
-        {
-            Name = JournalStatus.Name;
-        }
+        public Journal() : base(JournalStatus.Name){ }
 
         public string Status
         {

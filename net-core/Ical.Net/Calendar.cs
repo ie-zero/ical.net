@@ -23,9 +23,8 @@ namespace Ical.Net
         /// </code>
         /// </example>
         /// </summary>
-        public Calendar()
+        public Calendar() : base(Components.Calendar)
         {
-            Name = Components.Calendar;
             Initialize();
         }
 
@@ -74,7 +73,6 @@ namespace Ical.Net
             get => Properties.Get<string>("CALSCALE");
             set => Properties.Set("CALSCALE", value);
         }
-
 
         public IUniqueComponentList<IUniqueComponent> UniqueComponents { get; private set; }
 

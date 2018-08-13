@@ -33,10 +33,9 @@ namespace Ical.Net.Serialization
                     c = new Calendar();
                     break;
                 default:
-                    c = new CalendarComponent();
+                    c = new CalendarComponent(name);
                     break;
             }
-            c.Name = name;
             return c;
         }
     }

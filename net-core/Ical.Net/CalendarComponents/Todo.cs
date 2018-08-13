@@ -16,10 +16,8 @@ namespace Ical.Net.CalendarComponents
     {
         private readonly TodoEvaluator _evaluator;
 
-        public Todo()
+        public Todo() : base(TodoStatus.Name)
         {
-            Name = TodoStatus.Name;
-
             _evaluator = new TodoEvaluator(this);
             SetService(_evaluator);
         }

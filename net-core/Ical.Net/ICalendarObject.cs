@@ -9,7 +9,7 @@ namespace Ical.Net
         /// Every calendar object can be assigned
         /// a name.
         /// </summary>
-        string Name { get; set; }
+        string Name { get; }
 
         /// <summary>
         /// Returns the parent of this object.

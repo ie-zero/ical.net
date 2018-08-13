@@ -32,7 +32,7 @@ namespace Ical.Net.CalendarComponents
         /// Constructs an Event object, with an iCalObject
         /// (usually an iCalendar object) as its parent.
         /// </summary>
-        public CalendarEvent()
+        public CalendarEvent() : base(EventStatus.Name)
         {
             Initialize();
         }
@@ -383,8 +383,6 @@ namespace Ical.Net.CalendarComponents
 
         private void Initialize()
         {
-            Name = EventStatus.Name;
-
             _evaluator = new EventEvaluator(this);
             SetService(_evaluator);
         }

@@ -18,10 +18,7 @@ namespace Ical.Net.CalendarComponents
         private string _tzId;
         private Uri _url;
 
-        public VTimeZone()
-        {
-            Name = Components.Timezone;
-        }
+        public VTimeZone() : base(Components.Timezone) { }
 
         public VTimeZone(string tzId) : this()
         {
@@ -211,8 +208,8 @@ namespace Ical.Net.CalendarComponents
         }
 
         private static VTimeZoneInfo CreateTimeZoneInfo(
-            List<ZoneInterval> matchedIntervals, 
-            List<ZoneInterval> intervals, 
+            List<ZoneInterval> matchedIntervals,
+            List<ZoneInterval> intervals,
             bool isRRule = true,
             bool isOnlyInterval = false)
         {
