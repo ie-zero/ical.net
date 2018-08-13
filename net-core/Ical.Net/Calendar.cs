@@ -23,7 +23,7 @@ namespace Ical.Net
         /// </code>
         /// </example>
         /// </summary>
-        public Calendar() : base(Components.Calendar)
+        public Calendar() : base(ComponentName.Calendar)
         {
             Initialize();
         }
@@ -77,7 +77,7 @@ namespace Ical.Net
         public IUniqueComponentList<IUniqueComponent> UniqueComponents { get; private set; }
 
         /// <summary>
-        /// A collection of <see cref="Components.Event"/> components in the iCalendar.
+        /// A collection of <see cref="ComponentName.Event"/> components in the iCalendar.
         /// </summary>
         public IUniqueComponentList<CalendarEvent> Events { get; private set; }
 

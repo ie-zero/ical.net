@@ -6,7 +6,7 @@ using Ical.Net.Serialization.DataTypes;
 namespace Ical.Net.DataTypes
 {
     /// <summary>
-    /// A class that is used to specify exactly when an <see cref="Components.Alarm"/> component will trigger.
+    /// A class that is used to specify exactly when an <see cref="ComponentName.Alarm"/> component will trigger.
     /// Usually this date/time is relative to the component to which the Alarm is associated.
     /// </summary>    
     public class Trigger : EncodableDataType

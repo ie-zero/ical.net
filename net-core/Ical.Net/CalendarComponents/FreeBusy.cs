@@ -8,7 +8,7 @@ namespace Ical.Net.CalendarComponents
 {
     public class FreeBusy : UniqueComponent, IMergeable
     {
-        public FreeBusy() : base(Components.Freebusy) { }
+        public FreeBusy() : base(ComponentName.Freebusy) { }
 
         public static FreeBusy Create(ICalendarObject obj, FreeBusy freeBusyRequest)
         {

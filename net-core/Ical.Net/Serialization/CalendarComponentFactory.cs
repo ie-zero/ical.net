@@ -11,25 +11,25 @@ namespace Ical.Net.Serialization
 
             switch (name)
             {
-                case Components.Alarm:
+                case ComponentName.Alarm:
                     c = new Alarm();
                     break;
-                case EventStatus.Name:
+                case ComponentName.Event:
                     c = new CalendarEvent();
                     break;
-                case Components.Freebusy:
+                case ComponentName.Freebusy:
                     c = new FreeBusy();
                     break;
-                case JournalStatus.Name:
+                case ComponentName.Journal:
                     c = new Journal();
                     break;
-                case Components.Timezone:
+                case ComponentName.Timezone:
                     c = new VTimeZone();
                     break;
-                case TodoStatus.Name:
+                case ComponentName.Todo:
                     c = new Todo();
                     break;
-                case Components.Calendar:
+                case ComponentName.Calendar:
                     c = new Calendar();
                     break;
                 default:

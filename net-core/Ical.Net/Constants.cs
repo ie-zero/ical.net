@@ -26,12 +26,16 @@ namespace Ical.Net
         public const string End = "END";
     }
 
-    public static class Components
+    public static class ComponentName
     {
         public const string Alarm = "VALARM";
         public const string Calendar = "VCALENDAR";
+        public const string Event = "VEVENT";
         public const string Freebusy = "VFREEBUSY";
+        public const string Journal = "VJOURNAL";
+        public const string Todo = "VTODO";
         public const string Timezone = "VTIMEZONE";
+
         public const string Daylight = "DAYLIGHT";
         public const string Standard = "STANDARD";
     }
@@ -119,11 +123,10 @@ namespace Ical.Net
     }
 
     /// <summary>
-    /// Status codes available to an <see cref="Components.Event"/> item
+    /// Status codes available to an <see cref="ComponentName.Event"/> item
     /// </summary>
     public static class EventStatus
     {
-        public const string Name = "VEVENT";
         public static readonly StringComparison Comparison = StringComparison.Ordinal;
 
         public const string Tentative = "TENTATIVE";
@@ -136,7 +139,6 @@ namespace Ical.Net
     /// </summary>
     public static class TodoStatus
     {
-        public const string Name = "VTODO";
         public const string Key = "STATUS";
         public static readonly StringComparison Comparison = StringComparison.Ordinal;
 
@@ -151,7 +153,6 @@ namespace Ical.Net
     /// </summary>    
     public static class JournalStatus
     {
-        public const string Name = "VJOURNAL";
         public const string Key = "STATUS";
         public static readonly StringComparison Comparison = StringComparison.Ordinal;
 

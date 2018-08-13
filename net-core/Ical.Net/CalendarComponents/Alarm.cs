@@ -9,7 +9,7 @@ namespace Ical.Net.CalendarComponents
     /// </summary>    
     public class Alarm : CalendarComponent
     {
-        public Alarm() : base(Components.Alarm)
+        public Alarm() : base(ComponentName.Alarm)
         {
             Occurrences = new List<AlarmOccurrence>();
         }

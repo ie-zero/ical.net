@@ -24,15 +24,13 @@ namespace Ical.Net.CalendarComponents
     /// </note>
     public class CalendarEvent : RecurringComponent, IAlarmContainer, IComparable<CalendarEvent>
     {
-        internal const string ComponentName = "VEVENT";
-
         private EventEvaluator _evaluator;
 
         /// <summary>
         /// Constructs an Event object, with an iCalObject
         /// (usually an iCalendar object) as its parent.
         /// </summary>
-        public CalendarEvent() : base(EventStatus.Name)
+        public CalendarEvent() : base(ComponentName.Event)
         {
             Initialize();
         }

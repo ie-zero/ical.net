@@ -6,7 +6,7 @@ namespace Ical.Net.CalendarComponents
     public interface IAlarmContainer
     {
         /// <summary>
-        /// A list of <see cref="Components.Alarm"/>s for this recurring component.
+        /// A list of <see cref="ComponentName.Alarm"/>s for this recurring component.
         /// </summary>
         ICalendarObjectList<Alarm> Alarms { get; }
 

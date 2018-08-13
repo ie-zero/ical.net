@@ -18,7 +18,7 @@ namespace Ical.Net.CalendarComponents
         private string _tzId;
         private Uri _url;
 
-        public VTimeZone() : base(Components.Timezone) { }
+        public VTimeZone() : base(ComponentName.Timezone) { }
 
         public VTimeZone(string tzId) : this()
         {
