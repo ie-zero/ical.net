@@ -68,7 +68,7 @@
     <Compile Include="EqualityAndHashingTests.cs" />
     <Compile Include="FreeBusyTest.cs" />
     <Compile Include="GetOccurrenceTests.cs" />
-    <Compile Include="IcsFiles.cs" />
+    <Compile Include="Support\IcsFiles.cs" />
     <Compile Include="JournalTest.cs" />
     <Compile Include="ProgramTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
