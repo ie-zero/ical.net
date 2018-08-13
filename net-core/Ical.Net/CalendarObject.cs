@@ -47,11 +47,6 @@ namespace Ical.Net
 
                 return obj as Calendar;
             }
-
-            protected set
-            {
-                // TODO: FIX Required - Calendar property silently does nothing.
-            }
         }
 
         public string Group
