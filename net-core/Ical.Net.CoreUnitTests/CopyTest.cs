@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using Ical.Net.CalendarComponents;
 using Ical.Net.DataTypes;
 using Ical.Net.Serialization;
+using Ical.Net.Tests.Support;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 
@@ -55,17 +56,6 @@ namespace Ical.Net.CoreUnitTests
             Duration = TimeSpan.FromHours(1),
         };
 
-        private static string SerializeEvent(CalendarEvent e)
-        {
-            return SerializeCalendar(new Calendar { Events = { e } });
-        }
-
-        private static string SerializeCalendar(object calendarObject)
-        {
-            var serializer = new CalendarSerializer(SerializationContext.Default);
-            return serializer.SerializeToString(calendarObject);
-        }
-
         [Test]
         public void EventUid_Tests()
         {
@@ -77,10 +67,10 @@ namespace Ical.Net.CoreUnitTests
             copy.Uid = "Goodbye";
 
             const string uidPattern = "UID:";
-            var serializedOrig = SerializeEvent(e);
+            var serializedOrig = SerializationUtilities.SerializeEvent(e);
             Assert.AreEqual(1, Regex.Matches(serializedOrig, uidPattern).Count);
 
-            var serializedCopy = SerializeEvent(copy);
+            var serializedCopy = SerializationUtilities.SerializeEvent(copy);
             Assert.AreEqual(1, Regex.Matches(serializedCopy, uidPattern).Count);
         }
     }

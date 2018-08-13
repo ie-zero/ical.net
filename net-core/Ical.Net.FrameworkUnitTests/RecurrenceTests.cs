@@ -10,6 +10,7 @@ using Ical.Net.DataTypes;
 using Ical.Net.Evaluation;
 using Ical.Net.Serialization;
 using Ical.Net.Serialization.DataTypes;
+using Ical.Net.Tests.Support;
 using Ical.Net.Utility;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
@@ -3148,12 +3149,12 @@ END:VCALENDAR";
 
             var firstExclusion = new CalDateTime(start.AddDays(4));
             e.ExceptionDates = new List<PeriodList> { new PeriodList { new Period(firstExclusion) } };
-            var serialized = SerializationHelpers.SerializeToString(e);
+            var serialized = SerializationUtilities.SerializeEvent(e);
             Assert.AreEqual(1, Regex.Matches(serialized, "EXDATE:").Count);
 
             var secondExclusion = new CalDateTime(start.AddDays(5));
             e.ExceptionDates.First().Add(new Period(secondExclusion));
-            serialized = SerializationHelpers.SerializeToString(e);
+            serialized = SerializationUtilities.SerializeEvent(e);
             Assert.AreEqual(1, Regex.Matches(serialized, "EXDATE:").Count);
         }
 
@@ -3176,12 +3177,12 @@ END:VCALENDAR";
             exceptionDateList.Add(new Period(new CalDateTime(_now.AddDays(1))));
             e.ExceptionDates.Add(exceptionDateList);
 
-            var serialized = SerializationHelpers.SerializeToString(e);
+            var serialized = SerializationUtilities.SerializeEvent(e);
             const string expected = "TZID=Europe/Stockholm";
             Assert.AreEqual(3, Regex.Matches(serialized, expected).Count);
 
             e.ExceptionDates.First().Add(new Period(new CalDateTime(_now.AddDays(2))));
-            serialized = SerializationHelpers.SerializeToString(e);
+            serialized = SerializationUtilities.SerializeEvent(e);
             Assert.AreEqual(3, Regex.Matches(serialized, expected).Count);
         }
 

@@ -3,6 +3,7 @@ using System.Linq;
 using Ical.Net.CalendarComponents;
 using Ical.Net.DataTypes;
 using Ical.Net.Serialization;
+using Ical.Net.Tests.Support;
 using NUnit.Framework;
 
 namespace Ical.Net.CoreUnitTests
@@ -19,7 +20,7 @@ namespace Ical.Net.CoreUnitTests
             var iCal = new Calendar();
             iCal.AddProperty(propName, propValue);
 
-            var result = SerializeCalendar(iCal);
+            var result = SerializationUtilities.SerializeCalendar(iCal);
 
             var lines = result.Split(new [] { SerializationConstants.LineBreak }, StringSplitOptions.None);
             var propLine = lines.FirstOrDefault(x => x.StartsWith("X-WR-CALNAME:"));
@@ -46,7 +47,7 @@ namespace Ical.Net.CoreUnitTests
             var calendar = new Calendar();
             calendar.Events.Add(@event);
 
-            var serialized = SerializeCalendar(calendar);
+            var serialized = SerializationUtilities.SerializeCalendar(calendar);
             Assert.IsTrue(serialized.Contains("X-ALT-DESC;"));
         }
 
@@ -55,12 +56,6 @@ namespace Ical.Net.CoreUnitTests
         {
             var property = new CalendarProperty();
             Assert.DoesNotThrow(() => property.SetValue(null));
-        }
-
-        private static string SerializeCalendar(object calendarObject)
-        {
-            var serializer = new CalendarSerializer(SerializationContext.Default);
-            return serializer.SerializeToString(calendarObject);
         }
     }
 }

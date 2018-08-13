@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Ical.Net.CalendarComponents;
 using Ical.Net.DataTypes;
 using Ical.Net.Serialization;
+using Ical.Net.Tests.Support;
 using NUnit.Framework;
 
 namespace Ical.Net.FrameworkUnitTests
@@ -25,7 +26,7 @@ namespace Ical.Net.FrameworkUnitTests
         public void VTimeZoneAmericaPhoenixShouldSerializeProperly()
         {
             var iCal = CreateTestCalendar("America/Phoenix");
-            var serialized = SerializeCalendar(iCal);
+            var serialized = SerializationUtilities.SerializeCalendar(iCal);
 
             Assert.IsTrue(serialized.Contains("TZID:America/Phoenix"), "Time zone not found in serialization");
             Assert.IsTrue(serialized.Contains("DTSTART:19670430T020000"), "Daylight savings for Phoenix was not serialized properly.");
@@ -35,7 +36,7 @@ namespace Ical.Net.FrameworkUnitTests
         public void VTimeZoneAmericaPhoenixShouldSerializeProperly2()
         {
             var iCal = CreateTestCalendar("America/Phoenix", DateTime.Now, false);
-            var serialized = SerializeCalendar(iCal);
+            var serialized = SerializationUtilities.SerializeCalendar(iCal);
 
             Assert.IsTrue(serialized.Contains("TZID:America/Phoenix"), "Time zone not found in serialization");
             Assert.IsFalse(serialized.Contains("BEGIN:DAYLIGHT"), "Daylight savings should not exist for Phoenix.");
@@ -45,7 +46,7 @@ namespace Ical.Net.FrameworkUnitTests
         public void VTimeZoneUsMountainStandardTimeShouldSerializeProperly()
         {
             var iCal = CreateTestCalendar("US Mountain Standard Time");
-            var serialized = SerializeCalendar(iCal);
+            var serialized = SerializationUtilities.SerializeCalendar(iCal);
 
             Assert.IsTrue(serialized.Contains("TZID:US Mountain Standard Time"), "Time zone not found in serialization");
             Assert.IsTrue(serialized.Contains("BEGIN:STANDARD"));
@@ -57,7 +58,7 @@ namespace Ical.Net.FrameworkUnitTests
         public void VTimeZoneCentralAmericaStandardTimeShouldSerializeProperly()
         {
             var iCal = CreateTestCalendar("Central America Standard Time");
-            var serialized = SerializeCalendar(iCal);
+            var serialized = SerializationUtilities.SerializeCalendar(iCal);
 
             Assert.IsTrue(serialized.Contains("TZID:Central America Standard Time"), "Time zone not found in serialization");
         }
@@ -66,7 +67,7 @@ namespace Ical.Net.FrameworkUnitTests
         public void VTimeZoneEasternStandardTimeShouldSerializeProperly()
         {
             var iCal = CreateTestCalendar("Eastern Standard Time");
-            var serialized = SerializeCalendar(iCal);
+            var serialized = SerializationUtilities.SerializeCalendar(iCal);
 
             Assert.IsTrue(serialized.Contains("TZID:Eastern Standard Time"), "Time zone not found in serialization");
         }
@@ -75,7 +76,7 @@ namespace Ical.Net.FrameworkUnitTests
         public void VTimeZoneEuropeMoscowShouldSerializeProperly()
         {
             var iCal = CreateTestCalendar("Europe/Moscow");
-            var serialized = SerializeCalendar(iCal);
+            var serialized = SerializationUtilities.SerializeCalendar(iCal);
 
             Assert.IsTrue(serialized.Contains("TZID:Europe/Moscow"), "Time zone not found in serialization");
             Assert.IsTrue(serialized.Contains("BEGIN:STANDARD"), "The standard timezone info was not serialized");
@@ -97,7 +98,7 @@ namespace Ical.Net.FrameworkUnitTests
         public void VTimeZoneAmericaChicagoShouldSerializeProperly()
         {
             var iCal = CreateTestCalendar("America/Chicago");
-            var serialized = SerializeCalendar(iCal);
+            var serialized = SerializationUtilities.SerializeCalendar(iCal);
 
             Assert.IsTrue(serialized.Contains("TZID:America/Chicago"), "Time zone not found in serialization");
             Assert.IsTrue(serialized.Contains("BEGIN:STANDARD"), "The standard timezone info was not serialized");
@@ -119,7 +120,7 @@ namespace Ical.Net.FrameworkUnitTests
         public void VTimeZoneAmericaLosAngelesShouldSerializeProperly()
         {
             var iCal = CreateTestCalendar("America/Los_Angeles");
-            var serialized = SerializeCalendar(iCal);
+            var serialized = SerializationUtilities.SerializeCalendar(iCal);
 
             Assert.IsTrue(serialized.Contains("TZID:America/Los_Angeles"), "Time zone not found in serialization");
             Assert.IsTrue(serialized.Contains("BEGIN:STANDARD"), "The standard timezone info was not serialized");
@@ -141,7 +142,7 @@ namespace Ical.Net.FrameworkUnitTests
         public void VTimeZoneAmericaAnchorageShouldSerializeProperly()
         {
             var iCal = CreateTestCalendar("America/Anchorage");
-            var serialized = SerializeCalendar(iCal);
+            var serialized = SerializationUtilities.SerializeCalendar(iCal);
 
             Assert.IsTrue(serialized.Contains("TZID:America/Anchorage"), "Time zone not found in serialization");
             Assert.IsTrue(serialized.Contains("BEGIN:STANDARD"), "The standard timezone info was not serialized");
@@ -162,7 +163,7 @@ namespace Ical.Net.FrameworkUnitTests
         public void VTimeZoneAmericaEirunepeShouldSerializeProperly()
         {
             var iCal = CreateTestCalendar("America/Eirunepe");
-            var serialized = SerializeCalendar(iCal);
+            var serialized = SerializationUtilities.SerializeCalendar(iCal);
 
             Assert.IsTrue(serialized.Contains("TZID:America/Eirunepe"), "Time zone not found in serialization");
             Assert.IsTrue(serialized.Contains("BEGIN:STANDARD"), "The standard timezone info was not serialized");
@@ -182,7 +183,7 @@ namespace Ical.Net.FrameworkUnitTests
         public void VTimeZoneAmericaDetroitShouldSerializeProperly()
         {
             var iCal = CreateTestCalendar("America/Detroit");
-            var serialized = SerializeCalendar(iCal);
+            var serialized = SerializationUtilities.SerializeCalendar(iCal);
 
             Assert.IsTrue(serialized.Contains("TZID:America/Detroit"), "Time zone not found in serialization");
             Assert.IsTrue(serialized.Contains("BEGIN:STANDARD"), "The standard timezone info was not serialized");
@@ -222,12 +223,6 @@ namespace Ical.Net.FrameworkUnitTests
             };
             iCal.Events.Add(calEvent2);
             return iCal;
-        }
-
-        private static string SerializeCalendar(object calendarObject)
-        {
-            var serializer = new CalendarSerializer(SerializationContext.Default);
-            return serializer.SerializeToString(calendarObject);
         }
     }
 }

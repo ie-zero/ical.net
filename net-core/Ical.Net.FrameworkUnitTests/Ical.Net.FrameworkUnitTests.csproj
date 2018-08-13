@@ -73,7 +73,7 @@
     <Compile Include="ProgramTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RecurrenceTests.cs" />
-    <Compile Include="SerializationHelpers.cs" />
+    <Compile Include="Support\SerializationUtilities.cs" />
     <Compile Include="SerializationTests.cs" />
     <Compile Include="SimpleDeserializationTests.cs" />
     <Compile Include="SymmetricSerializationTests.cs" />
