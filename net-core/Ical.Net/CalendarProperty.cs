@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -46,25 +45,6 @@ namespace Ical.Net
         public object Value
         {
             get { return _values?.FirstOrDefault(); }
-
-            //set
-            //{
-            //    if (value == null)
-            //    {
-            //        _values = null;
-            //        return;
-            //    }
-
-            //    if (_values != null && _values.Count > 0)
-            //    {
-            //        _values[0] = value;
-            //    }
-            //    else
-            //    {
-            //        _values?.Clear();
-            //        _values?.Add(value);
-            //    }
-            //}
         }
 
         public IEnumerable<object> Values => _values?.AsReadOnly();
