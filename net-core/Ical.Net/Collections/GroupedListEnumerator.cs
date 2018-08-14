@@ -3,39 +3,57 @@ using System.Collections.Generic;
 
 namespace Ical.Net.Collections
 {
-    public class GroupedListEnumerator<TType> :
-        IEnumerator<TType>
+    public class GroupedListEnumerator<T> : IEnumerator<T>
     {
-        private readonly IList<IList<TType>> _lists;
-        private IEnumerator<IList<TType>> _listsEnumerator;
-        private IEnumerator<TType> _listEnumerator;
+        private readonly IList<IList<T>> _lists;
 
-        public GroupedListEnumerator(IList<IList<TType>> lists) => _lists = lists;
+        private IEnumerator<T> _itemEnumerator;
+        private IEnumerator<IList<T>> _listsEnumerator;
 
-        public TType Current
-            => _listEnumerator == null
-                ? default(TType)
-                : _listEnumerator.Current;
-
-        public void Dispose()
+        public GroupedListEnumerator(IList<IList<T>> lists)
         {
-            Reset();
+            _lists = lists;
         }
 
-        private void DisposeListEnumerator()
+        public T Current
         {
-            if (_listEnumerator == null)
+            get
             {
-                return;
+                return _itemEnumerator == null
+                    ? default(T)
+                    : _itemEnumerator.Current;
             }
-            _listEnumerator.Dispose();
-            _listEnumerator = null;
         }
 
-        object IEnumerator.Current
-            => _listEnumerator == null
-                ? default(TType)
-                : _listEnumerator.Current;
+        object IEnumerator.Current => Current;
+
+        public bool MoveNext()
+        {
+            while (true)
+            {
+                if (_itemEnumerator == null)
+                {
+                    if (MoveNextList())
+                    {
+                        continue;
+                    }
+                }
+                else
+                {
+                    if (_itemEnumerator.MoveNext())
+                    {
+                        return true;
+                    }
+
+                    DisposeItemEnumerator();
+                    if (MoveNextList())
+                    {
+                        continue;
+                    }
+                }
+                return false;
+            }
+        }
 
         private bool MoveNextList()
         {
@@ -54,52 +72,35 @@ namespace Ical.Net.Collections
                 return false;
             }
 
-            DisposeListEnumerator();
+            DisposeItemEnumerator();
             if (_listsEnumerator.Current == null)
             {
                 return false;
             }
 
-            _listEnumerator = _listsEnumerator.Current.GetEnumerator();
+            _itemEnumerator = _listsEnumerator.Current.GetEnumerator();
             return true;
-        }
-
-        public bool MoveNext()
-        {
-            while (true)
-            {
-                if (_listEnumerator == null)
-                {
-                    if (MoveNextList())
-                    {
-                        continue;
-                    }
-                }
-                else
-                {
-                    if (_listEnumerator.MoveNext())
-                    {
-                        return true;
-                    }
-                    DisposeListEnumerator();
-                    if (MoveNextList())
-                    {
-                        continue;
-                    }
-                }
-                return false;
-            }
         }
 
         public void Reset()
         {
-            if (_listsEnumerator == null)
-            {
-                return;
-            }
+            if (_listsEnumerator == null) { return; }
 
             _listsEnumerator.Dispose();
             _listsEnumerator = null;
+        }
+
+        public void Dispose()
+        {
+            Reset();
+        }
+
+        private void DisposeItemEnumerator()
+        {
+            if (_itemEnumerator == null) { return; }
+
+            _itemEnumerator.Dispose();
+            _itemEnumerator = null;
         }
     }
 }
