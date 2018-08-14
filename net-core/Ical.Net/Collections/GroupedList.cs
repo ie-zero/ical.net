@@ -12,10 +12,10 @@ namespace Ical.Net.Collections
         IGroupedList<T>
         where T : class, IGroupedObject
     {
-        private readonly List<IMultiLinkedList<T>> _lists = new List<IMultiLinkedList<T>>();
-        private readonly Dictionary<string, IMultiLinkedList<T>> _dictionary = new Dictionary<string, IMultiLinkedList<T>>();
+        private readonly List<MultiLinkedList<T>> _lists = new List<MultiLinkedList<T>>();
+        private readonly Dictionary<string, MultiLinkedList<T>> _dictionary = new Dictionary<string, MultiLinkedList<T>>();
 
-        private IMultiLinkedList<T> EnsureList(string group)
+        private MultiLinkedList<T> EnsureList(string group)
         {
             if (group == null)
             {
@@ -34,11 +34,11 @@ namespace Ical.Net.Collections
             return list;
         }
 
-        private IMultiLinkedList<T> ListForIndex(int index, out int relativeIndex)
+        private MultiLinkedList<T> ListForIndex(int index, out int relativeIndex)
         {
-            foreach (var list in _lists.Where(list => list.StartIndex <= index && list.ExclusiveEnd > index))
+            foreach (var list in _lists.Where(list => 0 <= index && list.Count > index))
             {
-                relativeIndex = index - list.StartIndex;
+                relativeIndex = index;
                 return list;
             }
             relativeIndex = -1;
@@ -54,17 +54,12 @@ namespace Ical.Net.Collections
 
         public void Add(T item)
         {
-            if (item == null)
-            {
-                return;
-            }
+            if (item == null) { return; }
 
             // Add a new list if necessary
-            var group = item.Group;
-            var list = EnsureList(group);
-            var index = list.Count;
+            var list = EnsureList(item.Group);
             list.Add(item);
-            OnItemAdded(item, list.StartIndex + index);
+            OnItemAdded(item, list.Count);
         }
 
         public int IndexOf(T item)
@@ -82,8 +77,7 @@ namespace Ical.Net.Collections
             var index = list.IndexOf(item);
 
             // Return the index within the overall KeyedList
-            if (index >= 0)
-                return list.StartIndex + index;
+            if (index >= 0) { return index; }
             return -1;
         }
 
