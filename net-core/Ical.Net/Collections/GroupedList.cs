@@ -12,10 +12,10 @@ namespace Ical.Net.Collections
         IGroupedList<T>
         where T : class, IGroupedObject
     {
-        private readonly List<MultiLinkedList<T>> _lists = new List<MultiLinkedList<T>>();
-        private readonly Dictionary<string, MultiLinkedList<T>> _dictionary = new Dictionary<string, MultiLinkedList<T>>();
+        private readonly List<IList<T>> _lists = new List<IList<T>>();
+        private readonly Dictionary<string, IList<T>> _dictionary = new Dictionary<string, IList<T>>();
 
-        private MultiLinkedList<T> EnsureList(string group)
+        private IList<T> EnsureList(string group)
         {
             if (group == null)
             {
@@ -27,14 +27,14 @@ namespace Ical.Net.Collections
                 return _dictionary[group];
             }
 
-            var list = new MultiLinkedList<T>();
+            var list = new List<T>();
             _dictionary[group] = list;
 
             _lists.Add(list);
             return list;
         }
 
-        private MultiLinkedList<T> ListForIndex(int index, out int relativeIndex)
+        private IList<T> ListForIndex(int index, out int relativeIndex)
         {
             foreach (var list in _lists.Where(list => 0 <= index && list.Count > index))
             {
