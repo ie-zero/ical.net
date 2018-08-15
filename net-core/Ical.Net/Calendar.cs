@@ -231,6 +231,14 @@ namespace Ical.Net
             return default(T);
         }
 
+        public Calendar Copy()
+        {
+            var calendar = new Calendar();
+            calendar.CopyFrom(this);
+
+            return calendar;
+        }
+
         public void Dispose()
         {
             Children.Clear();

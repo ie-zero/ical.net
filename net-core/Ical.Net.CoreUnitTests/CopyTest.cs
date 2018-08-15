@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Ical.Net.CalendarComponents;
 using Ical.Net.DataTypes;
-using Ical.Net.Serialization;
 using Ical.Net.Tests.Support;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
@@ -17,7 +16,7 @@ namespace Ical.Net.CoreUnitTests
         public void CopyCalendarTest(string calendarString)
         {
             var iCal1 = Calendar.Load(calendarString);
-            var iCal2 = iCal1.Copy<Calendar>();
+            var iCal2 = iCal1.Copy();
             SerializationTests.CompareCalendars(iCal1, iCal2);
         }
 
@@ -61,7 +60,7 @@ namespace Ical.Net.CoreUnitTests
         {
             var e = GetSimpleEvent();
             e.Uid = "Hello";
-            var copy = e.Copy<CalendarEvent>();
+            var copy = e.Copy();
             Assert.AreEqual(e.Uid, copy.Uid);
 
             copy.Uid = "Goodbye";

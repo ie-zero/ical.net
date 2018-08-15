@@ -16,7 +16,7 @@ namespace Ical.Net.FrameworkUnitTests
         public void CopyCalendarTest(string calendarString)
         {
             var iCal1 = Calendar.Load(calendarString);
-            var iCal2 = iCal1.Copy<Calendar>();
+            var iCal2 = iCal1.Copy();
             SerializationTests.CompareCalendars(iCal1, iCal2);
         }
 
@@ -60,7 +60,7 @@ namespace Ical.Net.FrameworkUnitTests
         {
             var e = GetSimpleEvent();
             e.Uid = "Hello";
-            var copy = e.Copy<CalendarEvent>();
+            var copy = e.Copy();
             Assert.AreEqual(e.Uid, copy.Uid);
 
             copy.Uid = "Goodbye";

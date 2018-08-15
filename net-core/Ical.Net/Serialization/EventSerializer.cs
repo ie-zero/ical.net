@@ -16,7 +16,7 @@ namespace Ical.Net.Serialization
             CalendarEvent actualEvent;
             if (evt.Properties.ContainsKey("DURATION") && evt.Properties.ContainsKey("DTEND"))
             {
-                actualEvent = evt.Copy<CalendarEvent>();
+                actualEvent = evt.Copy();
                 actualEvent.Properties.Remove("DURATION");
             }
             else

@@ -219,6 +219,14 @@ namespace Ical.Net.CalendarComponents
 
         protected override bool EvaluationIncludesReferenceDate => true;
 
+        public CalendarEvent Copy()
+        {
+            var calendarEvent = new CalendarEvent();
+            calendarEvent.CopyFrom(this);
+
+            return calendarEvent;
+        }
+
         public int CompareTo(CalendarEvent other)
         {
             if (DtStart.Equals(other.DtStart))
