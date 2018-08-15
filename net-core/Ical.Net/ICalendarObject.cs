@@ -5,9 +5,7 @@ namespace Ical.Net
     public interface ICalendarObject : IGroupedObject, ICopyable, IServiceProvider
     {
         /// <summary>
-        /// The name of the calendar object.
-        /// Every calendar object can be assigned
-        /// a name.
+        /// The name of the calendar object. Every calendar object can be assigned a name.
         /// </summary>
         string Name { get; }
 
@@ -22,8 +20,7 @@ namespace Ical.Net
         ICalendarObjectList<ICalendarObject> Children { get; }
 
         /// <summary>
-        /// Returns the iCalendar that this object
-        /// is associated with.
+        /// Returns the iCalendar that this object is associated with.
         /// </summary>
         Calendar Calendar { get; }
     }
