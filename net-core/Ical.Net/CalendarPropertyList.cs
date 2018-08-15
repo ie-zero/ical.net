@@ -5,6 +5,8 @@ using Ical.Net.Collections;
 
 namespace Ical.Net
 {
+    // TODO: Consider creating a CalendarPropertyValue class
+
     public class CalendarPropertyList : IEnumerable<CalendarProperty>
     {
         private readonly ICalendarObject _parent;
@@ -22,7 +24,7 @@ namespace Ical.Net
             e.Item.Parent = _parent;
         }
 
-        public ICalendarProperty this[string name]
+        public CalendarProperty this[string name]
         {
             get
             {
