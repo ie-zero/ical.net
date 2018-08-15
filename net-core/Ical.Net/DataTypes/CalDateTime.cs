@@ -580,5 +580,13 @@ namespace Ical.Net.DataTypes
             HasTime = value.Second != 0 || value.Minute != 0 || value.Hour != 0;
             AssociatedObject = cal;
         }
+
+        public new IDateTime Copy()
+        {
+            var value = new CalDateTime();
+            value.CopyFrom(this);
+
+            return value;
+        }
     }
 }

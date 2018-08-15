@@ -2,7 +2,7 @@
 
 namespace Ical.Net.DataTypes
 {
-    public interface IDateTime : IEncodableDataType, IComparable<IDateTime>, IFormattable, ICalendarDataType
+    public interface IDateTime : IEncodableDataType, IComparable<IDateTime>, IFormattable, ICalendarDataType, ICopy<IDateTime>
     {
         /// <summary>
         /// Converts the date/time to this computer's local date/time.

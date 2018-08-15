@@ -87,7 +87,7 @@ namespace Ical.Net.CalendarComponents
                 // Ensure that "FromDate" has already been set
                 if (fromDate == null)
                 {
-                    fromDate = rc.Start.Copy<IDateTime>();
+                    fromDate = rc.Start.Copy();
                 }
 
                 var d = default(TimeSpan);
@@ -121,7 +121,7 @@ namespace Ical.Net.CalendarComponents
             }
             else
             {
-                var dt = Trigger.DateTime.Copy<IDateTime>();
+                var dt = Trigger.DateTime.Copy();
                 dt.AssociatedObject = this;
                 Occurrences.Add(new AlarmOccurrence(this, dt, rc));
             }
@@ -168,12 +168,12 @@ namespace Ical.Net.CalendarComponents
             for (var index = 0; index < len; index++)
             {
                 var ao = Occurrences[index];
-                var alarmTime = ao.DateTime.Copy<IDateTime>();
+                var alarmTime = ao.DateTime.Copy();
 
                 for (var j = 0; j < Repeat; j++)
                 {
                     alarmTime = alarmTime.Add(Duration);
-                    Occurrences.Add(new AlarmOccurrence(this, alarmTime.Copy<IDateTime>(), ao.Component));
+                    Occurrences.Add(new AlarmOccurrence(this, alarmTime.Copy(), ao.Component));
                 }
             }
         }

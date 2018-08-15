@@ -31,7 +31,7 @@ namespace Ical.Net.Evaluation
         {
             if (recur.Count != int.MinValue)
             {
-                referenceDateTime = Todo.Start.Copy<IDateTime>();
+                referenceDateTime = Todo.Start.Copy();
             }
             else
             {
@@ -69,7 +69,7 @@ namespace Ical.Net.Evaluation
 
         public void EvaluateToPreviousOccurrence(IDateTime completedDate, IDateTime currDt)
         {
-            var beginningDate = completedDate.Copy<IDateTime>();
+            var beginningDate = completedDate.Copy();
 
             if (Todo.RecurrenceRules != null)
             {
