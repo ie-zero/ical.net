@@ -39,19 +39,16 @@ namespace Ical.Net.Proxies
         public void Clear(string group)
         {
             throw new NotImplementedException();
-            _list.Clear(group);
         }
 
         public void Clear()
         {
             throw new NotImplementedException();
-            _list.Clear();
         }
 
         public bool Contains(T item)
         {
             throw new NotImplementedException();
-            return _list.Contains(item);
         }
 
         public bool ContainsKey(string group)
@@ -62,7 +59,6 @@ namespace Ical.Net.Proxies
         public IEnumerable<T> AllOf(string group)
         {
             throw new NotImplementedException();
-            return _list.AllOf(group);
         }
 
         public void CopyTo(T[] array, int arrayIndex)
@@ -73,13 +69,11 @@ namespace Ical.Net.Proxies
         public int CountOf(string group)
         {
             throw new NotImplementedException();
-            return _list.CountOf(group);
         }
 
         public bool Remove(string group)
         {
             throw new NotImplementedException();
-            return _list.Remove(group);
         }
 
         public bool Remove(T item)
