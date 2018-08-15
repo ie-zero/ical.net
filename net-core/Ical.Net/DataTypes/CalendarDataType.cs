@@ -7,7 +7,7 @@ namespace Ical.Net.DataTypes
     /// <summary>
     /// An abstract class from which all iCalendar data types inherit.
     /// </summary>
-    public abstract class CalendarDataType : ICalendarDataType
+    public abstract class CalendarDataType : ICalendarDataType, ICopyable
     {
         protected ICalendarObject _associatedObject;
         private IParameterCollection _parameters;
