@@ -7,8 +7,6 @@ namespace Ical.Net
     {
         private readonly ICalendarObject _parent;
 
-        public CalendarPropertyList() { }
-
         public CalendarPropertyList(ICalendarObject parent)
         {
             _parent = parent;
