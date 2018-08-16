@@ -249,7 +249,6 @@ namespace Ical.Net.DataTypes
 
         public static TimeSpan operator -(CalDateTime left, IDateTime right)
         {
-            left.AssociateWith(right);
             return left.AsUtc - right.AsUtc;
         }
 
