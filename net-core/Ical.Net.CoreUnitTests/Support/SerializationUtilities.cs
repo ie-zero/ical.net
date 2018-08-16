@@ -20,12 +20,15 @@ namespace Ical.Net.Tests.Support
 
         public static Calendar DeserializeCalendar(string calendarString)
         {
-            return SimpleDeserializer.Default.Deserialize(new StringReader(calendarString)).Cast<Calendar>().Single();
+            return DeserializeCalendars(calendarString).Single();
         }
 
         public static IEnumerable<Calendar> DeserializeCalendars(string calendarString)
         {
-            return SimpleDeserializer.Default.Deserialize(new StringReader(calendarString)).Cast<Calendar>().ToList();
+            using (var reader = new StringReader(calendarString))
+            {
+                return SimpleDeserializer.Default.Deserialize(reader).Cast<Calendar>().ToArray();
+            }
         }
     }
 }
