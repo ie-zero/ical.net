@@ -10,8 +10,7 @@ namespace Ical.Net.DataTypes
     public abstract class CalendarDataType : ICalendarDataType, ICopyable
     {
         protected ICalendarObject _associatedObject;
-        private IParameterCollection _parameters;
-        private ParameterCollectionProxy _proxy;
+        private ParameterCollectionProxy _parameters;
         private ServiceProvider _serviceProvider;
 
         protected CalendarDataType()
@@ -21,27 +20,26 @@ namespace Ical.Net.DataTypes
 
         public virtual ICalendarObject AssociatedObject
         {
-            get => _associatedObject;
+            get { return _associatedObject; }
+
             set
             {
-                if (Equals(_associatedObject, value))
-                {
-                    return;
-                }
+                if (Equals(_associatedObject, value)) { return; }
 
                 _associatedObject = value;
                 if (_associatedObject != null)
                 {
-                    _proxy.SetParent(_associatedObject);
-                    if (_associatedObject is ICalendarParameterCollectionContainer)
+                    _parameters.SetParent(_associatedObject);
+
+                    var parameterContainer = _associatedObject as ICalendarParameterCollectionContainer;
+                    if (parameterContainer != null)
                     {
-                        _proxy.SetProxiedObject(((ICalendarParameterCollectionContainer)_associatedObject).Parameters);
+                        _parameters.SetProxiedObject(parameterContainer.Parameters);
                     }
                 }
                 else
                 {
-                    _proxy.SetParent(null);
-                    _proxy.SetProxiedObject(_parameters);
+                    _parameters.SetParent(null);
                 }
             }
         }
@@ -57,7 +55,7 @@ namespace Ical.Net.DataTypes
             set => Parameters.Set("LANGUAGE", value);
         }
 
-        public IParameterCollection Parameters => _proxy;
+        public IParameterCollection Parameters => _parameters;
 
         /// <summary>
         /// Creates a copy of the object.
@@ -90,8 +88,8 @@ namespace Ical.Net.DataTypes
 
             var dt = (ICalendarDataType)obj;
             _associatedObject = dt.AssociatedObject;
-            _proxy.SetParent(_associatedObject);
-            _proxy.SetProxiedObject(dt.Parameters);
+            _parameters.SetParent(_associatedObject);
+            _parameters.SetProxiedObject(dt.Parameters);
         }
 
         public object GetService(Type serviceType)
@@ -117,9 +115,9 @@ namespace Ical.Net.DataTypes
         public Type GetValueType()
         {
             // See RFC 5545 Section 3.2.20.
-            if (_proxy != null && _proxy.ContainsKey("VALUE"))
+            if (_parameters != null && _parameters.ContainsKey("VALUE"))
             {
-                switch (_proxy.Get("VALUE"))
+                switch (_parameters.Get("VALUE"))
                 {
                     case "BINARY":
                         return typeof(byte[]);
@@ -179,7 +177,7 @@ namespace Ical.Net.DataTypes
 
         public void SetValueType(string type)
         {
-            _proxy?.Set("VALUE", type ?? type.ToUpper());
+            _parameters?.Set("VALUE", type ?? type.ToUpper());
         }
 
         [OnDeserialized]
@@ -203,8 +201,7 @@ namespace Ical.Net.DataTypes
 
         private void Initialize()
         {
-            _parameters = new ParameterList();
-            _proxy = new ParameterCollectionProxy(_parameters);
+            _parameters = new ParameterCollectionProxy(new ParameterList());
             _serviceProvider = new ServiceProvider();
         }
     }
