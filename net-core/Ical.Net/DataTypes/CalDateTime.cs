@@ -16,7 +16,7 @@ namespace Ical.Net.DataTypes
     /// class handles time zone differences, and integrates seamlessly into the iCalendar framework.
     /// </remarks>
     /// </summary>
-    public sealed class CalDateTime : EncodableDataType, IDateTime
+    public sealed class CalDateTime : EncodableDataType, IDateTime, IComparable<IDateTime>
     {
         private DateTime _asUtc = DateTime.MinValue;
         private string _tzId = string.Empty;
@@ -390,24 +390,15 @@ namespace Ical.Net.DataTypes
                 : DateUtil.ToZonedDateTimeLeniently(Value, TzId).ToDateTimeOffset();
         }
 
-        public int CompareTo(IDateTime dt)
+        public int CompareTo(IDateTime other)
         {
-            if (Equals(dt))
-            {
-                return 0;
-            }
-            if (this < dt)
-            {
-                return -1;
-            }
-            if (this > dt)
-            {
-                return 1;
-            }
-            throw new Exception("An error occurred while comparing two IDateTime values.");
+            if (other == null) { return 1; }
+            if (this < other) { return -1; }
+            if (this == other) { return 0; }
+            return 1;
         }
 
-                public IDateTime Copy()
+        public IDateTime Copy()
         {
             var value = new CalDateTime();
             value.CopyFrom(this);
