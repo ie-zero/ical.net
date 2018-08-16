@@ -306,7 +306,7 @@ namespace Ical.Net
         /// <returns>A list of occurrences that occur on the given date (<paramref name="dt"/>).</returns>
         public HashSet<Occurrence> GetOccurrences(IDateTime dt)
         {
-            return GetOccurrences<IRecurringComponent>(new CalDateTime(dt.AsSystemLocal.Date), new CalDateTime(dt.AsSystemLocal.Date.AddDays(1).AddSeconds(-1)));
+            return GetOccurrences<IRecurringComponent>(new CalDateTime(dt.GetAsSystemLocal().Date), new CalDateTime(dt.GetAsSystemLocal().Date.AddDays(1).AddSeconds(-1)));
         }
 
         public HashSet<Occurrence> GetOccurrences(DateTime dt)
@@ -345,7 +345,7 @@ namespace Ical.Net
         /// <returns>A list of Periods representing the occurrences of this object.</returns>
         public HashSet<Occurrence> GetOccurrences<T>(IDateTime dt) where T : IRecurringComponent
         {
-            return GetOccurrences<T>(new CalDateTime(dt.AsSystemLocal.Date), new CalDateTime(dt.AsSystemLocal.Date.AddDays(1).AddTicks(-1)));
+            return GetOccurrences<T>(new CalDateTime(dt.GetAsSystemLocal().Date), new CalDateTime(dt.GetAsSystemLocal().Date.AddDays(1).AddTicks(-1)));
         }
 
         public HashSet<Occurrence> GetOccurrences<T>(DateTime dt) where T : IRecurringComponent

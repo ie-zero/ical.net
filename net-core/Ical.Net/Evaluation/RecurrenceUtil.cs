@@ -67,8 +67,8 @@ namespace Ical.Net.Evaluation
         {
             return GetOccurrences(
                     recurrable,
-                    new CalDateTime(dt.AsSystemLocal.Date), 
-                    new CalDateTime(dt.AsSystemLocal.Date.AddDays(1).AddSeconds(-1)), 
+                    new CalDateTime(dt.GetAsSystemLocal().Date), 
+                    new CalDateTime(dt.GetAsSystemLocal().Date.AddDays(1).AddSeconds(-1)), 
                     includeReferenceDateInResults);
         }
 

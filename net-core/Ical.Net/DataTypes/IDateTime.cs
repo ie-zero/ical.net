@@ -7,18 +7,18 @@ namespace Ical.Net.DataTypes
         /// <summary>
         /// Converts the date/time to this computer's local date/time.
         /// </summary>
-        DateTime AsSystemLocal { get; }
+        DateTime GetAsSystemLocal();
 
         /// <summary>
         /// Converts the date/time to UTC (Coordinated Universal Time)
         /// </summary>
-        DateTime AsUtc { get; }
+        DateTime GetAsUtc();
 
         /// <summary>
         /// Returns a DateTimeOffset representation of the Value. If a TzId is specified, it will use that time zone's UTC offset, otherwise it will use the
         /// system-local time zone.
         /// </summary>
-        DateTimeOffset AsDateTimeOffset { get; }
+        DateTimeOffset GetAsDateTimeOffset();
 
         /// <summary>
         /// Gets/sets whether the Value of this date/time represents

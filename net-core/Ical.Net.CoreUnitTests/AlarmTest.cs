@@ -21,10 +21,10 @@ namespace Ical.Net.CoreUnitTests
             // Poll all alarms that occurred between Start and End
             var alarms = evt.PollAlarms(start, end);
 
-            var utcDates = new HashSet<DateTime>(dates.Select(d => d.AsUtc));
+            var utcDates = new HashSet<DateTime>(dates.Select(d => d.GetAsUtc()));
 
             //Only compare the UTC values here, since we care about the time coordinate when the alarm fires, and nothing else
-            foreach (var alarm in alarms.Select(a => a.DateTime.AsUtc))
+            foreach (var alarm in alarms.Select(a => a.DateTime.GetAsUtc()))
             {
                 Assert.IsTrue(utcDates.Contains(alarm), "Alarm triggers at " + alarm + ", but it should not.");
             }

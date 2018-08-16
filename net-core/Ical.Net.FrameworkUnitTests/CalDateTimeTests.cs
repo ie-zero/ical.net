@@ -31,10 +31,10 @@ namespace Ical.Net.FrameworkUnitTests
         [Test, TestCaseSource(nameof(ToTimeZoneTestCases))]
         public void ToTimeZoneTests(CalendarEvent calendarEvent, string targetTimeZone)
         {
-            var startAsUtc = calendarEvent.Start.AsUtc;
+            var startAsUtc = calendarEvent.Start.GetAsUtc();
             
             var convertedStart = calendarEvent.Start.ToTimeZone(targetTimeZone);
-            var convertedAsUtc = convertedStart.AsUtc;
+            var convertedAsUtc = convertedStart.GetAsUtc();
 
             Assert.AreEqual(startAsUtc, convertedAsUtc);
         }
@@ -68,7 +68,7 @@ namespace Ical.Net.FrameworkUnitTests
 
         [TestCaseSource(nameof(AsDateTimeOffsetTestCases))]
         public DateTimeOffset AsDateTimeOffsetTests(CalDateTime incoming)
-            => incoming.AsDateTimeOffset;
+            => incoming.GetAsDateTimeOffset();
 
         public static IEnumerable<ITestCaseData> AsDateTimeOffsetTestCases()
         {
@@ -105,11 +105,11 @@ namespace Ical.Net.FrameworkUnitTests
             var someTime = DateTimeOffset.Parse("2018-05-21T11:35:00-04:00");
 
             var someDt = new CalDateTime(someTime.DateTime) { TzId = "America/New_York" };
-            var firstUtc = someDt.AsUtc;
+            var firstUtc = someDt.GetAsUtc();
             Assert.AreEqual(someTime.UtcDateTime, firstUtc);
 
             someDt.TzId = "Europe/Berlin";
-            var berlinUtc = someDt.AsUtc;
+            var berlinUtc = someDt.GetAsUtc();
             Assert.AreNotEqual(firstUtc, berlinUtc);
         }
 

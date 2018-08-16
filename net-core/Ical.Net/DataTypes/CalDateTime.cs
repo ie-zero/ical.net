@@ -75,15 +75,6 @@ namespace Ical.Net.DataTypes
 
         public static CalDateTime Today => new CalDateTime(DateTime.Today);
 
-        /// <summary>
-        /// Returns a DateTimeOffset representation of the Value. If a TzId is specified, it will use that time zone's UTC offset, otherwise it will use the
-        /// system-local time zone.
-        /// </summary>
-        public DateTimeOffset AsDateTimeOffset =>
-            string.IsNullOrWhiteSpace(TzId)
-                ? new DateTimeOffset(AsSystemLocal)
-                : DateUtil.ToZonedDateTimeLeniently(Value, TzId).ToDateTimeOffset();
-
         public override ICalendarObject AssociatedObject
         {
             get => base.AssociatedObject;
@@ -93,59 +84,6 @@ namespace Ical.Net.DataTypes
                 {
                     base.AssociatedObject = value;
                 }
-            }
-        }
-
-        /// <summary>
-        /// Converts the date/time to the date/time of the computer running the program. If the DateTimeKind is Unspecified, it's assumed that the underlying
-        /// Value already represents the system's datetime.
-        /// </summary>
-        public DateTime AsSystemLocal
-        {
-            get
-            {
-                if (Value.Kind == DateTimeKind.Unspecified)
-                {
-                    return HasTime
-                        ? Value
-                        : Value.Date;
-                }
-
-                return HasTime
-                    ? Value.ToLocalTime()
-                    : Value.ToLocalTime().Date;
-            }
-        }
-
-        /// <summary>
-        /// Returns a representation of the DateTime in Coordinated Universal Time (UTC)
-        /// </summary>
-        public DateTime AsUtc
-        {
-            get
-            {
-                if (_asUtc == DateTime.MinValue)
-                {
-                    // In order of weighting:
-                    //  1) Specified TzId
-                    //  2) Value having a DateTimeKind.Utc
-                    //  3) Use the OS's time zone
-
-                    if (!string.IsNullOrWhiteSpace(TzId))
-                    {
-                        var asLocal = DateUtil.ToZonedDateTimeLeniently(Value, TzId);
-                        _asUtc = asLocal.ToDateTimeUtc();
-                    }
-                    else if (IsUtc || Value.Kind == DateTimeKind.Utc)
-                    {
-                        _asUtc = DateTime.SpecifyKind(Value, DateTimeKind.Utc);
-                    }
-                    else
-                    {
-                        _asUtc = DateTime.SpecifyKind(Value, DateTimeKind.Local).ToUniversalTime();
-                    }
-                }
-                return _asUtc;
             }
         }
 
@@ -249,7 +187,7 @@ namespace Ical.Net.DataTypes
 
         public static TimeSpan operator -(CalDateTime left, IDateTime right)
         {
-            return left.AsUtc - right.AsUtc;
+            return left.GetAsUtc() - right.GetAsUtc();
         }
 
         public static IDateTime operator -(CalDateTime left, TimeSpan right)
@@ -273,12 +211,12 @@ namespace Ical.Net.DataTypes
 
         public static bool operator <(CalDateTime left, IDateTime right)
         {
-            return left != null && right != null && left.AsUtc < right.AsUtc;
+            return left != null && right != null && left.GetAsUtc() < right.GetAsUtc();
         }
 
         public static bool operator <=(CalDateTime left, IDateTime right)
         {
-            return left != null && right != null && left.AsUtc <= right.AsUtc;
+            return left != null && right != null && left.GetAsUtc() <= right.GetAsUtc();
         }
 
         public static bool operator ==(CalDateTime left, IDateTime right)
@@ -288,18 +226,18 @@ namespace Ical.Net.DataTypes
                 : right is CalDateTime
                     && left.Value.Equals(right.Value)
                     && left.HasDate == right.HasDate
-                    && left.AsUtc.Equals(right.AsUtc)
+                    && left.GetAsUtc().Equals(right.GetAsUtc())
                     && string.Equals(left.TzId, right.TzId, StringComparison.OrdinalIgnoreCase);
         }
 
         public static bool operator >(CalDateTime left, IDateTime right)
         {
-            return left != null && right != null && left.AsUtc > right.AsUtc;
+            return left != null && right != null && left.GetAsUtc() > right.GetAsUtc();
         }
 
         public static bool operator >=(CalDateTime left, IDateTime right)
         {
-            return left != null && right != null && left.AsUtc >= right.AsUtc;
+            return left != null && right != null && left.GetAsUtc() >= right.GetAsUtc();
         }
 
         public IDateTime Add(TimeSpan ts)
@@ -392,6 +330,66 @@ namespace Ical.Net.DataTypes
             }
         }
 
+        /// <summary>
+        /// Returns a representation of the DateTime in Coordinated Universal Time (UTC).
+        /// </summary>
+        public DateTime GetAsUtc()
+        {
+            if (_asUtc == DateTime.MinValue)
+            {
+                // In order of weighting:
+                //  1) Specified TzId
+                //  2) Value having a DateTimeKind.Utc
+                //  3) Use the OS's time zone
+
+                if (!string.IsNullOrWhiteSpace(TzId))
+                {
+                    var asLocal = DateUtil.ToZonedDateTimeLeniently(Value, TzId);
+                    _asUtc = asLocal.ToDateTimeUtc();
+                }
+                else if (IsUtc || Value.Kind == DateTimeKind.Utc)
+                {
+                    _asUtc = DateTime.SpecifyKind(Value, DateTimeKind.Utc);
+                }
+                else
+                {
+                    _asUtc = DateTime.SpecifyKind(Value, DateTimeKind.Local).ToUniversalTime();
+                }
+            }
+
+            return _asUtc;
+        }
+
+        /// <summary>
+        /// Converts the date/time to the date/time of the computer running the program. If the
+        /// DateTimeKind is Unspecified, it is assumed that the underlying value already represents
+        /// the system's datetime.
+        /// </summary>
+        public DateTime GetAsSystemLocal()
+        {
+            if (Value.Kind == DateTimeKind.Unspecified)
+            {
+                return HasTime
+                    ? Value
+                    : Value.Date;
+            }
+
+            return HasTime
+                ? Value.ToLocalTime()
+                : Value.ToLocalTime().Date;
+        }
+
+        /// <summary>
+        /// Returns a DateTimeOffset representation of the Value. If a TzId is specified, it will use
+        /// that time zone's UTC offset, otherwise it will use the system-local time zone.
+        /// </summary>
+        public DateTimeOffset GetAsDateTimeOffset()
+        {
+            return string.IsNullOrWhiteSpace(TzId)
+                ? new DateTimeOffset(GetAsSystemLocal())
+                : DateUtil.ToZonedDateTimeLeniently(Value, TzId).ToDateTimeOffset();
+        }
+
         public int CompareTo(IDateTime dt)
         {
             if (Equals(dt))
@@ -450,7 +448,7 @@ namespace Ical.Net.DataTypes
             {
                 var hashCode = Value.GetHashCode();
                 hashCode = (hashCode * 397) ^ HasDate.GetHashCode();
-                hashCode = (hashCode * 397) ^ AsUtc.GetHashCode();
+                hashCode = (hashCode * 397) ^ GetAsUtc().GetHashCode();
                 hashCode = (hashCode * 397) ^ (TzId != null ? TzId.GetHashCode() : 0);
                 return hashCode;
             }

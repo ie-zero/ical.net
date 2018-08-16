@@ -27,14 +27,14 @@ namespace Ical.Net.CoreUnitTests
                 End = new CalDateTime(2017, 11, 22, 11, 30, 01),
             };
 
-            var firstStartAsUtc = e.Start.AsUtc;
-            var firstEndAsUtc = e.End.AsUtc;
+            var firstStartAsUtc = e.Start.GetAsUtc();
+            var firstEndAsUtc = e.End.GetAsUtc();
 
             e.Start.Value = new DateTime(2017, 11, 22, 11, 30, 01);
             e.End.Value = new DateTime(2017, 11, 22, 12, 00, 01);
 
-            var secondStartAsUtc = e.Start.AsUtc;
-            var secondEndAsUtc = e.End.AsUtc;
+            var secondStartAsUtc = e.Start.GetAsUtc();
+            var secondEndAsUtc = e.End.GetAsUtc();
 
             Assert.AreNotEqual(firstStartAsUtc, secondStartAsUtc);
             Assert.AreNotEqual(firstEndAsUtc, secondEndAsUtc);

@@ -173,8 +173,8 @@ namespace Ical.Net.Utility
             }
 
             return dt1.IsUtc
-                ? new CalDateTime(copy.AsUtc)
-                : new CalDateTime(copy.AsSystemLocal);
+                ? new CalDateTime(copy.GetAsUtc())
+                : new CalDateTime(copy.GetAsSystemLocal());
         }
 
         public static DateTime SimpleDateTimeToMatch(IDateTime dt, IDateTime toMatch)
