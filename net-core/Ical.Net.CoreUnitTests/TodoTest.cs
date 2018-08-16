@@ -15,9 +15,9 @@ namespace Ical.Net.CoreUnitTests
         [Test, TestCaseSource(nameof(ActiveTodo_TestCases)), Category("Todo")]
         public void ActiveTodo_Tests(string calendarString, IList<KeyValuePair<CalDateTime, bool>> incoming)
         {
-            var iCal = Calendar.Load(calendarString);
-            AssertUtilities.AssertCalendarHasComponents(iCal);
-            var todo = iCal.Todos;
+            var calendar = Calendar.Load(calendarString);
+            AssertUtilities.AssertCalendarHasComponents(calendar);
+            var todo = calendar.Todos;
 
             foreach (var calDateTime in incoming)
             {
@@ -165,9 +165,9 @@ namespace Ical.Net.CoreUnitTests
         [Test, TestCaseSource(nameof(CompletedTodo_TestCases)), Category("Todo")]
         public void CompletedTodo_Tests(string calendarString, IList<KeyValuePair<CalDateTime, bool>> incoming)
         {
-            var iCal = Calendar.Load(calendarString);
-            AssertUtilities.AssertCalendarHasComponents(iCal);
-            var todo = iCal.Todos;
+            var calendar = Calendar.Load(calendarString);
+            AssertUtilities.AssertCalendarHasComponents(calendar);
+            var todo = calendar.Todos;
 
             foreach (var calDateTime in incoming)
             {
@@ -191,8 +191,8 @@ namespace Ical.Net.CoreUnitTests
         [Test, Category("Todo")]
         public void Todo7_1()
         {
-            var iCal = Calendar.Load(IcsFiles.Todo7);
-            var todo = iCal.Todos;
+            var calendar = Calendar.Load(IcsFiles.Todo7);
+            var todo = calendar.Todos;
 
             var items = new List<CalDateTime>
             {
