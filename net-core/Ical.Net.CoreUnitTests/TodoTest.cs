@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Ical.Net.CoreUnitTests.Support;
 using Ical.Net.DataTypes;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
@@ -15,7 +16,7 @@ namespace Ical.Net.CoreUnitTests
         public void ActiveTodo_Tests(string calendarString, IList<KeyValuePair<CalDateTime, bool>> incoming)
         {
             var iCal = Calendar.Load(calendarString);
-            ProgramTest.TestCal(iCal);
+            AssertUtilities.AssertCalendarHasComponents(iCal);
             var todo = iCal.Todos;
 
             foreach (var calDateTime in incoming)
@@ -165,7 +166,7 @@ namespace Ical.Net.CoreUnitTests
         public void CompletedTodo_Tests(string calendarString, IList<KeyValuePair<CalDateTime, bool>> incoming)
         {
             var iCal = Calendar.Load(calendarString);
-            ProgramTest.TestCal(iCal);
+            AssertUtilities.AssertCalendarHasComponents(iCal);
             var todo = iCal.Todos;
 
             foreach (var calDateTime in incoming)

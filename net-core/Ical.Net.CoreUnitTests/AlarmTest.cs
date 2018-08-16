@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Ical.Net.CoreUnitTests.Support;
 using Ical.Net.DataTypes;
 using NUnit.Framework;
 
@@ -13,9 +14,9 @@ namespace Ical.Net.CoreUnitTests
 
         public void TestAlarm(string calendarString, List<IDateTime> dates, CalDateTime start, CalDateTime end)
         {
-            var iCal = Calendar.Load(calendarString);
-            ProgramTest.TestCal(iCal);
-            var evt = iCal.Events.First();
+            var calendar = Calendar.Load(calendarString);
+            AssertUtilities.AssertCalendarHasComponents(calendar);
+            var evt = calendar.Events.First();
 
             // Poll all alarms that occurred between Start and End
             var alarms = evt.PollAlarms(start, end);

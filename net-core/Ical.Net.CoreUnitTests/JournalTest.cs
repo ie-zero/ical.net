@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Ical.Net.CoreUnitTests.Support;
 using NUnit.Framework;
 
 namespace Ical.Net.CoreUnitTests
@@ -11,7 +12,7 @@ namespace Ical.Net.CoreUnitTests
         public void Journal1()
         {
             var iCal = Calendar.Load(IcsFiles.Journal1);
-            ProgramTest.TestCal(iCal);
+            AssertUtilities.AssertCalendarHasComponents(iCal);
             Assert.AreEqual(1, iCal.Journals.Count);
             var j = iCal.Journals[0];
 
@@ -25,7 +26,7 @@ namespace Ical.Net.CoreUnitTests
         public void Journal2()
         {
             var iCal = Calendar.Load(IcsFiles.Journal2);
-            ProgramTest.TestCal(iCal);
+            AssertUtilities.AssertCalendarHasComponents(iCal);
             Assert.AreEqual(1, iCal.Journals.Count);
             var j = iCal.Journals.First();
 
