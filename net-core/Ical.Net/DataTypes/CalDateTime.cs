@@ -260,7 +260,9 @@ namespace Ical.Net.DataTypes
         }
 
         public static bool operator !=(CalDateTime left, IDateTime right)
-            => !(left == right);
+        {
+            return !(left == right);
+        }
 
         public static IDateTime operator +(CalDateTime left, TimeSpan right)
         {
@@ -270,10 +272,14 @@ namespace Ical.Net.DataTypes
         }
 
         public static bool operator <(CalDateTime left, IDateTime right)
-            => left != null && right != null && left.AsUtc < right.AsUtc;
+        {
+            return left != null && right != null && left.AsUtc < right.AsUtc;
+        }
 
         public static bool operator <=(CalDateTime left, IDateTime right)
-            => left != null && right != null && left.AsUtc <= right.AsUtc;
+        {
+            return left != null && right != null && left.AsUtc <= right.AsUtc;
+        }
 
         public static bool operator ==(CalDateTime left, IDateTime right)
         {
@@ -287,12 +293,19 @@ namespace Ical.Net.DataTypes
         }
 
         public static bool operator >(CalDateTime left, IDateTime right)
-            => left != null && right != null && left.AsUtc > right.AsUtc;
+        {
+            return left != null && right != null && left.AsUtc > right.AsUtc;
+        }
 
         public static bool operator >=(CalDateTime left, IDateTime right)
-            => left != null && right != null && left.AsUtc >= right.AsUtc;
+        {
+            return left != null && right != null && left.AsUtc >= right.AsUtc;
+        }
 
-        public IDateTime Add(TimeSpan ts) => this + ts;
+        public IDateTime Add(TimeSpan ts)
+        {
+            return this + ts;
+        }
 
         public IDateTime AddDays(int days)
         {
@@ -394,6 +407,14 @@ namespace Ical.Net.DataTypes
                 return 1;
             }
             throw new Exception("An error occurred while comparing two IDateTime values.");
+        }
+
+                public IDateTime Copy()
+        {
+            var value = new CalDateTime();
+            value.CopyFrom(this);
+
+            return value;
         }
 
         public override void CopyFrom(ICopyable obj)
@@ -570,14 +591,6 @@ namespace Ical.Net.DataTypes
             HasDate = true;
             HasTime = value.Second != 0 || value.Minute != 0 || value.Hour != 0;
             AssociatedObject = cal;
-        }
-
-        public IDateTime Copy()
-        {
-            var value = new CalDateTime();
-            value.CopyFrom(this);
-
-            return value;
         }
     }
 }
