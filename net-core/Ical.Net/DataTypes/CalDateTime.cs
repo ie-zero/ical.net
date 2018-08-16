@@ -19,8 +19,6 @@ namespace Ical.Net.DataTypes
     public sealed class CalDateTime : EncodableDataType, IDateTime
     {
         private DateTime _asUtc = DateTime.MinValue;
-        private bool _hasDate;
-        private bool _hasTime;
         private string _tzId = string.Empty;
         private DateTime _value;
 
@@ -34,9 +32,11 @@ namespace Ical.Net.DataTypes
         public CalDateTime(DateTime value) : this(value, null) { }
 
         /// <summary>
-        /// Specifying a `tzId` value will override `value`'s `DateTimeKind` property. If the time zone specified is UTC, the underlying `DateTimeKind` will be
-        /// `Utc`. If a non-UTC time zone is specified, the underlying `DateTimeKind` property will be `Local`. If no time zone is specified, the `DateTimeKind`
-        /// property will be left untouched.
+        /// Specifying a <paramref name="tzId"/> value will override <paramref name="value"/>'s
+        /// 'DateTimeKind' property. If the time zone specified is UTC, the underlying 'DateTimeKind'
+        /// will be 'Utc'. If a non-UTC time zone is specified, the underlying 'DateTimeKind'
+        /// property will be 'Local'. If no time zone is specified, the 'DateTimeKind' property will
+        /// be left untouched.
         /// </summary>
         public CalDateTime(DateTime value, string tzId)
         {
@@ -157,17 +157,9 @@ namespace Ical.Net.DataTypes
 
         public int DayOfYear => Value.DayOfYear;
 
-        public bool HasDate
-        {
-            get => _hasDate;
-            set => _hasDate = value;
-        }
+        public bool HasDate { get; set; }
 
-        public bool HasTime
-        {
-            get => _hasTime;
-            set => _hasTime = value;
-        }
+        public bool HasTime { get; set; }
 
         public int Hour => Value.Hour;
 
@@ -416,8 +408,8 @@ namespace Ical.Net.DataTypes
             }
 
             _value = dt.Value;
-            _hasDate = dt.HasDate;
-            _hasTime = dt.HasTime;
+            HasDate = dt.HasDate;
+            HasTime = dt.HasTime;
 
             AssociateWith(dt);
         }
@@ -581,7 +573,7 @@ namespace Ical.Net.DataTypes
             AssociatedObject = cal;
         }
 
-        public new IDateTime Copy()
+        public IDateTime Copy()
         {
             var value = new CalDateTime();
             value.CopyFrom(this);
