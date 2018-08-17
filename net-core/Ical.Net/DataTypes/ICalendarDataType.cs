@@ -4,7 +4,7 @@ namespace Ical.Net.DataTypes
 {
     public interface ICalendarDataType : ICalendarParameterCollectionContainer
     {
-        ICalendarObject AssociatedObject { get; set; }
+        ICalendarObject AssociatedObject { get; }
         Calendar Calendar { get; }
         string Language { get; set; }
 

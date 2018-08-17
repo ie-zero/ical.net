@@ -326,7 +326,7 @@ namespace Ical.Net.DataTypes
             }
             else if (AssociatedObject != null && dt.AssociatedObject == null)
             {
-                dt.AssociatedObject = AssociatedObject;
+                dt.Associate(AssociatedObject);
             }
         }
 

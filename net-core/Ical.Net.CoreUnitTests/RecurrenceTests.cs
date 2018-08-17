@@ -32,8 +32,8 @@ namespace Ical.Net.CoreUnitTests
         )
         {
             var evt = cal.Events.Skip(eventIndex).First();
-            fromDate.AssociatedObject = cal;
-            toDate.AssociatedObject = cal;
+            fromDate.Associate(cal);
+            toDate.Associate(cal);
 
             var occurrences = evt.GetOccurrences(fromDate, toDate)
                 .OrderBy(o => o.Period.StartTime)
@@ -52,7 +52,7 @@ namespace Ical.Net.CoreUnitTests
             for (var i = 0; i < dateTimes.Length; i++)
             {
                 // Associate each incoming date/time with the calendar.
-                dateTimes[i].AssociatedObject = cal;
+                dateTimes[i].Associate(cal);
 
                 var dt = dateTimes[i];
                 Assert.AreEqual(dt, occurrences[i].Period.StartTime, "Event should occur on " + dt);

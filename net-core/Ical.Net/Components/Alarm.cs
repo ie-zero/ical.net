@@ -122,7 +122,7 @@ namespace Ical.Net.CalendarComponents
             else
             {
                 var dt = Trigger.DateTime.Copy();
-                dt.AssociatedObject = this;
+                dt.Associate(this);
                 Occurrences.Add(new AlarmOccurrence(this, dt, rc));
             }
 

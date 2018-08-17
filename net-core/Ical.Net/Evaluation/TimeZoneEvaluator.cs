@@ -60,7 +60,7 @@ namespace Ical.Net.Evaluation
         {
             // Ensure the reference date is associated with the time zone
             if (referenceDate.AssociatedObject == null)
-                referenceDate.AssociatedObject = TimeZone;
+                referenceDate.Associate(TimeZone);
 
             var infos = new List<VTimeZoneInfo>(TimeZone.TimeZoneInfos);
 

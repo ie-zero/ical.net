@@ -74,7 +74,7 @@ namespace Ical.Net.Serialization.DataTypes
 
                 if (dt != null)
                 {
-                    dt.AssociatedObject = rdt.AssociatedObject;
+                    dt.Associate(rdt.AssociatedObject);
                     rdt.Add(dt);
                 }
                 else if (p != null)

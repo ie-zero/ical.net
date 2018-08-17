@@ -82,7 +82,7 @@ namespace Ical.Net.Evaluation
 
             // Ensure the start time is associated with the object being queried
             var start = recurrable.Start;
-            start.AssociatedObject = recurrable as ICalendarObject;
+            start.Associate(recurrable as ICalendarObject);
 
             // Change the time zone of periodStart/periodEnd as needed 
             // so they can be used during the evaluation process.
