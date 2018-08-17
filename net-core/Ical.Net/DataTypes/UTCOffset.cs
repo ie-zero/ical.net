@@ -8,9 +8,7 @@ namespace Ical.Net.DataTypes
     /// </summary>
     public class UtcOffset : EncodableDataType
     {
-        public UtcOffset() { }
-
-        public UtcOffset(string value) : this()
+        public UtcOffset(string value)
         {
             Offset = UtcOffsetSerializer.GetOffset(value);
         }
@@ -82,18 +80,6 @@ namespace Ical.Net.DataTypes
         public override string ToString()
         {
             return (Positive ? "+" : "-") + Hours.ToString("00") + Minutes.ToString("00") + (Seconds != 0 ? Seconds.ToString("00") : string.Empty);
-        }
-
-        // TODO: Review ToLocal() method. The naming/logic appear to be flawed.
-        public DateTime ToLocal(DateTime dt)
-        {
-            return DateTime.SpecifyKind(dt.Add(Offset), DateTimeKind.Local);
-        }
-
-        // TODO: Review ToUtc() method. The naming/logic appear to be flawed.
-        public DateTime ToUtc(DateTime dt)
-        {
-            return DateTime.SpecifyKind(dt.Add(-Offset), DateTimeKind.Utc);
         }
     }
 }
