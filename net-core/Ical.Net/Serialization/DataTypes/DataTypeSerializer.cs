@@ -9,13 +9,20 @@ namespace Ical.Net.Serialization.DataTypes
 
         protected ICalendarDataType CreateAndAssociate()
         {
-            // Create an instance of the object
-            if (!(Activator.CreateInstance(TargetType) is ICalendarDataType dt))
-            {
-                return null;
-            }
+            ICalendarDataType dt = Create();
+            if (dt == null) { return null; }
 
-            if (SerializationContext.Peek() is ICalendarObject associatedObject)
+            return Associate(dt, SerializationContext.Peek() as ICalendarObject);
+        }
+
+        private ICalendarDataType Create()
+        {
+            return Activator.CreateInstance(TargetType) as ICalendarDataType;
+        }
+
+        private ICalendarDataType Associate(ICalendarDataType dt, ICalendarObject associatedObject)
+        {
+            if (associatedObject != null)
             {
                 dt.AssociatedObject = associatedObject;
             }
