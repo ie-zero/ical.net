@@ -36,7 +36,7 @@ namespace Ical.Net.Proxies
             return item;
         }
 
-        public virtual T this[string uid]
+        public T this[string uid]
         {
             get => Search(uid);
             set
