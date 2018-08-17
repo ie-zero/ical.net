@@ -39,21 +39,6 @@ namespace Ical.Net.Proxies
         public T this[string uid]
         {
             get => Search(uid);
-            set
-            {
-                // Find the item matching the UID
-                var item = Search(uid);
-
-                if (item != null)
-                {
-                    Remove(item);
-                }
-
-                if (value != null)
-                {
-                    Add(value);
-                }
-            }
         }
 
         public void AddRange(IEnumerable<T> collection)
