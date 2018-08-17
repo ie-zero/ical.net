@@ -18,6 +18,10 @@ namespace Ical.Net.Collections.Proxies
             RealObject = realObject;
         }
 
+        public bool IsReadOnly => false;
+
+        public IGroupedCollection<TOriginal> RealObject { get; }
+
         public event EventHandler<ItemProcessedEventArgs<TNew>> ItemAdded;
 
         protected void OnItemAdded(TNew item, int index)
@@ -25,24 +29,34 @@ namespace Ical.Net.Collections.Proxies
             ItemAdded?.Invoke(this, new ItemProcessedEventArgs<TNew>(item, index));
         }
 
-        public bool Remove(string group) => RealObject.Remove(group);
-
         public void Clear(string group)
         {
             RealObject.Clear(group);
         }
 
-        public bool ContainsKey(string group) => RealObject.ContainsKey(group);
+        public bool ContainsKey(string group)
+        {
+            return RealObject.ContainsKey(group);
+        }
 
-        public int CountOf(string group) => RealObject.OfType<string>().Count();
+        public int CountOf(string group)
+        {
+            return RealObject.OfType<string>().Count();
+        }
 
-        public IEnumerable<TNew> AllOf(string group) => RealObject
-            .AllOf(group)
-            .OfType<TNew>();
+        public IEnumerable<TNew> AllOf(string group)
+        {
+            return RealObject.AllOf(group).OfType<TNew>();
+        }
 
         public void Add(TNew item)
         {
             RealObject.Add(item);
+        }
+
+        public bool Remove(string group)
+        {
+            return RealObject.Remove(group);
         }
 
         public void Clear()
@@ -57,7 +71,10 @@ namespace Ical.Net.Collections.Proxies
             }
         }
 
-        public bool Contains(TNew item) => RealObject.Contains(item);
+        public bool Contains(TNew item)
+        {
+            return RealObject.Contains(item);
+        }
 
         public void CopyTo(TNew[] array, int arrayIndex)
         {
@@ -68,22 +85,24 @@ namespace Ical.Net.Collections.Proxies
             }
         }
 
-        public int Count => RealObject
-            .OfType<TNew>()
-            .Count();
+        public int Count
+        {
+            get { return RealObject.OfType<TNew>().Count(); }
+        }
 
-        public bool IsReadOnly => false;
+        public bool Remove(TNew item)
+        {
+            return RealObject.Remove(item);
+        }
 
-        public bool Remove(TNew item) => RealObject.Remove(item);
+        public IEnumerator<TNew> GetEnumerator()
+        {
+            return RealObject.OfType<TNew>().GetEnumerator();
+        }
 
-        public IEnumerator<TNew> GetEnumerator() => RealObject
-            .OfType<TNew>()
-            .GetEnumerator();
-
-        IEnumerator IEnumerable.GetEnumerator() => RealObject
-            .OfType<TNew>()
-            .GetEnumerator();
-
-        public IGroupedCollection<TOriginal> RealObject { get; }
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
     }
 }
