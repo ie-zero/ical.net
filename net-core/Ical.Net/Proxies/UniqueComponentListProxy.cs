@@ -18,6 +18,11 @@ namespace Ical.Net.Proxies
             _lookup = new Dictionary<string, T>();
         }
 
+        public T this[string uid]
+        {
+            get { return Search(uid); }
+        }
+
         private T Search(string uid)
         {
             if (_lookup.TryGetValue(uid, out var componentType))
@@ -26,19 +31,10 @@ namespace Ical.Net.Proxies
             }
 
             var item = this.FirstOrDefault(c => string.Equals(c.Uid, uid, StringComparison.OrdinalIgnoreCase));
-
-            if (item == null)
-            {
-                return default(T);
-            }
+            if (item == null) { return default(T); }
 
             _lookup[uid] = item;
             return item;
-        }
-
-        public T this[string uid]
-        {
-            get => Search(uid);
         }
 
         public void AddRange(IEnumerable<T> collection)
