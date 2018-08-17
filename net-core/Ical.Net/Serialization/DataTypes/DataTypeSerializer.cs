@@ -12,22 +12,13 @@ namespace Ical.Net.Serialization.DataTypes
             ICalendarDataType dt = Create();
             if (dt == null) { return null; }
 
-            return Associate(dt, SerializationContext.Peek() as ICalendarObject);
+            dt.Associate(SerializationContext.Peek() as ICalendarObject);
+            return dt;
         }
 
         private ICalendarDataType Create()
         {
             return Activator.CreateInstance(TargetType) as ICalendarDataType;
-        }
-
-        private ICalendarDataType Associate(ICalendarDataType dt, ICalendarObject associatedObject)
-        {
-            if (associatedObject != null)
-            {
-                dt.AssociatedObject = associatedObject;
-            }
-
-            return dt;
         }
     }
 }

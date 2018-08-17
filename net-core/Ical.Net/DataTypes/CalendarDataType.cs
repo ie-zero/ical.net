@@ -57,6 +57,12 @@ namespace Ical.Net.DataTypes
 
         public IParameterCollection Parameters => _parameters;
 
+        public void Associate(ICalendarObject associatedObject)
+        {
+            if (associatedObject == null) { return; }
+            AssociatedObject = associatedObject;            
+        }
+
         /// <summary>
         /// Creates a copy of the object.
         /// </summary>
