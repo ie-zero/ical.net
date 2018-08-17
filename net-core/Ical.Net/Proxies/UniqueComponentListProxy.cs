@@ -6,19 +6,19 @@ using Ical.Net.Collections;
 
 namespace Ical.Net.Proxies
 {
-    public class UniqueComponentListProxy<TComponentType> :
-        CalendarObjectListProxy<TComponentType>,
-        IUniqueComponentList<TComponentType>
-        where TComponentType : class, IUniqueComponent
+    public class UniqueComponentListProxy<T> :
+        CalendarObjectListProxy<T>,
+        IUniqueComponentList<T>
+        where T : class, IUniqueComponent
     {
-        private readonly Dictionary<string, TComponentType> _lookup;
+        private readonly Dictionary<string, T> _lookup;
 
         public UniqueComponentListProxy(IGroupedCollection<ICalendarObject> children) : base(children)
         {
-            _lookup = new Dictionary<string, TComponentType>();
+            _lookup = new Dictionary<string, T>();
         }
 
-        private TComponentType Search(string uid)
+        private T Search(string uid)
         {
             if (_lookup.TryGetValue(uid, out var componentType))
             {
@@ -29,14 +29,14 @@ namespace Ical.Net.Proxies
 
             if (item == null)
             {
-                return default(TComponentType);
+                return default(T);
             }
 
             _lookup[uid] = item;
             return item;
         }
 
-        public virtual TComponentType this[string uid]
+        public virtual T this[string uid]
         {
             get => Search(uid);
             set
@@ -56,7 +56,7 @@ namespace Ical.Net.Proxies
             }
         }
 
-        public void AddRange(IEnumerable<TComponentType> collection)
+        public void AddRange(IEnumerable<T> collection)
         {
             foreach (var element in collection)
             {
