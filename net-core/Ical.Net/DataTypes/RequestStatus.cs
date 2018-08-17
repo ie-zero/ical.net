@@ -5,39 +5,23 @@ using Ical.Net.Serialization.DataTypes;
 namespace Ical.Net.DataTypes
 {
     /// <summary>
-    /// A class that represents the return status of an iCalendar request.
+    /// Represents the return status of an iCalendar request.
     /// </summary>
     public class RequestStatus : EncodableDataType
     {
-        private string _description;
-        private string _extraData;
-        private StatusCode _statusCode;
-
         public RequestStatus() { }
 
-        public RequestStatus(string value) : this()
+        public RequestStatus(string value)
         {
             var serializer = new RequestStatusSerializer(SerializationContext.Default);
             CopyFrom(serializer.Deserialize(new StringReader(value)) as ICopyable);
         }
 
-        public string Description
-        {
-            get => _description;
-            set => _description = value;
-        }
+        public string Description { get; set; }
 
-        public string ExtraData
-        {
-            get => _extraData;
-            set => _extraData = value;
-        }
+        public string ExtraData { get; set; }
 
-        public StatusCode StatusCode
-        {
-            get => _statusCode;
-            set => _statusCode = value;
-        }
+        public StatusCode StatusCode { get; set; }
 
         public override void CopyFrom(ICopyable copyable)
         {
@@ -59,9 +43,9 @@ namespace Ical.Net.DataTypes
 
         protected bool Equals(RequestStatus other)
         {
-            return string.Equals(_description, other._description)
-                && string.Equals(_extraData, other._extraData)
-                && Equals(_statusCode, other._statusCode);
+            return string.Equals(Description, other.Description)
+                && string.Equals(ExtraData, other.ExtraData)
+                && Equals(StatusCode, other.StatusCode);
         }
 
         public override bool Equals(object obj)
@@ -85,9 +69,9 @@ namespace Ical.Net.DataTypes
         {
             unchecked
             {
-                var hashCode = _description?.GetHashCode() ?? 0;
-                hashCode = (hashCode * 397) ^ (_extraData?.GetHashCode() ?? 0);
-                hashCode = (hashCode * 397) ^ (_statusCode?.GetHashCode() ?? 0);
+                var hashCode = Description?.GetHashCode() ?? 0;
+                hashCode = (hashCode * 397) ^ (ExtraData?.GetHashCode() ?? 0);
+                hashCode = (hashCode * 397) ^ (StatusCode?.GetHashCode() ?? 0);
                 return hashCode;
             }
         }
