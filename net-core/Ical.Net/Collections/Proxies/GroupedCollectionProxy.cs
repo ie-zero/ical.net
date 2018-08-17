@@ -15,20 +15,14 @@ namespace Ical.Net.Collections.Proxies
     {
         public GroupedCollectionProxy(IGroupedCollection<TOriginal> realObject)
         {
-            SetProxiedObject(realObject);
+            RealObject = realObject;
         }
 
         public event EventHandler<ItemProcessedEventArgs<TNew>> ItemAdded;
-        public event EventHandler<ItemProcessedEventArgs<TNew>> ItemRemoved;
 
         protected void OnItemAdded(TNew item, int index)
         {
             ItemAdded?.Invoke(this, new ItemProcessedEventArgs<TNew>(item, index));
-        }
-
-        protected void OnItemRemoved(TNew item, int index)
-        {
-            ItemRemoved?.Invoke(this, new ItemProcessedEventArgs<TNew>(item, index));
         }
 
         public bool Remove(string group) => RealObject.Remove(group);
@@ -53,9 +47,6 @@ namespace Ical.Net.Collections.Proxies
 
         public void Clear()
         {
-            // Only clear items of this type
-            // that match the predicate.
-
             var items = RealObject
                 .OfType<TNew>()
                 .ToArray();
@@ -93,11 +84,6 @@ namespace Ical.Net.Collections.Proxies
             .OfType<TNew>()
             .GetEnumerator();
 
-        public IGroupedCollection<TOriginal> RealObject { get; private set; }
-
-        public void SetProxiedObject(IGroupedCollection<TOriginal> realObject)
-        {
-            RealObject = realObject;
-        }
+        public IGroupedCollection<TOriginal> RealObject { get; }
     }
 }
