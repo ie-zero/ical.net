@@ -181,12 +181,6 @@ namespace Ical.Net.CalendarComponents
             return false;
         }
 
-        protected override void OnDeserializing(StreamingContext context)
-        {
-            // TODO: a necessary evil, for now
-            base.OnDeserializing(context);
-        }
-
         private void ExtrapolateTimes()
         {
             if (Due == null && DtStart != null && Duration != default(TimeSpan))

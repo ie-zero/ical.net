@@ -38,10 +38,5 @@ namespace Ical.Net.CalendarComponents
             hashCode = (hashCode * 397) ^ base.GetHashCode();
             return hashCode;
         }
-
-        protected override void OnDeserializing(StreamingContext context)
-        {
-            base.OnDeserializing(context);
-        }
     }
 }
