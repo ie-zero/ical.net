@@ -75,18 +75,6 @@ namespace Ical.Net.DataTypes
 
         public static CalDateTime Today => new CalDateTime(DateTime.Today);
 
-        public override ICalendarObject AssociatedObject
-        {
-            get => base.AssociatedObject;
-            set
-            {
-                if (!Equals(AssociatedObject, value))
-                {
-                    base.AssociatedObject = value;
-                }
-            }
-        }
-
         public DateTime Date => Value.Date;
 
         public int Day => Value.Day;

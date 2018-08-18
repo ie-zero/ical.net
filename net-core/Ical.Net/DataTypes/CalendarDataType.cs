@@ -18,30 +18,10 @@ namespace Ical.Net.DataTypes
             Initialize();
         }
 
-        public virtual ICalendarObject AssociatedObject
+        public ICalendarObject AssociatedObject
         {
             get { return _associatedObject; }
-
-            set
-            {
-                if (Equals(_associatedObject, value)) { return; }
-
-                _associatedObject = value;
-                if (_associatedObject != null)
-                {
-                    _parameters.SetParent(_associatedObject);
-
-                    var parameterContainer = _associatedObject as ICalendarParameterCollectionContainer;
-                    if (parameterContainer != null)
-                    {
-                        _parameters.SetProxiedObject(parameterContainer.Parameters);
-                    }
-                }
-                else
-                {
-                    _parameters.SetParent(null);
-                }
-            }
+            set { Associate(value); }
         }
 
         public Calendar Calendar
@@ -59,8 +39,23 @@ namespace Ical.Net.DataTypes
 
         public void Associate(ICalendarObject associatedObject)
         {
-            if (associatedObject == null) { return; }
-            AssociatedObject = associatedObject;            
+            if (Equals(_associatedObject, associatedObject)) { return; }
+
+            _associatedObject = associatedObject;
+            if (_associatedObject != null)
+            {
+                _parameters.SetParent(_associatedObject);
+
+                var parameterContainer = _associatedObject as ICalendarParameterCollectionContainer;
+                if (parameterContainer != null)
+                {
+                    _parameters.SetProxiedObject(parameterContainer.Parameters);
+                }
+            }
+            else
+            {
+                _parameters.SetParent(null);
+            }
         }
 
         /// <summary>
