@@ -1,6 +1,6 @@
 using System.Runtime.Serialization;
 
-namespace Ical.Net.CalendarComponents
+namespace Ical.Net.Components
 {
     /// <summary>
     /// It represents an RFC 5545 VJOURNAL component.

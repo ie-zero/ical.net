@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Ical.Net.CalendarComponents;
+using Ical.Net.Components;
 using Ical.Net.DataTypes;
 
 namespace Ical.Net.Evaluation

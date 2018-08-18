@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Reflection;
-using Ical.Net.CalendarComponents;
+using Ical.Net.Components;
 using Ical.Net.DataTypes;
 using Ical.Net.Serialization.DataTypes;
 

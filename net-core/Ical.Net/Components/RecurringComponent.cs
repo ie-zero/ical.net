@@ -7,7 +7,7 @@ using Ical.Net.Evaluation;
 using Ical.Net.Proxies;
 using Ical.Net.Utility;
 
-namespace Ical.Net.CalendarComponents
+namespace Ical.Net.Components
 {
     /// <summary>
     /// An iCalendar component that recurs.

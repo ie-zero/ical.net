@@ -6,7 +6,7 @@ using Ical.Net.Utility;
 using NodaTime;
 using NodaTime.TimeZones;
 
-namespace Ical.Net.CalendarComponents
+namespace Ical.Net.Components
 {
     /// <summary>
     /// Represents an RFC 5545 VTIMEZONE component.

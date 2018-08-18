@@ -1,4 +1,4 @@
-﻿namespace Ical.Net.CalendarComponents
+﻿namespace Ical.Net.Components
 {
     public interface ICalendarComponent : ICalendarObject
     {

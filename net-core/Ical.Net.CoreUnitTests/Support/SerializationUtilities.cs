@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Ical.Net.CalendarComponents;
+using Ical.Net.Components;
 using Ical.Net.Serialization;
 
 namespace Ical.Net.Tests.Support

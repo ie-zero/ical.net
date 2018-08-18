@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Ical.Net.DataTypes;
 
-namespace Ical.Net.CalendarComponents
+namespace Ical.Net.Components
 {
     /// <summary>
     /// A class that represents an RFC 2445 VALARM component.  

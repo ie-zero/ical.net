@@ -6,7 +6,7 @@ using Ical.Net.DataTypes;
 using Ical.Net.Evaluation;
 using Ical.Net.Utility;
 
-namespace Ical.Net.CalendarComponents
+namespace Ical.Net.Components
 {
     /// <summary>
     /// A class that represents an RFC 5545 VEVENT component.

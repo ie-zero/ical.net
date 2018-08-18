@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using BenchmarkDotNet.Attributes;
 using Ical.Net;
-using Ical.Net.CalendarComponents;
+using Ical.Net.Components;
 using Ical.Net.DataTypes;
 
 namespace PerfTests

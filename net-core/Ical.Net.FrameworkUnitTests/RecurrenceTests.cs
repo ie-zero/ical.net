@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
-using Ical.Net.CalendarComponents;
+using Ical.Net.Components;
 using Ical.Net.DataTypes;
 using Ical.Net.Evaluation;
 using Ical.Net.Serialization;

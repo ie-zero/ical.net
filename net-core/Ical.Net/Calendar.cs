@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
-using Ical.Net.CalendarComponents;
+using Ical.Net.Components;
 using Ical.Net.DataTypes;
 using Ical.Net.Proxies;
 using Ical.Net.Serialization;
@@ -92,7 +92,7 @@ namespace Ical.Net
         public ICalendarObjectList<Journal> Journals { get; private set; }
 
         /// <summary>
-        /// A collection of <see cref="CalendarComponents.FreeBusy"/> components in the iCalendar.
+        /// A collection of <see cref="Components.FreeBusy"/> components in the iCalendar.
         /// </summary>
         public IUniqueComponentList<FreeBusy> FreeBusy { get; private set; }
 
@@ -285,17 +285,17 @@ namespace Ical.Net
 
         public FreeBusy GetFreeBusy(FreeBusy freeBusyRequest)
         {
-            return CalendarComponents.FreeBusy.Create(this, freeBusyRequest);
+            return Components.FreeBusy.Create(this, freeBusyRequest);
         }
 
         public FreeBusy GetFreeBusy(IDateTime fromInclusive, IDateTime toExclusive)
         {
-            return CalendarComponents.FreeBusy.Create(this, CalendarComponents.FreeBusy.CreateRequest(fromInclusive, toExclusive, null, null));
+            return Components.FreeBusy.Create(this, Components.FreeBusy.CreateRequest(fromInclusive, toExclusive, null, null));
         }
 
         public FreeBusy GetFreeBusy(Organizer organizer, IEnumerable<Attendee> contacts, IDateTime fromInclusive, IDateTime toExclusive)
         {
-            return CalendarComponents.FreeBusy.Create(this, CalendarComponents.FreeBusy.CreateRequest(fromInclusive, toExclusive, organizer, contacts));
+            return Components.FreeBusy.Create(this, Components.FreeBusy.CreateRequest(fromInclusive, toExclusive, organizer, contacts));
         }
 
         /// <summary>

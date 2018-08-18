@@ -4,7 +4,7 @@ using System.Linq;
 using Ical.Net.DataTypes;
 using Ical.Net.Utility;
 
-namespace Ical.Net.CalendarComponents
+namespace Ical.Net.Components
 {
     public class FreeBusy : UniqueComponent, IMergeable
     {

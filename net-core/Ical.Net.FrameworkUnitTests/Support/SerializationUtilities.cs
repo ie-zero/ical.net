@@ -1,4 +1,4 @@
-﻿using Ical.Net.CalendarComponents;
+﻿using Ical.Net.Components;
 using Ical.Net.Serialization;
 
 namespace Ical.Net.Tests.Support

@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using System.Runtime.Serialization;
 
-namespace Ical.Net.CalendarComponents
+namespace Ical.Net.Components
 {
     // TODO: Consider converting CalendarComponent class to abstract. 
 

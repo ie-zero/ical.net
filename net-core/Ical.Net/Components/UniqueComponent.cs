@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 using Ical.Net.DataTypes;
 using Ical.Net.Utility;
 
-namespace Ical.Net.CalendarComponents
+namespace Ical.Net.Components
 {
     /// <summary>
     /// Represents a unique component, a component with a unique UID, which can be used to uniquely

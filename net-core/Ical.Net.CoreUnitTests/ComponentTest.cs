@@ -1,5 +1,5 @@
 using System;
-using Ical.Net.CalendarComponents;
+using Ical.Net.Components;
 using Ical.Net.DataTypes;
 using NUnit.Framework;
 
