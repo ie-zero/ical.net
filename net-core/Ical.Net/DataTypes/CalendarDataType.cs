@@ -21,7 +21,7 @@ namespace Ical.Net.DataTypes
         public ICalendarObject AssociatedObject
         {
             get { return _associatedObject; }
-            set { Associate(value); }
+            internal set { Associate(value); }
         }
 
         public Calendar Calendar
@@ -37,6 +37,9 @@ namespace Ical.Net.DataTypes
 
         public IParameterCollection Parameters => _parameters;
 
+        // TODO: Consider merging Associate() method with AssociatedObject property setter.
+        //      The Associate() method is used as the external API of the class where the AssociatedObject 
+        //      setter for internal calls. 
         public void Associate(ICalendarObject associatedObject)
         {
             if (Equals(_associatedObject, associatedObject)) { return; }
