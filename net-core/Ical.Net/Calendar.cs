@@ -12,7 +12,7 @@ using Ical.Net.Utility;
 
 namespace Ical.Net
 {
-    public class Calendar : CalendarComponent, IGetOccurrencesTyped, IMergeable
+    public class Calendar : CalendarComponent, IMergeable, IGetOccurrences, IGetOccurrencesTyped
     {
         /// <summary>
         /// To load an existing an iCalendar object, use one of the provided LoadFromXXX methods.
@@ -359,6 +359,7 @@ namespace Ical.Net
         /// All components occurring between <paramref name="startTime"/> and <paramref name="endTime"/>
         /// will be returned.
         /// </summary>
+        /// <typeparam name="T">Occurances will be returned only for recurring components of this type.</typeparam>
         /// <param name="startTime">The starting date range</param>
         /// <param name="endTime">The ending date range</param>
         public HashSet<Occurrence> GetOccurrences<T>(IDateTime startTime, IDateTime endTime) where T : IRecurringComponent

@@ -41,7 +41,7 @@ namespace Ical.Net
         HashSet<Occurrence> GetOccurrences(DateTime startTime, DateTime endTime);
     }
 
-    public interface IGetOccurrencesTyped : IGetOccurrences
+    public interface IGetOccurrencesTyped
     {
         /// <summary>
         /// Returns all occurrences of components of type T that start on the date provided.
@@ -64,6 +64,7 @@ namespace Ical.Net
         /// All components occurring between <paramref name="startTime"/> and <paramref name="endTime"/>
         /// will be returned.
         /// </summary>
+        /// <typeparam name="T">Occurances will be returned only for recurring components of this type.</typeparam>
         /// <param name="startTime">The starting date range</param>
         /// <param name="endTime">The ending date range</param>
         HashSet<Occurrence> GetOccurrences<T>(IDateTime startTime, IDateTime endTime) where T : IRecurringComponent;
