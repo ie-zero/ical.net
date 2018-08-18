@@ -72,6 +72,9 @@ namespace Ical.Net
 
         private FreeBusy CombineFreeBusy(FreeBusy main, FreeBusy current)
         {
+            // TODO: The implementation of the CombineFreeBusy() method is wrong. 
+            //      The items are merged on the 'main' but the 'current' object is returned.
+
             main?.MergeWith(current);
             return current;
         }
