@@ -110,7 +110,7 @@ namespace Ical.Net
         {
             using (var reader = new StringReader(calendarString))
             {
-                return CalendarCollection.Load(reader).SingleOrDefault();
+                return Load(reader);
             }
         }
 
@@ -123,34 +123,49 @@ namespace Ical.Net
         {
             using (var reader = new StreamReader(stream, Encoding.UTF8))
             {
-                return CalendarCollection.Load(reader).SingleOrDefault();
+                return Load(reader);
             }
         }
 
         public static Calendar Load(TextReader reader)
         {
-            return CalendarCollection.Load(reader).OfType<Calendar>().SingleOrDefault();
+            return SimpleDeserializer.Default.Deserialize(reader).OfType<Calendar>().SingleOrDefault();
         }
 
-        public static IList<T> Load<T>(Stream stream, Encoding encoding)
+        public static IEnumerable<T> LoadMany<T>(Stream stream, Encoding encoding)
         {
             using (var reader = new StreamReader(stream, encoding))
             {
-                return Load<T>(reader);
+                return LoadMany<T>(reader);
             }
         }
 
-        public static IList<T> Load<T>(TextReader reader)
+        public static IEnumerable<T> LoadMany<T>(TextReader reader)
         {
-            return SimpleDeserializer.Default.Deserialize(reader).OfType<T>().ToList();
+            return SimpleDeserializer.Default.Deserialize(reader).OfType<T>().ToArray();
         }
 
-        public static IList<T> Load<T>(string calendarString)
+        public static IEnumerable<T> LoadMany<T>(string calendarString)
         {
             using (var reader = new StringReader(calendarString))
             {
-                return Load<T>(reader);
+                return LoadMany<T>(reader);
             }
+        }
+
+        public static IEnumerable<Calendar> LoadMany(Stream stream, Encoding encoding)
+        {
+            return LoadMany<Calendar>(stream, encoding);
+        }
+
+        public static IEnumerable<Calendar> LoadMany(TextReader reader)
+        {
+            return LoadMany<Calendar>(reader);
+        }
+
+        public static IEnumerable<Calendar> LoadMany(string calendarString)
+        {
+            return LoadMany<Calendar>(calendarString);
         }
 
         public VTimeZone AddLocalTimeZone(DateTime earliestDateTimeToSupport, bool includeHistoricalData)

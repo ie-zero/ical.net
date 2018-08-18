@@ -3064,7 +3064,7 @@ TRANSP:OPAQUE
 END:VEVENT
 END:VCALENDAR";
 
-            var calendars = CalendarCollection.Load(ical);
+            var calendars = Calendar.LoadMany(ical);
             var events = calendars.SelectMany(c => c.Events).ToList();
 
             var startSearch = DateTime.Parse("2016-08-01T00:00:00");
@@ -3330,7 +3330,7 @@ END:VCALENDAR";
             //The only textual difference between A and B is a different DTSTAMP, which is not considered significant for equality or hashing
 
             //Tautologies...
-            var collectionA = CalendarCollection.Load(icalA);
+            var collectionA = Calendar.LoadMany(icalA);
             Assert.AreEqual(collectionA, collectionA);
             Assert.AreEqual(collectionA.GetHashCode(), collectionA.GetHashCode());
             var calendarA = collectionA.First();
@@ -3340,7 +3340,7 @@ END:VCALENDAR";
             Assert.AreEqual(eventA, eventA);
             Assert.AreEqual(eventA.GetHashCode(), eventA.GetHashCode());
 
-            var collectionB = CalendarCollection.Load(icalB);
+            var collectionB = Calendar.LoadMany(icalB);
             Assert.AreEqual(collectionB, collectionB);
             Assert.AreEqual(collectionB.GetHashCode(), collectionB.GetHashCode());
             var calendarB = collectionB.First();
@@ -3352,7 +3352,7 @@ END:VCALENDAR";
 
             //Comparing the two...
             Assert.AreEqual(collectionA, collectionB);
-            Assert.AreEqual(collectionA.GetHashCode(), collectionB.GetHashCode());
+            Assert.AreEqual(CollectionHelpers.GetHashCode(collectionA), CollectionHelpers.GetHashCode(collectionB));
             Assert.AreEqual(calendarA, calendarB);
             Assert.AreEqual(calendarA.GetHashCode(), calendarB.GetHashCode());
             Assert.AreEqual(eventA, eventB);

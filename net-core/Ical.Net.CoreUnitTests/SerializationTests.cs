@@ -433,7 +433,7 @@ X-CONFLUENCE-SUBCALENDAR-TYPE:other
 TRANSP:TRANSPARENT
 STATUS:CONFIRMED
 END:VEVENT";
-            var deserializedEvent = Calendar.Load<CalendarEvent>(ics).Single();
+            var deserializedEvent = Calendar.LoadMany<CalendarEvent>(ics).Single();
 
             Assert.IsTrue(deserializedEvent.Description.Contains("\t"));
             Assert.IsTrue(deserializedEvent.Description.Contains("•"));

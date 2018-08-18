@@ -172,7 +172,7 @@ namespace Ical.Net.CoreUnitTests
         [Test]
         public void EmptyLines2()
         {
-            var calendars = CalendarCollection.Load(IcsFiles.EmptyLines2);
+            var calendars = Calendar.LoadMany(IcsFiles.EmptyLines2).ToList();
             Assert.AreEqual(2, calendars.Count);
             Assert.AreEqual(2, calendars[0].Events.Count, "iCalendar should have 2 events");
             Assert.AreEqual(2, calendars[1].Events.Count, "iCalendar should have 2 events");

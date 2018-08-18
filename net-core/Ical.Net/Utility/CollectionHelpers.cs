@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Ical.Net.Utility
 {
-    internal static class CollectionHelpers
+    public static class CollectionHelpers
     {
         /// <summary> Commutative, stable, order-independent hashing for collections of collections. </summary>
         public static int GetHashCode<T>(IEnumerable<T> collection)

@@ -4,14 +4,13 @@ using System.Linq;
 using Ical.Net.Components;
 using Ical.Net.DataTypes;
 using Ical.Net.Evaluation;
+using Ical.Net.Extensions;
 using NUnit.Framework;
 
 namespace Ical.Net.CoreUnitTests
 {
-    internal class GetOccurrenceTests
+    public class GetOccurrenceTests
     {
-        public static CalendarCollection GetCalendars(string incoming) => CalendarCollection.Load(incoming);
-
         [Test]
         public void WrongDurationTest()
         {
@@ -132,7 +131,7 @@ END:VEVENT
 
 END:VCALENDAR";
 
-            var calendar = GetCalendars(ical);
+            var calendar = Calendar.LoadMany(ical);
             var date = new DateTime(2016, 10, 11);
             var occurrences = calendar.GetOccurrences(date);
 

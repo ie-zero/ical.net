@@ -19,7 +19,7 @@ namespace Ical.Net.FrameworkUnitTests
                 IcsFiles.DailyByHourMinute1,
             };
 
-            var deserializedCalendars = calendars.AsParallel().SelectMany(CalendarCollection.Load);
+            var deserializedCalendars = calendars.AsParallel().SelectMany(Calendar.LoadMany);
             var materialized = deserializedCalendars.ToList();
             Assert.AreEqual(5, materialized.Count);
         }
