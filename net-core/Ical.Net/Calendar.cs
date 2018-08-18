@@ -106,9 +106,12 @@ namespace Ical.Net
             get { return Children.OfType<IRecurrable>(); }
         }
 
-        public static Calendar Load(string iCalendarString)
+        public static Calendar Load(string calendarString)
         {
-            return CalendarCollection.Load(new StringReader(iCalendarString)).SingleOrDefault();
+            using (var reader = new StringReader(calendarString))
+            {
+                return CalendarCollection.Load(reader).SingleOrDefault();
+            }
         }
 
         /// <summary>
@@ -118,7 +121,10 @@ namespace Ical.Net
         /// <returns>An <see cref="Calendar"/> object</returns>
         public static Calendar Load(Stream stream)
         {
-            return CalendarCollection.Load(new StreamReader(stream, Encoding.UTF8)).SingleOrDefault();
+            using (var reader = new StreamReader(stream, Encoding.UTF8))
+            {
+                return CalendarCollection.Load(reader).SingleOrDefault();
+            }
         }
 
         public static Calendar Load(TextReader reader)
@@ -128,7 +134,10 @@ namespace Ical.Net
 
         public static IList<T> Load<T>(Stream stream, Encoding encoding)
         {
-            return Load<T>(new StreamReader(stream, encoding));
+            using (var reader = new StreamReader(stream, encoding))
+            {
+                return Load<T>(reader);
+            }
         }
 
         public static IList<T> Load<T>(TextReader reader)
@@ -138,7 +147,10 @@ namespace Ical.Net
 
         public static IList<T> Load<T>(string calendarString)
         {
-            return Load<T>(new StringReader(calendarString));
+            using (var reader = new StringReader(calendarString))
+            {
+                return Load<T>(reader);
+            }
         }
 
         public VTimeZone AddLocalTimeZone(DateTime earliestDateTimeToSupport, bool includeHistoricalData)
