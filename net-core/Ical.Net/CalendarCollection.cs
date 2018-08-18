@@ -10,11 +10,14 @@ using Ical.Net.Utility;
 
 namespace Ical.Net
 {
+    // TODO: CalendarCollection class does not have any state other than the one encapsulated in the List<T>.
+    //      Consider converting the methods to extension methods on IEnumerable<Calendar>
+
     /// <summary>
     /// Collection of iCalendars.
     /// </summary>
     public class CalendarCollection : List<Calendar>
-    {
+    {    
         public static CalendarCollection Load(string calendarString)
         {
             using (var reader = new StringReader(calendarString))
@@ -77,7 +80,7 @@ namespace Ical.Net
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            return obj.GetType() == GetType() && Equals((CalendarEvent)obj);
+            return obj.GetType() == GetType() && Equals((CalendarCollection)obj);
         }
 
         protected bool Equals(CalendarCollection obj)
