@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Ical.Net.Components;
 using Ical.Net.DataTypes;
+using Ical.Net.Extensions;
 using Ical.Net.Serialization;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;

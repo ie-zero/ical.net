@@ -6,6 +6,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using Ical.Net.Components;
 using Ical.Net.DataTypes;
+using Ical.Net.Extensions;
 using Ical.Net.Proxies;
 using Ical.Net.Serialization;
 using Ical.Net.Utility;

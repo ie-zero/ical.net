@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Ical.Net.DataTypes;
+using Ical.Net.Extensions;
 using Ical.Net.Utility;
 using NodaTime;
 using NodaTime.TimeZones;
