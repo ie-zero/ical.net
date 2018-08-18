@@ -12,7 +12,7 @@ using Ical.Net.Utility;
 
 namespace Ical.Net
 {
-    public class Calendar : CalendarComponent, IMergeable, IGetOccurrences, IGetOccurrencesTyped
+    public class Calendar : CalendarComponent, IGetOccurrences, IGetOccurrencesTyped
     {
         /// <summary>
         /// To load an existing an iCalendar object, use one of the provided LoadFromXXX methods.
@@ -385,30 +385,29 @@ namespace Ical.Net
             return GetOccurrences<T>(new CalDateTime(startTime), new CalDateTime(endTime));
         }
 
-        public void MergeWith(IMergeable obj)
+        /// <summary>
+        /// Merges the properties and components of another calendar into this one, when they do not exist in the target object.
+        /// </summary>
+        public void MergeWith(Calendar calendar)
         {
-            var c = obj as Calendar;
-            if (c == null)
-            {
-                return;
-            }
+            if (calendar == null) { return; }
 
             if (Name == null)
             {
-                Name = c.Name;
+                Name = calendar.Name;
             }
 
-            Method = c.Method;
-            Version = c.Version;
-            ProductId = c.ProductId;
-            Scale = c.Scale;
+            Method = calendar.Method;
+            Version = calendar.Version;
+            ProductId = calendar.ProductId;
+            Scale = calendar.Scale;
 
-            foreach (var p in c.Properties.Where(p => !Properties.ContainsKey(p.Name)))
+            foreach (var property in calendar.Properties.Where(p => !Properties.ContainsKey(p.Name)))
             {
-                Properties.Add(p);
+                Properties.Add(property);
             }
 
-            foreach (var child in c.Children)
+            foreach (var child in calendar.Children)
             {
                 if (child is IUniqueComponent)
                 {

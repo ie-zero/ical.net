@@ -6,7 +6,7 @@ using Ical.Net.Utility;
 
 namespace Ical.Net.Components
 {
-    public class FreeBusy : UniqueComponent, IMergeable
+    public class FreeBusy : UniqueComponent
     {
         public FreeBusy() : base(ComponentName.Freebusy) { }
 
@@ -180,14 +180,10 @@ namespace Ical.Net.Components
             return status;
         }
 
-        public void MergeWith(IMergeable obj)
+        public void MergeWith(FreeBusy freeBusy)
         {
-            if (!(obj is FreeBusy fb))
-            {
-                return;
-            }
-
-            Entries.AddRange(fb.Entries.Where(entry => !Entries.Contains(entry)));
+            if (freeBusy == null) { return; }
+            Entries.AddRange(freeBusy.Entries.Where(entry => !Entries.Contains(entry)));
         }
     }
 }
