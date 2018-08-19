@@ -388,10 +388,7 @@ namespace Ical.Net.DataTypes
 
         public IDateTime Copy()
         {
-            var value = new CalDateTime();
-            value.CopyFrom(this);
-
-            return value;
+            return new CalDateTime(this); ;
         }
 
         public override void CopyFrom(ICopyable obj)

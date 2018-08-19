@@ -7,5 +7,6 @@ namespace Ical.Net
     /// </summary>
     public class CalendarObjectList : GroupedList<ICalendarObject>, ICalendarObjectList<ICalendarObject>
     {
+        // TODO: Encapsualting the GroupedList<ICalendarObject> as readonly field for CalendarObjectList generates unexpected test failures.
     }
 }
