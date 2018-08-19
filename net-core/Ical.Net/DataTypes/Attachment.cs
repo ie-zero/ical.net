@@ -71,9 +71,6 @@ namespace Ical.Net.DataTypes
             }
         }
 
-        // TODO: See if CopyFrom() method can be deleted.
-        public override void CopyFrom(ICopyable obj) { }
-
         protected bool Equals(Attachment other)
         {
             var firstPart = Equals(Uri, other.Uri) && ValueEncoding.Equals(other.ValueEncoding);

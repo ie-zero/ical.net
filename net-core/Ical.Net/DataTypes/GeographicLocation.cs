@@ -31,9 +31,6 @@ namespace Ical.Net.DataTypes
 
         public double Latitude { get; set; }
 
-        public double Longitude { get; set; }
-
-        // TODO: See if CopyFrom() method can be deleted.
-        public override void CopyFrom(ICopyable obj) {}        
+        public double Longitude { get; set; }   
     }
 }

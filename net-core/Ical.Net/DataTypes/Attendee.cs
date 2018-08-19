@@ -262,9 +262,6 @@ namespace Ical.Net.DataTypes
         /// <summary> Uri associated with the attendee, typically an email address </summary>
         public Uri Value { get; set; }
 
-        // TODO: See if CopyFrom() method can be deleted.
-        public override void CopyFrom(ICopyable obj) { }
-
         protected bool Equals(Attendee other)
         {
             return Equals(SentBy, other.SentBy)
