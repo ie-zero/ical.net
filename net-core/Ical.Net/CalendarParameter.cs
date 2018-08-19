@@ -53,13 +53,15 @@ namespace Ical.Net
         {
             base.CopyFrom(copyable);
 
-            var p = copyable as CalendarParameter;
-            if (p?.Values == null)
-            {
-                return;
-            }
+            var parameter = copyable as CalendarParameter;
+            if (parameter == null) { return; }
 
-            _values = new HashSet<string>(p.Values.Where(IsValidValue), StringComparer.OrdinalIgnoreCase);
+            CopyFrom(parameter);
+        }
+
+        private void CopyFrom(CalendarParameter parameter)
+        {
+            _values = new HashSet<string>(parameter.Values.Where(IsValidValue), StringComparer.OrdinalIgnoreCase);
         }
 
         public bool ContainsValue(string value)

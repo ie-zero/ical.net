@@ -27,18 +27,20 @@ namespace Ical.Net.DataTypes
         {
             base.CopyFrom(copyable);
 
-            if (!(copyable is RequestStatus))
-            {
-                return;
-            }
+            var status = copyable as RequestStatus;
+            if (status == null) { return; }
 
-            var rs = (RequestStatus) copyable;
-            if (rs.StatusCode != null)
+            CopyFrom(status);
+        }
+
+        private void CopyFrom(RequestStatus status)
+        {
+            if (status.StatusCode != null)
             {
-                StatusCode = rs.StatusCode;
+                StatusCode = status.StatusCode;
             }
-            Description = rs.Description;
-            rs.ExtraData = rs.ExtraData;
+            Description = status.Description;
+            status.ExtraData = status.ExtraData;
         }
 
         protected bool Equals(RequestStatus other)

@@ -44,12 +44,17 @@ namespace Ical.Net.DataTypes
         public override void CopyFrom(ICopyable copyable)
         {
             base.CopyFrom(copyable);
-            if (copyable is StatusCode)
-            {
-                var sc = (StatusCode) copyable;
-                Parts = new int[sc.Parts.Length];
-                sc.Parts.CopyTo(Parts, 0);
-            }
+
+            var statusCode = copyable as StatusCode;
+            if (statusCode == null) { return; }
+
+            CopyFrom(statusCode);
+        }
+
+        private void CopyFrom(StatusCode statusCode)
+        {
+            Parts = new int[statusCode.Parts.Length];
+            statusCode.Parts.CopyTo(Parts, 0);
         }
 
         protected bool Equals(StatusCode other)

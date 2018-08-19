@@ -83,11 +83,14 @@ namespace Ical.Net
             var calendarObject = copyable as ICalendarObject;
             if (calendarObject == null) return;
 
-            // Copy the name and basic information
+            CopyFrom(calendarObject);
+        }
+
+        private void CopyFrom(ICalendarObject calendarObject)
+        {             
             Name = calendarObject.Name;
             Parent = calendarObject.Parent;
 
-            // Add each child
             Children.Clear();
             foreach (var child in calendarObject.Children)
             {

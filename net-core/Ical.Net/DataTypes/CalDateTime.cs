@@ -391,21 +391,23 @@ namespace Ical.Net.DataTypes
             return new CalDateTime(this); ;
         }
 
-        public override void CopyFrom(ICopyable obj)
+        public override void CopyFrom(ICopyable copyable)
         {
-            base.CopyFrom(obj);
+            base.CopyFrom(copyable);
 
-            var dt = obj as IDateTime;
-            if (dt == null)
-            {
-                return;
-            }
+            var dateTime = copyable as IDateTime;
+            if (dateTime == null) { return; }
 
-            _value = dt.Value;
-            HasDate = dt.HasDate;
-            HasTime = dt.HasTime;
+            CopyFrom(dateTime);
+        }
 
-            AssociateWith(dt);
+        private void CopyFrom(IDateTime dateTime)
+        {
+            _value = dateTime.Value;
+            HasDate = dateTime.HasDate;
+            HasTime = dateTime.HasTime;
+
+            AssociateWith(dateTime);
         }
 
         public bool Equals(CalDateTime other)

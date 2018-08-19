@@ -64,12 +64,17 @@ namespace Ical.Net.DataTypes
         public override void CopyFrom(ICopyable copyable)
         {
             base.CopyFrom(copyable);
-            if (copyable is WeekDay)
-            {
-                var bd = (WeekDay)copyable;
-                Offset = bd.Offset;
-                DayOfWeek = bd.DayOfWeek;
-            }
+
+            var weekDay = copyable as WeekDay;
+            if (weekDay == null) { return; }
+
+            CopyFrom(weekDay);
+        }
+
+        private void CopyFrom(WeekDay weekDay)
+        {
+            Offset = weekDay.Offset;
+            DayOfWeek = weekDay.DayOfWeek;
         }
 
         public override bool Equals(object obj)

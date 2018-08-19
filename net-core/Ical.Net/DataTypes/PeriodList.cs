@@ -97,14 +97,19 @@ namespace Ical.Net.DataTypes
         public override void CopyFrom(ICopyable copyable)
         {
             base.CopyFrom(copyable);
-            if (!(copyable is PeriodList list))
-            {
-                return;
-            }
 
-            foreach (var p in list)
+            var periods = copyable as PeriodList;
+            if (periods == null) { return; }
+
+            CopyFrom(periods);
+        }
+
+        private void CopyFrom(PeriodList periods)
+        {
+            periods.Clear();
+            foreach (var period in periods)
             {
-                Add(p);
+                Add(period);
             }
         }
 

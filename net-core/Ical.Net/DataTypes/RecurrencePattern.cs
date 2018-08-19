@@ -140,32 +140,34 @@ namespace Ical.Net.DataTypes
             }
         }
 
-        public override void CopyFrom(ICopyable obj)
+        public override void CopyFrom(ICopyable copyable)
         {
-            base.CopyFrom(obj);
-            if (!(obj is RecurrencePattern))
-            {
-                return;
-            }
+            base.CopyFrom(copyable);
 
-            var r = (RecurrencePattern)obj;
+            var pattern = copyable as RecurrencePattern;
+            if (pattern == null) { return; }
 
-            Frequency = r.Frequency;
-            Until = r.Until;
-            Count = r.Count;
-            Interval = r.Interval;
-            BySecond = new List<int>(r.BySecond);
-            ByMinute = new List<int>(r.ByMinute);
-            ByHour = new List<int>(r.ByHour);
-            ByDay = new List<WeekDay>(r.ByDay);
-            ByMonthDay = new List<int>(r.ByMonthDay);
-            ByYearDay = new List<int>(r.ByYearDay);
-            ByWeekNo = new List<int>(r.ByWeekNo);
-            ByMonth = new List<int>(r.ByMonth);
-            BySetPosition = new List<int>(r.BySetPosition);
-            FirstDayOfWeek = r.FirstDayOfWeek;
-            RestrictionType = r.RestrictionType;
-            EvaluationMode = r.EvaluationMode;
+            CopyFrom(pattern);
+        }
+
+        private void CopyFrom(RecurrencePattern pattern)
+        {
+            Frequency = pattern.Frequency;
+            Until = pattern.Until;
+            Count = pattern.Count;
+            Interval = pattern.Interval;
+            BySecond = new List<int>(pattern.BySecond);
+            ByMinute = new List<int>(pattern.ByMinute);
+            ByHour = new List<int>(pattern.ByHour);
+            ByDay = new List<WeekDay>(pattern.ByDay);
+            ByMonthDay = new List<int>(pattern.ByMonthDay);
+            ByYearDay = new List<int>(pattern.ByYearDay);
+            ByWeekNo = new List<int>(pattern.ByWeekNo);
+            ByMonth = new List<int>(pattern.ByMonth);
+            BySetPosition = new List<int>(pattern.BySetPosition);
+            FirstDayOfWeek = pattern.FirstDayOfWeek;
+            RestrictionType = pattern.RestrictionType;
+            EvaluationMode = pattern.EvaluationMode;
         }
 
         protected bool Equals(RecurrencePattern other)

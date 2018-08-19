@@ -80,20 +80,21 @@ namespace Ical.Net.DataTypes
         }
 
         /// <summary>
-        /// Copies values from the target object to the
-        /// current object.
+        /// Copies values from the input object to the current object.
         /// </summary>
-        public virtual void CopyFrom(ICopyable obj)
+        public virtual void CopyFrom(ICopyable copyable)
         {
-            if (!(obj is ICalendarDataType))
-            {
-                return;
-            }
+            var dataType = copyable as ICalendarDataType;
+            if (dataType == null) { return; }
 
-            var dt = (ICalendarDataType)obj;
-            _associatedObject = dt.AssociatedObject;
+            CopyFrom(dataType);
+        }
+
+        private void CopyFrom(ICalendarDataType dataType)
+        {
+            _associatedObject = dataType.AssociatedObject;
             _parameters.SetParent(_associatedObject);
-            _parameters.SetProxiedObject(dt.Parameters);
+            _parameters.SetProxiedObject(dataType.Parameters);
         }
 
         public object GetService(Type serviceType)

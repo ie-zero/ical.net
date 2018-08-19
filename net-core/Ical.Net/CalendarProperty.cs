@@ -112,6 +112,11 @@ namespace Ical.Net
             var property = copyable as ICalendarProperty;
             if (property == null) { return; }
 
+            CopyFrom(property);
+        }
+
+        private void CopyFrom(ICalendarProperty property)
+        {
             SetValue(property.Values);
         }
     }

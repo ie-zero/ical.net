@@ -13,6 +13,7 @@ namespace Ical.Net.DataTypes
     {
         private IDateTime _dateTime;
         private TimeSpan? _duration;
+        private object pattern;
 
         public Trigger() { }
 
@@ -72,18 +73,21 @@ namespace Ical.Net.DataTypes
 
         public string Related { get; set; } = TriggerRelation.Start;
 
-        public override void CopyFrom(ICopyable obj)
+        public override void CopyFrom(ICopyable copyable)
         {
-            base.CopyFrom(obj);
-            if (!(obj is Trigger))
-            {
-                return;
-            }
+            base.CopyFrom(copyable);
 
-            var t = (Trigger) obj;
-            DateTime = t.DateTime;
-            Duration = t.Duration;
-            Related = t.Related;
+            var trigger = copyable as Trigger;
+            if (trigger == null) { return; }
+
+            CopyFrom(trigger);
+        }
+
+        private void CopyFrom(Trigger trigger)
+        {
+            DateTime = trigger.DateTime;
+            Duration = trigger.Duration;
+            Related = trigger.Related;
         }
 
         protected bool Equals(Trigger other)

@@ -69,10 +69,15 @@ namespace Ical.Net.DataTypes
         {
             base.CopyFrom(copyable);
 
-            if (copyable is Organizer o)
-            {
-                Value = o.Value;
-            }
+            var organizer = copyable as Organizer;
+            if (organizer == null) { return; }
+
+            CopyFrom(organizer);
+        }
+
+        private void CopyFrom(Organizer organizer)
+        {
+            Value = organizer.Value;
         }
 
         protected bool Equals(Organizer other)

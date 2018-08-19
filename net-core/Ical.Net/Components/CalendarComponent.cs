@@ -56,6 +56,11 @@ namespace Ical.Net.Components
             var component = copyable as ICalendarComponent;
             if (component == null) { return; }
 
+            CopyFrom(component);
+        }
+
+        private void CopyFrom(ICalendarComponent component)
+        {
             Properties.Clear();
             foreach (var prop in component.Properties)
             {

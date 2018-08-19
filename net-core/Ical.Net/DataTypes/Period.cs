@@ -146,6 +146,11 @@ namespace Ical.Net.DataTypes
             var period = copyable as Period;
             if (period == null) { return; }
 
+            CopyFrom(period);
+        }
+
+        private void CopyFrom(Period period)
+        {
             StartTime = period.StartTime;
             EndTime = period.EndTime;
             Duration = period.Duration;
