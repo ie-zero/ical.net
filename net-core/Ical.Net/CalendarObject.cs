@@ -28,7 +28,7 @@ namespace Ical.Net
             // TODO: I'm fairly certain this is ONLY used for null checking. 
             //      If so, maybe it can just be a bool? CalendarObjectList is an empty object, and its constructor 
             //      parameter is ignored.
-            Children = new CalendarObjectList(this);
+            Children = new CalendarObjectList();
             _serviceProvider = new ServiceProvider();
 
             Children.ItemAdded += Children_ItemAdded;
