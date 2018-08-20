@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Ical.Net.Components;
 
 namespace Ical.Net.DataTypes
@@ -30,6 +32,7 @@ namespace Ical.Net.DataTypes
 
         public IRecurringComponent Component { get; set; }
 
+        // TODO: There is a dependency between DateTime and Period properties on AlarmOccurrence.
         public IDateTime DateTime
         {
             get => Period.StartTime;
@@ -43,30 +46,35 @@ namespace Ical.Net.DataTypes
             return Period.CompareTo(other.Period);
         }
 
-        protected bool Equals(AlarmOccurrence other)
-        {
-            return Equals(Period, other.Period)
-                           && Equals(Component, other.Component)
-                           && Equals(Alarm, other.Alarm);
-        }
-
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            return obj.GetType() == GetType() && Equals((AlarmOccurrence)obj);
+            if (ReferenceEquals(null, obj)) { return false; }
+            if (ReferenceEquals(this, obj)) { return true; }
+            if (obj.GetType() != GetType()) { return false; }
+
+            var occurrence = (AlarmOccurrence)obj;
+
+            return GetEqualityComponents().SequenceEqual(occurrence.GetEqualityComponents());
         }
 
         public override int GetHashCode()
         {
+            return GetEqualityComponents()
+                .Aggregate(1, (current, obj) =>
+                {
+                    unchecked
+                    {
+                        return current * 23 + (obj?.GetHashCode() ?? 0);
+                    }
+                });
+        }
+
+        protected IEnumerable<object> GetEqualityComponents()
+        {
             // TODO: Alarm does not implement Equals or GetHashCode()
-            unchecked
-            {
-                var hashCode = Period?.GetHashCode() ?? 0;
-                hashCode = (hashCode * 397) ^ (Component?.GetHashCode() ?? 0);
-                hashCode = (hashCode * 397) ^ (Alarm?.GetHashCode() ?? 0);
-                return hashCode;
-            }
+            yield return Alarm;
+            yield return Component;
+            yield return Period;
         }
     }
 }

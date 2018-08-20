@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 using Ical.Net.DataTypes;
 using Ical.Net.Utility;
@@ -75,25 +76,6 @@ namespace Ical.Net.Components
             return string.Compare(Uid, other.Uid, StringComparison.OrdinalIgnoreCase);
         }
 
-        public override bool Equals(object obj)
-        {
-            if (obj is RecurringComponent && obj != this)
-            {
-                var r = (RecurringComponent)obj;
-                if (Uid != null)
-                {
-                    return Uid.Equals(r.Uid);
-                }
-                return Uid == r.Uid;
-            }
-            return base.Equals(obj);
-        }
-
-        public override int GetHashCode()
-        {
-            return Uid?.GetHashCode() ?? base.GetHashCode();
-        }
-
         protected override void OnDeserialized(StreamingContext context)
         {
             base.OnDeserialized(context);
@@ -128,6 +110,34 @@ namespace Ical.Net.Components
                 var utcNow = DateTime.UtcNow.Truncate(TimeSpan.FromSeconds(1));
                 DtStamp = new CalDateTime(utcNow, "UTC");
             }
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) { return false; }
+            if (ReferenceEquals(this, obj)) { return true; }
+            if (obj.GetType() != GetType()) { return false; }
+
+            var uniqueComponent = (UniqueComponent)obj;
+
+            return GetEqualityComponents().SequenceEqual(uniqueComponent.GetEqualityComponents());
+        }
+
+        public override int GetHashCode()
+        {
+            return GetEqualityComponents()
+                .Aggregate(1, (current, obj) =>
+                {
+                    unchecked
+                    {
+                        return current * 23 + (obj?.GetHashCode() ?? 0);
+                    }
+                });
+        }
+
+        protected IEnumerable<object> GetEqualityComponents()
+        {
+            yield return Uid;
         }
     }
 }

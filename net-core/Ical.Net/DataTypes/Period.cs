@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Ical.Net.Serialization;
 using Ical.Net.Serialization.DataTypes;
 
@@ -156,27 +158,34 @@ namespace Ical.Net.DataTypes
             Duration = period.Duration;
         }
 
-        protected bool Equals(Period other)
-        {
-            return Equals(StartTime, other.StartTime) && Equals(EndTime, other.EndTime) && Duration.Equals(other.Duration);
-        }
-
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            return obj.GetType() == GetType() && Equals((Period)obj);
+            if (ReferenceEquals(null, obj)) { return false; }
+            if (ReferenceEquals(this, obj)) { return true; }
+            if (obj.GetType() != GetType()) { return false; }
+
+            var period = (Period)obj;
+
+            return GetEqualityComponents().SequenceEqual(period.GetEqualityComponents());
         }
 
         public override int GetHashCode()
         {
-            unchecked
-            {
-                var hashCode = StartTime?.GetHashCode() ?? 0;
-                hashCode = (hashCode * 397) ^ (EndTime?.GetHashCode() ?? 0);
-                hashCode = (hashCode * 397) ^ Duration.GetHashCode();
-                return hashCode;
-            }
+            return GetEqualityComponents()
+                .Aggregate(1, (current, obj) =>
+                {
+                    unchecked
+                    {
+                        return current * 23 + (obj?.GetHashCode() ?? 0);
+                    }
+                });
+        }
+
+        protected IEnumerable<object> GetEqualityComponents()
+        {
+            yield return StartTime;
+            yield return EndTime;
+            yield return Duration;
         }
 
         public override string ToString()

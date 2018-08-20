@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Ical.Net.Serialization;
 using Ical.Net.Serialization.DataTypes;
 
@@ -13,7 +15,6 @@ namespace Ical.Net.DataTypes
     {
         private IDateTime _dateTime;
         private TimeSpan? _duration;
-        private object pattern;
 
         public Trigger() { }
 
@@ -90,37 +91,34 @@ namespace Ical.Net.DataTypes
             Related = trigger.Related;
         }
 
-        protected bool Equals(Trigger other)
-        {
-            return Equals(_dateTime, other._dateTime) && _duration.Equals(other._duration) && Related == other.Related;
-        }
-
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj))
-            {
-                return false;
-            }
-            if (ReferenceEquals(this, obj))
-            {
-                return true;
-            }
-            if (obj.GetType() != GetType())
-            {
-                return false;
-            }
-            return Equals((Trigger)obj);
+            if (ReferenceEquals(null, obj)) { return false; }
+            if (ReferenceEquals(this, obj)) { return true; }
+            if (obj.GetType() != GetType()) { return false; }
+
+            var trigger = (Trigger)obj;
+
+            return GetEqualityComponents().SequenceEqual(trigger.GetEqualityComponents());
         }
 
         public override int GetHashCode()
         {
-            unchecked
-            {
-                var hashCode = _dateTime?.GetHashCode() ?? 0;
-                hashCode = (hashCode * 397) ^ _duration.GetHashCode();
-                hashCode = (hashCode * 397) ^ Related?.GetHashCode() ?? 0;
-                return hashCode;
-            }
+            return GetEqualityComponents()
+                .Aggregate(1, (current, obj) =>
+                {
+                    unchecked
+                    {
+                        return current * 23 + (obj?.GetHashCode() ?? 0);
+                    }
+                });
+        }
+
+        protected IEnumerable<object> GetEqualityComponents()
+        {
+            yield return _dateTime;
+            yield return _duration;
+            yield return Related;
         }
     }
 }

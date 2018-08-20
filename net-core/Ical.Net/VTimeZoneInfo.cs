@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 using Ical.Net.Components;
 using Ical.Net.DataTypes;
@@ -10,7 +11,6 @@ namespace Ical.Net
     public class VTimeZoneInfo : CalendarComponent, IRecurrable
     {
         TimeZoneInfoEvaluator _evaluator;
-        DateTime _end;
 
         public VTimeZoneInfo()
         {
@@ -39,20 +39,6 @@ namespace Ical.Net
 
             Initialize();
         }
-
-        public override bool Equals(object obj)
-        {
-            var tzi = obj as VTimeZoneInfo;
-            if (tzi != null)
-            {
-                return Equals(TimeZoneName, tzi.TimeZoneName) &&
-                       Equals(OffsetFrom, tzi.OffsetFrom) &&
-                       Equals(OffsetTo, tzi.OffsetTo);
-            }
-            return base.Equals(obj);
-        }
-
-        // TODO: VTimeZoneInfo class overrides Equals() but it does not override GetHashCode().
 
         public string TzId
         {
@@ -187,6 +173,36 @@ namespace Ical.Net
         public HashSet<Occurrence> GetOccurrences(DateTime startTime, DateTime endTime)
         {
             return RecurrenceUtil.GetOccurrences(this, new CalDateTime(startTime), new CalDateTime(endTime), true);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) { return false; }
+            if (ReferenceEquals(this, obj)) { return true; }
+            if (obj.GetType() != GetType()) { return false; }
+
+            var timeZone = (VTimeZoneInfo)obj;
+
+            return GetEqualityComponents().SequenceEqual(timeZone.GetEqualityComponents());
+        }
+
+        public override int GetHashCode()
+        {
+            return GetEqualityComponents()
+                .Aggregate(1, (current, obj) =>
+                {
+                    unchecked
+                    {
+                        return current * 23 + (obj?.GetHashCode() ?? 0);
+                    }
+                });
+        }
+
+        protected IEnumerable<object> GetEqualityComponents()
+        {
+            yield return TimeZoneName;
+            yield return OffsetFrom;
+            yield return TimeZoneName;
         }
     }
 }

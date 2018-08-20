@@ -1,8 +1,8 @@
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Ical.Net.Serialization;
 using Ical.Net.Serialization.DataTypes;
-using Ical.Net.Utility;
 
 namespace Ical.Net.DataTypes
 {
@@ -57,32 +57,33 @@ namespace Ical.Net.DataTypes
             statusCode.Parts.CopyTo(Parts, 0);
         }
 
-        protected bool Equals(StatusCode other)
-        {
-            return Parts.SequenceEqual(other.Parts);
-        }
-
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj))
-            {
-                return false;
-            }
-            if (ReferenceEquals(this, obj))
-            {
-                return true;
-            }
-            if (obj.GetType() != GetType())
-            {
-                return false;
-            }
-            return Equals((StatusCode)obj);
+            if (ReferenceEquals(null, obj)) { return false; }
+            if (ReferenceEquals(this, obj)) { return true; }
+            if (obj.GetType() != GetType()) { return false; }
+
+            var statusCode = (StatusCode)obj;
+
+            return GetEqualityComponents().SequenceEqual(statusCode.GetEqualityComponents());
         }
 
         public override int GetHashCode()
         {
-            return CollectionHelpers.GetHashCode(Parts);
+            return GetEqualityComponents()
+                .Aggregate(1, (current, obj) =>
+                {
+                    unchecked
+                    {
+                        return current * 23 + (obj?.GetHashCode() ?? 0);
+                    }
+                });
         }
+
+        protected IEnumerable<object> GetEqualityComponents()
+        {
+            yield return Parts;
+        }        
 
         public override string ToString()
         {
