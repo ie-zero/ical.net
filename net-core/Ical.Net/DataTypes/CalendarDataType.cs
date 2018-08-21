@@ -97,24 +97,19 @@ namespace Ical.Net.DataTypes
             _parameters.SetProxiedObject(dataType.Parameters);
         }
 
-        public object GetService(Type serviceType)
+        internal object GetService(Type serviceType)
         {
             return _serviceProvider.GetService(serviceType);
         }
 
-        public object GetService(string name)
-        {
-            return _serviceProvider.GetService(name);
-        }
-
-        public T GetService<T>()
+        internal T GetService<T>()
         {
             return _serviceProvider.GetService<T>();
         }
 
-        public T GetService<T>(string name)
+        internal void SetService(object obj)
         {
-            return _serviceProvider.GetService<T>(name);
+            _serviceProvider.SetService(obj);
         }
 
         public Type GetValueType()
@@ -158,26 +153,6 @@ namespace Ical.Net.DataTypes
                 }
             }
             return null;
-        }
-
-        public void RemoveService(Type type)
-        {
-            _serviceProvider.RemoveService(type);
-        }
-
-        public void RemoveService(string name)
-        {
-            _serviceProvider.RemoveService(name);
-        }
-
-        public void SetService(string name, object obj)
-        {
-            _serviceProvider.SetService(name, obj);
-        }
-
-        public void SetService(object obj)
-        {
-            _serviceProvider.SetService(obj);
         }
 
         public void SetValueType(string type)
