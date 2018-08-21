@@ -35,7 +35,7 @@ namespace Ical.Net.Evaluation
         /// <summary>
         /// Gets the object associated with this evaluator.
         /// </summary>
-        ICalendarObject AssociatedObject { get; }
+        ICalendarObject Associated { get; }
 
         /// <summary>
         /// Clears the evaluation, eliminating all data that has

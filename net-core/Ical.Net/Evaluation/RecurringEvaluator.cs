@@ -17,12 +17,12 @@ namespace Ical.Net.Evaluation
             // the associated object manually
             if (obj is ICalendarObject)
             {
-                AssociatedObject = (ICalendarObject)obj;
+                Associated = (ICalendarObject)obj;
             }
             if (obj is ICalendarDataType)
             {
                 var dt = (ICalendarDataType)obj;
-                AssociatedObject = dt.AssociatedObject;
+                Associated = dt.AssociatedObject;
             }
         }
 

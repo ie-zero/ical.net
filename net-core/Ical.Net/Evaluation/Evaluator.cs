@@ -8,9 +8,6 @@ namespace Ical.Net.Evaluation
 {
     public abstract class Evaluator : IEvaluator
     {
-        private readonly ICalendarDataType _associatedDataType;
-        private ICalendarObject _associatedObject;
-
         protected Evaluator()
         {
             Calendar = CultureInfo.CurrentCulture.Calendar;
@@ -22,23 +19,19 @@ namespace Ical.Net.Evaluation
 
         protected Evaluator(ICalendarObject associatedObject) : this()
         {
-            _associatedObject = associatedObject;
+            Associated = associatedObject;
         }
 
         protected Evaluator(ICalendarDataType dataType) : this()
         {
-            _associatedDataType = dataType;
+            Associated = dataType?.AssociatedObject;
         }
 
-        public ICalendarObject AssociatedObject
-        {
-            get => _associatedObject ?? _associatedDataType?.AssociatedObject;
-            protected set => _associatedObject = value;
-        }
+        public ICalendarObject Associated { get; protected set; }
 
-        public System.Globalization.Calendar Calendar { get; private set; }
+        public System.Globalization.Calendar Calendar { get; }
 
-        public HashSet<Period> Periods { get; private set; }
+        public HashSet<Period> Periods { get; }
         public DateTime EvaluationEndBounds { get; protected set; } 
         public DateTime EvaluationStartBounds { get; protected set; }
 
