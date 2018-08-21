@@ -26,7 +26,7 @@ namespace Ical.Net.Evaluation
             }
         }
 
-        protected IRecurrable Recurrable { get; set; }
+        protected IRecurrable Recurrable { get; }
 
         public override HashSet<Period> Evaluate(IDateTime referenceDate, DateTime periodStart, DateTime periodEnd, bool includeReferenceDateInResults)
         {

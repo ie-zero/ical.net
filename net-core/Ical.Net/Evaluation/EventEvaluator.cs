@@ -13,7 +13,6 @@ namespace Ical.Net.Evaluation
         protected CalendarEvent CalendarEvent
         {
             get => Recurrable as CalendarEvent;
-            set => Recurrable = value;
         }
 
         /// <summary>
