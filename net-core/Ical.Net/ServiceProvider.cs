@@ -46,14 +46,9 @@ namespace Ical.Net
             return default(T);
         }
 
-        public void RemoveService(Type type)
+        public void SetService(object obj)
         {
-            _typedServices.RemoveService(type);
-        }
-
-        public void RemoveService(string name)
-        {
-            _namedServices.RemoveService(name);
+            _typedServices.SetService(obj);
         }
 
         public void SetService(string name, object obj)
@@ -61,9 +56,14 @@ namespace Ical.Net
             _namedServices.SetService(name, obj);
         }
 
-        public void SetService(object obj)
+        public void RemoveService(Type serviceType)
         {
-            _typedServices.SetService(obj);
+            _typedServices.RemoveService(serviceType);
+        }
+
+        public void RemoveService(string name)
+        {
+            _namedServices.RemoveService(name);
         }
     }
 
@@ -139,17 +139,17 @@ namespace Ical.Net
 
         }
 
-        public void RemoveService(Type type)
+        public void RemoveService(Type serviceType)
         {
-            if (type != null)
+            if (serviceType != null)
             {
-                if (_services.ContainsKey(type))
+                if (_services.ContainsKey(serviceType))
                 {
-                    _services.Remove(type);
+                    _services.Remove(serviceType);
                 }
 
                 // Get interfaces for the given type
-                foreach (var iface in type.GetInterfaces().Where(iface => _services.ContainsKey(iface)))
+                foreach (var iface in serviceType.GetInterfaces().Where(iface => _services.ContainsKey(iface)))
                 {
                     _services.Remove(iface);
                 }
