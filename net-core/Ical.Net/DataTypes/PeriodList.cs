@@ -27,15 +27,43 @@ namespace Ical.Net.DataTypes
             CopyFrom(serializer.Deserialize(new StringReader(value)) as ICopyable);
         }
 
-        public int Count => Periods.Count;
+        public Period this[int index]
+        {
+            get { return Periods[index]; }
+        }
+
+        public int Count
+        {
+            get { return Periods.Count; }
+        }
 
         public string TzId { get; set; }
 
         protected IList<Period> Periods { get; }
 
-        public Period this[int index]
+        public void Clear()
         {
-            get => Periods[index];
+            Periods.Clear();
+        }
+
+        public bool Contains(Period item)
+        {
+            return Periods.Contains(item);
+        }
+
+        public void Add(IDateTime dt)
+        {
+            Periods.Add(new Period(dt));
+        }
+
+        public void Add(Period item)
+        {
+            Periods.Add(item);
+        }
+
+        public bool Remove(Period item)
+        {
+            return Periods.Remove(item);
         }
 
         public static Dictionary<string, List<Period>> GetGroupedPeriods(IList<PeriodList> periodLists)
@@ -70,26 +98,6 @@ namespace Ical.Net.DataTypes
                 }
             }
             return grouped.ToDictionary(k => k.Key, v => v.Value.OrderBy(d => d.StartTime).ToList());
-        }
-
-        public void Add(IDateTime dt)
-        {
-            Periods.Add(new Period(dt));
-        }
-
-        public void Add(Period item)
-        {
-            Periods.Add(item);
-        }
-
-        public void Clear()
-        {
-            Periods.Clear();
-        }
-
-        public bool Contains(Period item)
-        {
-            return Periods.Contains(item);
         }
 
         public override void CopyFrom(ICopyable copyable)
@@ -147,11 +155,6 @@ namespace Ical.Net.DataTypes
                 hashCode = (hashCode * 397) ^ CollectionHelpers.GetHashCode(Periods);
                 return hashCode;
             }
-        }
-
-        public bool Remove(Period item)
-        {
-            return Periods.Remove(item);
         }
     }
 }
