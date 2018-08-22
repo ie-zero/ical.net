@@ -66,7 +66,7 @@ namespace Ical.Net.DataTypes
             return Periods.Remove(item);
         }
 
-        public static Dictionary<string, List<Period>> GetGroupedPeriods(IList<PeriodList> periodLists)
+        public static IDictionary<string, IEnumerable<Period>> GetGroupedPeriods(IEnumerable<PeriodList> periodLists)
         {
             // In order to know if two events are equal, a semantic understanding of exdates, rdates, rrules, and exrules is required. This could be done by
             // computing the complete recurrence set (expensive) while being time-zone sensitive, or by comparing each List<Period> in each IPeriodList.
@@ -97,7 +97,7 @@ namespace Ical.Net.DataTypes
                     grouped[actualBucket].Add(period);
                 }
             }
-            return grouped.ToDictionary(k => k.Key, v => v.Value.OrderBy(d => d.StartTime).ToList());
+            return grouped.ToDictionary(k => k.Key, v => v.Value.OrderBy(d => d.StartTime).AsEnumerable());
         }
 
         public override void CopyFrom(ICopyable copyable)
