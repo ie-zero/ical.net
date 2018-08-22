@@ -3,7 +3,7 @@ using Ical.Net.Collections;
 
 namespace Ical.Net
 {
-    public interface IParameterCollection : IGroupedList<CalendarParameter>
+    public interface IParameterCollection : IGroupedCollection<CalendarParameter>
     {
         void SetParent(ICalendarObject parent);
         void Add(string name, string value);

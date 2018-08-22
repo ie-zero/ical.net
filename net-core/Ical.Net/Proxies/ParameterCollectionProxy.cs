@@ -11,7 +11,7 @@ namespace Ical.Net.Proxies
     {
         private GroupedCollectionProxy<CalendarParameter, CalendarParameter> _proxy;
 
-        public ParameterCollectionProxy(IGroupedList<CalendarParameter> realObject)
+        public ParameterCollectionProxy(IGroupedCollection<CalendarParameter> realObject)
         {
             _proxy = new GroupedCollectionProxy<CalendarParameter, CalendarParameter>(realObject);
         }
@@ -82,11 +82,13 @@ namespace Ical.Net.Proxies
             return new GroupedValueListProxy<CalendarParameter, string, string>(Parameters, name);
         }
 
+        // TODO: Consider removing method as obsolete.
         public int IndexOf(CalendarParameter obj)
         {
             throw new NotImplementedException();
         }
 
+        // TODO: Consider removing method as obsolete.
         public void Insert(int index, CalendarParameter item)
         {
             throw new NotImplementedException();
@@ -102,6 +104,7 @@ namespace Ical.Net.Proxies
             return _proxy.Remove(item);
         }
 
+        // TODO: Consider removing method as obsolete.
         public void RemoveAt(int index)
         {
             throw new NotImplementedException();
