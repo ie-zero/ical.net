@@ -20,17 +20,9 @@ namespace Ical.Net.Proxies
 
         public int Count => throw new NotImplementedException();
 
-        public bool IsReadOnly => throw new NotImplementedException();
-
         private GroupedValueList<CalendarParameter, string> Parameters
         {
             get { return _proxy.RealObject as GroupedValueList<CalendarParameter, string>; }
-        }
-
-        public CalendarParameter this[int index]
-        {
-            get { return Parameters[index]; }
-            set { throw new NotImplementedException(); }
         }
 
         public void Add(string name, string value)
@@ -53,11 +45,6 @@ namespace Ical.Net.Proxies
             throw new NotImplementedException();
         }
 
-        public void Clear()
-        {
-            throw new NotImplementedException();
-        }
-
         public bool Contains(CalendarParameter item)
         {
             throw new NotImplementedException();
@@ -66,11 +53,6 @@ namespace Ical.Net.Proxies
         public bool ContainsKey(string group)
         {
             return _proxy.ContainsKey(group);
-        }
-
-        public void CopyTo(CalendarParameter[] array, int arrayIndex)
-        {
-            throw new NotImplementedException();
         }
 
         public int CountOf(string group)

@@ -1,11 +1,10 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Ical.Net.Collections
 {
-    public interface IGroupedCollection<T> :
-        ICollection<T>
-        where T : class, IGroupedObject
+    public interface IGroupedCollection<T> : IEnumerable<T>, IEnumerable where T : class, IGroupedObject
     {
         /// <summary>
         /// Fired after an item is added to the collection.
@@ -19,26 +18,20 @@ namespace Ical.Net.Collections
         bool Remove(string group);
 
         /// <summary>
-        /// Clears all items matching the specified group.
-        /// </summary>
-        void Clear(string group);
-        
-        /// <summary>
         /// Returns true if the list contains at least one 
         /// object with a matching group, false otherwise.
         /// </summary>
         bool ContainsKey(string group);
-
-        /// <summary>
-        /// Returns the number of objects in the list
-        /// with a matching group.
-        /// </summary>
-        int CountOf(string group);
         
         /// <summary>
         /// Returns a list of objects that
         /// match the specified group.
         /// </summary>
         IEnumerable<T> AllOf(string group);
+
+        int Count { get; }       
+        bool Contains(T item);    
+        void Add(T item);
+        bool Remove(T item);
     }
 }

@@ -8,9 +8,7 @@ namespace Ical.Net.Collections
     /// <summary>
     /// A list of objects that are keyed.
     /// </summary>
-    public class GroupedList<T> :
-        IGroupedList<T>
-        where T : class, IGroupedObject
+    public class GroupedList<T> : IGroupedList<T> where T : class, IGroupedObject
     {
         private readonly List<IList<T>> _lists = new List<IList<T>>();
         private readonly Dictionary<string, IList<T>> _dictionary = new Dictionary<string, IList<T>>();
@@ -62,25 +60,6 @@ namespace Ical.Net.Collections
             OnItemAdded(item, list.Count);
         }
 
-        public int IndexOf(T item)
-        {
-            var group = item.Group;
-            if (!_dictionary.ContainsKey(group))
-            {
-                return -1;
-            }
-
-            // Get the list associated with this object's group
-            var list = _dictionary[group];
-
-            // Find the object within the list.
-            var index = list.IndexOf(item);
-
-            // Return the index within the overall KeyedList
-            if (index >= 0) { return index; }
-            return -1;
-        }
-
         public void Clear(string group)
         {
             if (!_dictionary.ContainsKey(group))
@@ -101,10 +80,6 @@ namespace Ical.Net.Collections
         public bool ContainsKey(string group) => _dictionary.ContainsKey(group);
 
         public int Count => _lists.Sum(list => list.Count);
-
-        public int CountOf(string group) => _dictionary.ContainsKey(group)
-            ? _dictionary[group].Count
-            : 0;
 
         public IEnumerable<T> Values() => _dictionary.Values.SelectMany(i => i);
 
@@ -152,13 +127,6 @@ namespace Ical.Net.Collections
             var group = item.Group;
             return _dictionary.ContainsKey(group) && _dictionary[group].Contains(item);
         }
-
-        public void CopyTo(T[] array, int arrayIndex)
-        {
-            _dictionary.SelectMany(kvp => kvp.Value).ToArray().CopyTo(array, arrayIndex);
-        }
-
-        public bool IsReadOnly => false;
 
         public void Insert(int index, T item)
         {

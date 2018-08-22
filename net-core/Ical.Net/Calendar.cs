@@ -267,11 +267,6 @@ namespace Ical.Net
             return calendar;
         }
 
-        public void Dispose()
-        {
-            Children.Clear();
-        }
-
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj))
