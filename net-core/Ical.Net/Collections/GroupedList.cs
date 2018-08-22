@@ -8,7 +8,7 @@ namespace Ical.Net.Collections
     /// <summary>
     /// A list of objects that are keyed.
     /// </summary>
-    public class GroupedList<T> : IGroupedCollection<T> where T : class, IGroupedObject
+    public class GroupedCollection<T> : IGroupedCollection<T> where T : class, IGroupedObject
     {
         private readonly List<IList<T>> _lists = new List<IList<T>>();
         private readonly Dictionary<string, IList<T>> _dictionary = new Dictionary<string, IList<T>>();
@@ -161,7 +161,7 @@ namespace Ical.Net.Collections
                 var list = ListForIndex(index, out relativeIndex);
                 return list?[relativeIndex];
             }
-            set
+            private set
             {
                 int relativeIndex;
                 var list = ListForIndex(index, out relativeIndex);
