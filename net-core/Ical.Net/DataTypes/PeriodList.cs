@@ -13,10 +13,11 @@ namespace Ical.Net.DataTypes
     /// <summary>
     /// An iCalendar list of recurring dates (or date exclusions)
     /// </summary>
-    public class PeriodList : EncodableDataType, IList<Period>
+    public class PeriodList : EncodableDataType, IEnumerable<Period>
     {
         public PeriodList()
         {
+            Periods = new List<Period>();
             SetService(new PeriodListEvaluator(this));
         }
 
@@ -28,16 +29,13 @@ namespace Ical.Net.DataTypes
 
         public int Count => Periods.Count;
 
-        public bool IsReadOnly => Periods.IsReadOnly;
-
         public string TzId { get; set; }
 
-        protected IList<Period> Periods { get; set; } = new List<Period>();
+        protected IList<Period> Periods { get; }
 
         public Period this[int index]
         {
             get => Periods[index];
-            set => Periods[index] = value;
         }
 
         public static Dictionary<string, List<Period>> GetGroupedPeriods(IList<PeriodList> periodLists)
@@ -113,11 +111,6 @@ namespace Ical.Net.DataTypes
             }
         }
 
-        public void CopyTo(Period[] array, int arrayIndex)
-        {
-            Periods.CopyTo(array, arrayIndex);
-        }
-
         public IEnumerator<Period> GetEnumerator()
         {
             return Periods.GetEnumerator();
@@ -156,24 +149,9 @@ namespace Ical.Net.DataTypes
             }
         }
 
-        public int IndexOf(Period item)
-        {
-            return Periods.IndexOf(item);
-        }
-
-        public void Insert(int index, Period item)
-        {
-            Periods.Insert(index, item);
-        }
-
         public bool Remove(Period item)
         {
             return Periods.Remove(item);
-        }
-
-        public void RemoveAt(int index)
-        {
-            Periods.RemoveAt(index);
         }
     }
 }
