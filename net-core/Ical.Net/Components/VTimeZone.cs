@@ -19,7 +19,14 @@ namespace Ical.Net.Components
         private string _tzId;
         private Uri _url;
 
-        public VTimeZone() : base(ComponentName.Timezone) { }
+        public VTimeZone() : base(ComponentName.Timezone) 
+        {
+            // TODO: How do we ensure SEQUENCE doesn't get serialized?
+            //      base.Sequence = null;
+            //
+            //      iCalTimeZoneInfo does not allow sequence numbers Perhaps we should have a 
+            //      custom serializer that fixes this?
+        }
 
         public VTimeZone(string tzId) : this()
         {
@@ -240,19 +247,18 @@ namespace Ical.Net.Components
 
             var utcOffset = oldestInterval.StandardOffset.ToTimeSpan();
 
-            var timeZoneInfo = new VTimeZoneInfo();
-
-            var isDaylight = oldestInterval.Savings.Ticks > 0;
+            VTimeZoneInfo timeZoneInfo;
+            bool isDaylight = oldestInterval.Savings.Ticks > 0;
 
             if (isDaylight)
             {
-                timeZoneInfo.Name = "DAYLIGHT";
+                timeZoneInfo = new VTimeZoneInfo("DAYLIGHT");
                 timeZoneInfo.OffsetFrom = new UtcOffset(utcOffset);
                 timeZoneInfo.OffsetTo = new UtcOffset(utcOffset - delta);
             }
             else
             {
-                timeZoneInfo.Name = "STANDARD";
+                timeZoneInfo = new VTimeZoneInfo("STANDARD");
                 timeZoneInfo.OffsetFrom = new UtcOffset(utcOffset + delta);
                 timeZoneInfo.OffsetTo = new UtcOffset(utcOffset);
             }

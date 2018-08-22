@@ -12,11 +12,6 @@ namespace Ical.Net.Components
     [DebuggerDisplay("Component: {Name}")]
     public class CalendarComponent : CalendarObject, ICalendarComponent
     {
-        public CalendarComponent() : base()
-        {
-            Initialize();
-        }
-
         public CalendarComponent(string name) : base(name)
         {
             Initialize();

@@ -12,17 +12,18 @@ namespace Ical.Net
     {
         TimeZoneInfoEvaluator _evaluator;
 
-        public VTimeZoneInfo()
-        {
-            // TODO: How do we ensure SEQUENCE doesn't get serialized?
-            //      base.Sequence = null;
-            //
-            //      iCalTimeZoneInfo does not allow sequence numbers Perhaps we should have a 
-            //      custom serializer that fixes this?
+        //public VTimeZoneInfo()
+        //{
+        //    // TODO: How do we ensure SEQUENCE doesn't get serialized?
+        //    //      base.Sequence = null;
+        //    //
+        //    //      iCalTimeZoneInfo does not allow sequence numbers Perhaps we should have a 
+        //    //      custom serializer that fixes this?
 
-            Initialize();
-        }
-        public VTimeZoneInfo(string name) : this()
+        //    Initialize();
+        //}
+
+        public VTimeZoneInfo(string name) : base(name)
         {
             Name = name;
         }

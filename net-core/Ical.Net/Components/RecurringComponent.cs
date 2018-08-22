@@ -19,12 +19,6 @@ namespace Ical.Net.Components
     /// </remarks>
     public abstract class RecurringComponent : UniqueComponent, IRecurringComponent
     {
-        public RecurringComponent()
-        {
-            Initialize();
-            EnsureProperties();
-        }
-
         public RecurringComponent(string name) : base(name)
         {
             Initialize();

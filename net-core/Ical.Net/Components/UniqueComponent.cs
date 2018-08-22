@@ -19,11 +19,6 @@ namespace Ical.Net.Components
 
         // TODO: Add RemoveRelationship() public method.        
 
-        public UniqueComponent()
-        {
-            EnsureProperties();
-        }
-
         public UniqueComponent(string name) : base(name)
         {
             EnsureProperties();
