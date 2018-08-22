@@ -72,19 +72,8 @@ namespace Ical.Net
 
         public void SetValue(object value)
         {
-            if (_values.Count == 0)
-            {
-                _values.Add(value);
-            }
-            else if (value != null)
-            {
-                // Our list contains values.  Let's set the first value!
-                _values[0] = value;
-            }
-            else
-            {
-                _values.Clear();
-            }
+            _values.Clear();
+            if (value != null) { _values.Add(value); }
         }
 
         public void SetValue(IEnumerable<object> values)
