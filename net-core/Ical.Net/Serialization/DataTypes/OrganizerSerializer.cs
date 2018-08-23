@@ -8,16 +8,16 @@ namespace Ical.Net.Serialization.DataTypes
     {
         public OrganizerSerializer(SerializationContext ctx) : base(ctx) { }
 
-        public override Type TargetType => typeof (Organizer);
+        public override Type TargetType => typeof(Organizer);
 
         public override string SerializeToString(object obj)
         {
             try
             {
-                var o = obj as Organizer;
-                return o?.Value == null
+                var organizer = obj as Organizer;
+                return organizer?.Value == null
                     ? null
-                    : Encode(o, Escape(o.Value.OriginalString));
+                    : Encode(organizer, Escape(organizer.Value.OriginalString));
             }
             catch
             {
@@ -25,30 +25,29 @@ namespace Ical.Net.Serialization.DataTypes
             }
         }
 
-        public override object Deserialize(TextReader tr)
+        public override object Deserialize(TextReader reader)
         {
-            var value = tr.ReadToEnd();
+            var value = reader.ReadToEnd();
 
-            Organizer o = null;
             try
             {
-                o = CreateAndAssociate() as Organizer;
-                if (o != null)
+                var organizer = CreateAndAssociate() as Organizer;
+                if (organizer == null) { return null; }
+
+                var uriString = Unescape(Decode(organizer, value));
+
+                // Prepend "mailto:" if necessary
+                if (!uriString.StartsWith("mailto:", StringComparison.OrdinalIgnoreCase))
                 {
-                    var uriString = Unescape(Decode(o, value));
-
-                    // Prepend "mailto:" if necessary
-                    if (!uriString.StartsWith("mailto:", StringComparison.OrdinalIgnoreCase))
-                    {
-                        uriString = "mailto:" + uriString;
-                    }
-
-                    o.Value = new Uri(uriString);
+                    uriString = $"mailto:{uriString}";
                 }
-            }
-            catch {}
 
-            return o;
+                organizer.Value = new Uri(uriString);
+                return organizer;
+            }
+            catch { }
+
+            return null;
         }
     }
 }
