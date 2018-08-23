@@ -7,60 +7,50 @@ namespace Ical.Net.Serialization.DataTypes
 {
     public class StatusCodeSerializer : StringSerializer
     {
+        private static readonly Regex StatusCodeRegEx = new Regex(@"\d(\.\d+)*", RegexOptions.Compiled | RegexOptions.CultureInvariant);
+
         public StatusCodeSerializer(SerializationContext ctx) : base(ctx) { }
 
-        public override Type TargetType => typeof (StatusCode);
+        public override Type TargetType => typeof(StatusCode);
 
         public override string SerializeToString(object obj)
         {
-            var sc = obj as StatusCode;
-            if (sc == null)
-            {
-                return null;
-            }
+            var statusCode = obj as StatusCode;
+            if (statusCode == null) { return null; }
 
-            var vals = new string[sc.Parts.Length];
-            for (var i = 0; i < sc.Parts.Length; i++)
+            var values = new string[statusCode.Parts.Length];
+            for (var i = 0; i < statusCode.Parts.Length; i++)
             {
-                vals[i] = sc.Parts[i].ToString();
+                values[i] = statusCode.Parts[i].ToString();
             }
-            return Encode(sc, Escape(string.Join(".", vals)));
+            return Encode(statusCode, Escape(string.Join(".", values)));
         }
 
-        internal static readonly Regex StatusCode = new Regex(@"\d(\.\d+)*", RegexOptions.Compiled | RegexOptions.CultureInvariant);
-
-        public override object Deserialize(TextReader tr)
+        public override object Deserialize(TextReader reader)
         {
-            var value = tr.ReadToEnd();
+            var value = reader.ReadToEnd();
 
-            var sc = CreateAndAssociate() as StatusCode;
-            if (sc == null)
-            {
-                return null;
-            }
+            var statusCode = CreateAndAssociate() as StatusCode;
+            if (statusCode == null) { return null; }
 
             // Decode the value as needed
-            value = Decode(sc, value);
+            value = Decode(statusCode, value);
 
-            var match = StatusCode.Match(value);
-            if (!match.Success)
-            {
-                return null;
-            }
+            var match = StatusCodeRegEx.Match(value);
+            if (!match.Success) { return null; }
 
             var parts = match.Value.Split('.');
-            var iparts = new int[parts.Length];
+            var numericParts = new int[parts.Length];
             for (var i = 0; i < parts.Length; i++)
             {
-                int num;
-                if (!int.TryParse(parts[i], out num))
+                if (!int.TryParse(parts[i], out int num))
                 {
                     return false;
                 }
-                iparts[i] = num;
+                numericParts[i] = num;
             }
 
-            return new StatusCode(iparts);
+            return new StatusCode(numericParts);
         }
     }
 }
