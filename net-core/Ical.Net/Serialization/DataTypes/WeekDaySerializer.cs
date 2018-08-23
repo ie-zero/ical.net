@@ -7,55 +7,50 @@ namespace Ical.Net.Serialization.DataTypes
 {
     public class WeekDaySerializer : EncodableDataTypeSerializer
     {
+        private static readonly Regex DayOfWeekRegEx = new Regex(@"(\+|-)?(\d{1,2})?(\w{2})", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
         public WeekDaySerializer(SerializationContext ctx) : base(ctx) { }
 
-        public override Type TargetType => typeof (WeekDay);
+        public override Type TargetType => typeof(WeekDay);
 
         public override string SerializeToString(object obj)
         {
-            if (!(obj is WeekDay ds))
-            {
-                return null;
-            }
+            var weekDay = obj as WeekDay;
+            if (weekDay == null) { return null; }
 
             var value = string.Empty;
-            if (ds.Offset != int.MinValue)
+            if (weekDay.Offset != int.MinValue)
             {
-                value += ds.Offset;
+                value += weekDay.Offset;
             }
-            value += Enum.GetName(typeof (DayOfWeek), ds.DayOfWeek).ToUpper().Substring(0, 2);
+            value += Enum.GetName(typeof(DayOfWeek), weekDay.DayOfWeek).ToUpper().Substring(0, 2);
 
-            return Encode(ds, value);
+            return Encode(weekDay, value);
         }
 
-        private static readonly Regex _dayOfWeek = new Regex(@"(\+|-)?(\d{1,2})?(\w{2})", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-
-        public override object Deserialize(TextReader tr)
+        public override object Deserialize(TextReader reader)
         {
-            var value = tr.ReadToEnd();
+            var value = reader.ReadToEnd();
 
             // Create the day specifier and associate it with a calendar object
-            var ds = CreateAndAssociate() as WeekDay;
+            var weekDay = CreateAndAssociate() as WeekDay;
 
             // Decode the value, if necessary
-            value = Decode(ds, value);
+            value = Decode(weekDay, value);
 
-            var match = _dayOfWeek.Match(value);
-            if (!match.Success)
-            {
-                return null;
-            }
+            var match = DayOfWeekRegEx.Match(value);
+            if (!match.Success) { return null; }
 
             if (match.Groups[2].Success)
             {
-                ds.Offset = Convert.ToInt32(match.Groups[2].Value);
+                weekDay.Offset = Convert.ToInt32(match.Groups[2].Value);
                 if (match.Groups[1].Success && match.Groups[1].Value.Contains("-"))
                 {
-                    ds.Offset *= -1;
+                    weekDay.Offset *= -1;
                 }
             }
-            ds.DayOfWeek = RecurrencePatternSerializer.GetDayOfWeek(match.Groups[3].Value);
-            return ds;
+            weekDay.DayOfWeek = RecurrencePatternSerializer.GetDayOfWeek(match.Groups[3].Value);
+            return weekDay;
         }
     }
 }
