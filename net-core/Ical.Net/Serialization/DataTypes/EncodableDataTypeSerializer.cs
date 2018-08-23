@@ -4,19 +4,12 @@ namespace Ical.Net.Serialization.DataTypes
 {
     public abstract class EncodableDataTypeSerializer : DataTypeSerializer
     {
-        protected EncodableDataTypeSerializer(SerializationContext ctx) : base(ctx) {}
+        protected EncodableDataTypeSerializer(SerializationContext ctx) : base(ctx) { }
 
         protected string Encode(IEncodableDataType dt, string value)
         {
-            if (value == null)
-            {
-                return null;
-            }
-
-            if (dt?.Encoding == null)
-            {
-                return value;
-            }
+            if (value == null) { return null; } 
+            if (dt?.Encoding == null) { return value; }
 
             // Return the value in the current encoding
             var encodingStack = GetService<EncodingStack>();
@@ -25,10 +18,7 @@ namespace Ical.Net.Serialization.DataTypes
 
         protected string Encode(IEncodableDataType dt, byte[] data)
         {
-            if (data == null)
-            {
-                return null;
-            }
+            if (data == null) { return null; }
 
             if (dt?.Encoding == null)
             {
@@ -43,16 +33,10 @@ namespace Ical.Net.Serialization.DataTypes
 
         protected string Decode(IEncodableDataType dt, string value)
         {
-            if (dt?.Encoding == null)
-            {
-                return value;
-            }
+            if (dt?.Encoding == null) { return value; }
 
             var data = DecodeData(dt, value);
-            if (data == null)
-            {
-                return null;
-            }
+            if (data == null) { return null; }
 
             // Default to the current encoding
             var encodingStack = GetService<EncodingStack>();
@@ -61,10 +45,7 @@ namespace Ical.Net.Serialization.DataTypes
 
         protected byte[] DecodeData(IEncodableDataType dt, string value)
         {
-            if (value == null)
-            {
-                return null;
-            }
+            if (value == null) { return null; }
 
             if (dt?.Encoding == null)
             {
