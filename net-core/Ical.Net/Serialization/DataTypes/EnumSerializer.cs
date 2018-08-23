@@ -6,14 +6,14 @@ namespace Ical.Net.Serialization.DataTypes
 {
     public class EnumSerializer : EncodableDataTypeSerializer
     {
-        private readonly Type _mEnumType;
+        private readonly Type _enumType;
 
         public EnumSerializer(Type enumType, SerializationContext ctx) : base(ctx)
         {
-            _mEnumType = enumType;
+            _enumType = enumType;
         }
 
-        public override Type TargetType => _mEnumType;
+        public override Type TargetType => _enumType;
 
         public override string SerializeToString(object enumValue)
         {
@@ -23,11 +23,11 @@ namespace Ical.Net.Serialization.DataTypes
                 if (obj != null)
                 {
                     // Encode the value as needed.
-                    var dt = new EncodableDataType
+                    var dataType = new EncodableDataType
                     {
                         AssociatedObject = obj
                     };
-                    return Encode(dt, enumValue.ToString());
+                    return Encode(dataType, enumValue.ToString());
                 }
                 return enumValue.ToString();
             }
@@ -37,9 +37,9 @@ namespace Ical.Net.Serialization.DataTypes
             }
         }
 
-        public override object Deserialize(TextReader tr)
+        public override object Deserialize(TextReader reader)
         {
-            var value = tr.ReadToEnd();
+            var value = reader.ReadToEnd();
 
             try
             {
@@ -47,17 +47,20 @@ namespace Ical.Net.Serialization.DataTypes
                 if (obj != null)
                 {
                     // Decode the value, if necessary!
-                    var dt = new EncodableDataType
+                    var dataType = new EncodableDataType
                     {
                         AssociatedObject = obj
                     };
-                    value = Decode(dt, value);
+                    value = Decode(dataType, value);
                 }
 
                 // Remove "-" characters while parsing Enum values.
-                return Enum.Parse(_mEnumType, value.Replace("-", ""), true);
+                return Enum.Parse(_enumType, value.Replace("-", ""), true);
             }
-            catch {}
+            catch 
+            {
+                // TODO: We should NOT swallow the all the exceptions.
+            }
 
             return value;
         }
