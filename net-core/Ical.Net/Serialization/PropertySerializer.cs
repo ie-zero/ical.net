@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Ical.Net.DataTypes;
-using Ical.Net.Utility;
+using Ical.Net.Utilities;
 
 namespace Ical.Net.Serialization
 {
@@ -87,7 +87,7 @@ namespace Ical.Net.Serialization
                 sb.Append(":");
                 sb.Append(value);
 
-                result.Append(TextUtil.FoldLines(sb.ToString()));
+                result.Append(TextUtilities.FoldLines(sb.ToString()));
             }
 
             // Pop the object off the serialization context.

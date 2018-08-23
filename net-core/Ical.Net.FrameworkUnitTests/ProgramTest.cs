@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 using Ical.Net.DataTypes;
-using Ical.Net.Utility;
+using Ical.Net.Utilities;
 using NUnit.Framework;
 
 namespace Ical.Net.FrameworkUnitTests
@@ -84,8 +84,8 @@ namespace Ical.Net.FrameworkUnitTests
                 var start = occurrences[i].Period.StartTime;
                 Assert.AreEqual(dt, start);
 
-                var expectedZone = DateUtil.GetZone(dt.TimeZoneName);
-                var actualZone = DateUtil.GetZone(timeZones[i]);
+                var expectedZone = DateUtilities.GetZone(dt.TimeZoneName);
+                var actualZone = DateUtilities.GetZone(timeZones[i]);
 
                 //Assert.AreEqual();
 

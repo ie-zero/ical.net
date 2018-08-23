@@ -6,9 +6,9 @@ using Ical.Net.DataTypes;
 using NodaTime;
 using NodaTime.TimeZones;
 
-namespace Ical.Net.Utility
+namespace Ical.Net.Utilities
 {
-    internal static class DateUtil
+    internal static class DateUtilities
     {
         public static readonly DateTimeZone LocalDateTimeZone = DateTimeZoneProviders.Tzdb.GetSystemDefault();
 

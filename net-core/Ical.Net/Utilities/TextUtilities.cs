@@ -4,9 +4,9 @@ using System.IO;
 using System.Text.RegularExpressions;
 using Ical.Net.Serialization;
 
-namespace Ical.Net.Utility
+namespace Ical.Net.Utilities
 {
-    internal static class TextUtil
+    internal static class TextUtilities
     {
         internal static readonly Regex NewLineMatch = new Regex(@"(\r\n[ \t])", RegexOptions.Compiled);
         internal static readonly Regex NormalizeToCrLf = new Regex(@"((\r(?=[^\n]))|((?<=[^\r])\n))", RegexOptions.Compiled);

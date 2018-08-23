@@ -9,7 +9,7 @@ using Ical.Net.DataTypes;
 using Ical.Net.Extensions;
 using Ical.Net.Proxies;
 using Ical.Net.Serialization;
-using Ical.Net.Utility;
+using Ical.Net.Utilities;
 
 namespace Ical.Net
 {

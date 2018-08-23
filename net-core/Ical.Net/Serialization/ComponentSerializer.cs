@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Ical.Net.Components;
-using Ical.Net.Utility;
+using Ical.Net.Utilities;
 
 namespace Ical.Net.Serialization
 {
@@ -25,7 +25,7 @@ namespace Ical.Net.Serialization
 
             var sb = new StringBuilder();
             var upperName = c.Name.ToUpperInvariant();
-            sb.Append(TextUtil.FoldLines($"BEGIN:{upperName}"));
+            sb.Append(TextUtilities.FoldLines($"BEGIN:{upperName}"));
 
             // Get a serializer factory
             var sf = GetService<ISerializerFactory>();
@@ -49,7 +49,7 @@ namespace Ical.Net.Serialization
                 sb.Append(serializer.SerializeToString(child));
             }
 
-            sb.Append(TextUtil.FoldLines($"END:{upperName}"));
+            sb.Append(TextUtilities.FoldLines($"END:{upperName}"));
             return sb.ToString();
         }
 

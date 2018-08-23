@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using Ical.Net.Serialization;
 using Ical.Net.Serialization.DataTypes;
-using Ical.Net.Utility;
+using Ical.Net.Utilities;
 using NodaTime;
 
 namespace Ical.Net.DataTypes
@@ -332,7 +332,7 @@ namespace Ical.Net.DataTypes
 
                 if (!string.IsNullOrWhiteSpace(TzId))
                 {
-                    var asLocal = DateUtil.ToZonedDateTimeLeniently(Value, TzId);
+                    var asLocal = DateUtilities.ToZonedDateTimeLeniently(Value, TzId);
                     _asUtc = asLocal.ToDateTimeUtc();
                 }
                 else if (IsUtc || Value.Kind == DateTimeKind.Utc)
@@ -375,7 +375,7 @@ namespace Ical.Net.DataTypes
         {
             return string.IsNullOrWhiteSpace(TzId)
                 ? new DateTimeOffset(GetAsSystemLocal())
-                : DateUtil.ToZonedDateTimeLeniently(Value, TzId).ToDateTimeOffset();
+                : DateUtilities.ToZonedDateTimeLeniently(Value, TzId).ToDateTimeOffset();
         }
 
         public int CompareTo(IDateTime other)
@@ -510,8 +510,8 @@ namespace Ical.Net.DataTypes
                 ? TimeZoneInfo.Local.Id
                 : TzId;
 
-            var zonedOriginal = DateUtil.ToZonedDateTimeLeniently(Value, originalTzId);
-            var converted = zonedOriginal.WithZone(DateUtil.GetZone(tzId));
+            var zonedOriginal = DateUtilities.ToZonedDateTimeLeniently(Value, originalTzId);
+            var converted = zonedOriginal.WithZone(DateUtilities.GetZone(tzId));
 
             return converted.Zone == DateTimeZone.Utc
                 ? new CalDateTime(converted.ToDateTimeUtc(), tzId)

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Ical.Net.Components;
 using Ical.Net.DataTypes;
-using Ical.Net.Utility;
+using Ical.Net.Utilities;
 
 namespace Ical.Net.Evaluation
 {
@@ -100,7 +100,7 @@ namespace Ical.Net.Evaluation
                 }
             }
 
-            Evaluate(Todo.Start, DateUtil.GetSimpleDateTimeData(beginningDate), DateUtil.GetSimpleDateTimeData(currDt).AddTicks(1), true);
+            Evaluate(Todo.Start, DateUtilities.GetSimpleDateTimeData(beginningDate), DateUtilities.GetSimpleDateTimeData(currDt).AddTicks(1), true);
         }
     }
 }

@@ -11,7 +11,7 @@ using Ical.Net.Evaluation;
 using Ical.Net.Serialization;
 using Ical.Net.Serialization.DataTypes;
 using Ical.Net.Tests.Support;
-using Ical.Net.Utility;
+using Ical.Net.Utilities;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 
@@ -2715,8 +2715,8 @@ namespace Ical.Net.FrameworkUnitTests
 
             var occurrences = evaluator.Evaluate(
                 startDate, 
-                DateUtil.SimpleDateTimeToMatch(fromDate, startDate), 
-                DateUtil.SimpleDateTimeToMatch(toDate, startDate),
+                DateUtilities.SimpleDateTimeToMatch(fromDate, startDate), 
+                DateUtilities.SimpleDateTimeToMatch(toDate, startDate),
                 false)
                 .OrderBy(o => o.StartTime)
                 .ToList();
@@ -2745,8 +2745,8 @@ namespace Ical.Net.FrameworkUnitTests
 
             var occurrences = evaluator.Evaluate(
                 startDate, 
-                DateUtil.SimpleDateTimeToMatch(fromDate, startDate), 
-                DateUtil.SimpleDateTimeToMatch(toDate, startDate),
+                DateUtilities.SimpleDateTimeToMatch(fromDate, startDate), 
+                DateUtilities.SimpleDateTimeToMatch(toDate, startDate),
                 false);
             Assert.AreNotEqual(0, occurrences.Count);
         }
@@ -2857,8 +2857,8 @@ namespace Ical.Net.FrameworkUnitTests
             // Add the exception dates
             var periods = evaluator.Evaluate(
                 evtStart,
-                DateUtil.GetSimpleDateTimeData(evtStart), 
-                DateUtil.SimpleDateTimeToMatch(evtEnd, evtStart),
+                DateUtilities.GetSimpleDateTimeData(evtStart), 
+                DateUtilities.SimpleDateTimeToMatch(evtEnd, evtStart),
                 false)
                 .OrderBy(p => p.StartTime)
                 .ToList();

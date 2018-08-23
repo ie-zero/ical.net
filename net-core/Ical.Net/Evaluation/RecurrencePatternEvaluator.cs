@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Ical.Net.DataTypes;
-using Ical.Net.Utility;
+using Ical.Net.Utilities;
 
 namespace Ical.Net.Evaluation
 {
@@ -66,7 +66,7 @@ namespace Ical.Net.Evaluation
             // Convert the UNTIL value to one that matches the same time information as the reference date
             if (r.Until != DateTime.MinValue)
             {
-                r.Until = DateUtil.MatchTimeZone(referenceDate, new CalDateTime(r.Until, referenceDate.TzId)).Value;
+                r.Until = DateUtilities.MatchTimeZone(referenceDate, new CalDateTime(r.Until, referenceDate.TzId)).Value;
             }
 
             if (r.Frequency > FrequencyType.Secondly && r.BySecond.Count == 0 && referenceDate.HasTime
@@ -227,8 +227,8 @@ namespace Ical.Net.Evaluation
             bool includeReferenceDateInResults)
         {
             var dates = new HashSet<DateTime>();
-            var originalDate = DateUtil.GetSimpleDateTimeData(seed);
-            var seedCopy = DateUtil.GetSimpleDateTimeData(seed);
+            var originalDate = DateUtilities.GetSimpleDateTimeData(seed);
+            var seedCopy = DateUtilities.GetSimpleDateTimeData(seed);
 
             if (includeReferenceDateInResults)
             {

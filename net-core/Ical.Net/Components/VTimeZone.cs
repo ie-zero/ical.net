@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Ical.Net.DataTypes;
 using Ical.Net.Extensions;
-using Ical.Net.Utility;
+using Ical.Net.Utilities;
 using NodaTime;
 using NodaTime.TimeZones;
 
@@ -74,7 +74,7 @@ namespace Ical.Net.Components
                     Properties.Remove("TZID");
                 }
 
-                _nodaZone = DateUtil.GetZone(value, useLocalIfNotFound: false);
+                _nodaZone = DateUtilities.GetZone(value, useLocalIfNotFound: false);
                 var id = _nodaZone.Id;
                 if (string.IsNullOrWhiteSpace(id))
                 {
@@ -197,12 +197,12 @@ namespace Ical.Net.Components
 
         public static VTimeZone FromLocalTimeZone()
         {
-            return FromDateTimeZone(DateUtil.LocalDateTimeZone.Id);
+            return FromDateTimeZone(DateUtilities.LocalDateTimeZone.Id);
         }
 
         public static VTimeZone FromLocalTimeZone(DateTime earlistDateTimeToSupport, bool includeHistoricalData)
         {
-            return FromDateTimeZone(DateUtil.LocalDateTimeZone.Id, earlistDateTimeToSupport, includeHistoricalData);
+            return FromDateTimeZone(DateUtilities.LocalDateTimeZone.Id, earlistDateTimeToSupport, includeHistoricalData);
         }
 
         public static VTimeZone FromSystemTimeZone(TimeZoneInfo tzinfo)
@@ -381,7 +381,7 @@ namespace Ical.Net.Components
 
                 var date = interval.IsoLocalStart.ToDateTimeUnspecified();
                 var weekday = date.DayOfWeek;
-                var num = DateUtil.WeekOfMonth(date);
+                var num = DateUtilities.WeekOfMonth(date);
 
                 ByDay.Add(num != 5 ? new WeekDay(weekday, num) : new WeekDay(weekday, -1));
             }

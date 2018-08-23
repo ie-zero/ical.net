@@ -2,7 +2,7 @@
 using System.Linq;
 using Ical.Net.Components;
 using Ical.Net.DataTypes;
-using Ical.Net.Utility;
+using Ical.Net.Utilities;
 
 namespace Ical.Net.Evaluation
 {
@@ -90,7 +90,7 @@ namespace Ical.Net.Evaluation
             periodStart.TzId = start.TzId;
             periodEnd.TzId = start.TzId;
 
-            var periods = evaluator.Evaluate(start, DateUtil.GetSimpleDateTimeData(periodStart), DateUtil.GetSimpleDateTimeData(periodEnd),
+            var periods = evaluator.Evaluate(start, DateUtilities.GetSimpleDateTimeData(periodStart), DateUtilities.GetSimpleDateTimeData(periodEnd),
                 includeReferenceDateInResults);
 
             var otherOccurrences = from p in periods

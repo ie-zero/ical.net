@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using Ical.Net.DataTypes;
-using Ical.Net.Utility;
+using Ical.Net.Utilities;
 
 namespace Ical.Net.Evaluation
 {
@@ -67,7 +67,7 @@ namespace Ical.Net.Evaluation
                     dt = old.AddDays(interval);
                     break;
                 case FrequencyType.Weekly:
-                    dt = DateUtil.AddWeeks(old, interval, pattern.FirstDayOfWeek);
+                    dt = DateUtilities.AddWeeks(old, interval, pattern.FirstDayOfWeek);
                     break;
                 case FrequencyType.Monthly:
                     dt = old.AddDays(-old.Day + 1).AddMonths(interval);
