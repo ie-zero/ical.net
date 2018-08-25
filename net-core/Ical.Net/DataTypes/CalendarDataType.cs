@@ -10,7 +10,7 @@ namespace Ical.Net.DataTypes
     public abstract class CalendarDataType : ICalendarDataType, ICopyable
     {
         protected ICalendarObject _associatedObject;
-        private ParameterCollectionProxy _parameters;
+        private ParameterList _parameters;
         private ServiceProvider _serviceProvider;
 
         protected CalendarDataType()
@@ -52,7 +52,11 @@ namespace Ical.Net.DataTypes
                 var parameterContainer = _associatedObject as IPropertyParameters;
                 if (parameterContainer != null)
                 {
-                    _parameters.SetProxiedObject(parameterContainer.Parameters);
+                    _parameters.Clear();
+                    foreach (var param in parameterContainer.Parameters)
+                    {
+                        _parameters.Add(param);
+                    }
                 }
             }
             else
@@ -94,7 +98,11 @@ namespace Ical.Net.DataTypes
         {
             _associatedObject = dataType.AssociatedObject;
             _parameters.SetParent(_associatedObject);
-            _parameters.SetProxiedObject(dataType.Parameters);
+            _parameters.Clear();
+            foreach (var param in dataType.Parameters)
+            {
+                _parameters.Add(param);
+            }
         }
 
         internal object GetService(Type serviceType)
@@ -181,7 +189,7 @@ namespace Ical.Net.DataTypes
 
         private void Initialize()
         {
-            _parameters = new ParameterCollectionProxy(new ParameterList());
+            _parameters = new ParameterList();
             _serviceProvider = new ServiceProvider();
         }
     }
