@@ -7,10 +7,11 @@ using Ical.Net.Collections.Interfaces;
 
 namespace Ical.Net
 {
+
     [DebuggerDisplay("{Name}={string.Join(\",\", Values)}")]
     public class CalendarParameter : CalendarObject, IValueObject<string>
     {
-        private HashSet<string> _values;
+        private CalendarParameterValue _parameterValue;
 
         public CalendarParameter()
         {
@@ -39,7 +40,7 @@ namespace Ical.Net
 
         private void Initialize()
         {
-            _values = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            _parameterValue = new CalendarParameterValue();
         }
 
         public string Value
@@ -47,7 +48,10 @@ namespace Ical.Net
             get { return Values?.FirstOrDefault(); }
         }
 
-        public IEnumerable<string> Values => _values.ToList().AsReadOnly();
+        public IEnumerable<string> Values
+        {
+            get { return _parameterValue.Values; }
+        }
 
         public override void CopyFrom(ICopyable copyable)
         {
@@ -61,39 +65,32 @@ namespace Ical.Net
 
         private void CopyFrom(CalendarParameter parameter)
         {
-            _values = new HashSet<string>(parameter.Values.Where(IsValidValue), StringComparer.OrdinalIgnoreCase);
+            _parameterValue = new CalendarParameterValue(parameter.Values);
         }
 
         public bool ContainsValue(string value)
         {
-            return _values.Contains(value);
+            return _parameterValue.ContainsValue(value);
         }
 
         public void SetValue(string value)
         {
-            _values.Clear();
-            _values.Add(value);
+            _parameterValue.SetValue(value);
         }
 
         public void SetValue(IEnumerable<string> values)
         {
-            _values.Clear();
-            _values.UnionWith(values.Where(IsValidValue));
+            _parameterValue.SetValue(values);
         }
 
         public void AddValue(string value)
         {
-            if (IsValidValue(value)) { _values.Add(value); }
+            _parameterValue.AddValue(value);
         }
 
         public void RemoveValue(string value)
         {
-            _values.Remove(value);
-        }
-
-        private bool IsValidValue(string value)
-        {
-            return !string.IsNullOrWhiteSpace(value);
+            _parameterValue.RemoveValue(value);
         }
 
         protected override void OnDeserializing(StreamingContext context)
