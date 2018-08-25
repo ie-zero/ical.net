@@ -26,16 +26,23 @@ namespace Ical.Net
     [DebuggerDisplay("{Name}:{Value}")]
     public class CalendarProperty : CalendarObject, ICalendarProperty
     {
-        private List<object> _values = new List<object>();
+        private readonly CalendarPropertyValue _propertyValue;
 
         // Required by GroupedValueList class.
-        public CalendarProperty() {}
+        public CalendarProperty() 
+        {
+            _propertyValue = new CalendarPropertyValue();
+        }
 
-        public CalendarProperty(string name) : base(name) { }
+        public CalendarProperty(string name) : base(name) 
+        {
+            _propertyValue = new CalendarPropertyValue();
+        }
 
         public CalendarProperty(string name, object value) : base(name)
         {
-            if (value != null) { _values.Add(value); }
+            _propertyValue = new CalendarPropertyValue();
+            if (value != null) { _propertyValue.AddValue(value); }
         }
 
         /// <summary>
@@ -45,10 +52,13 @@ namespace Ical.Net
 
         public object Value
         {
-            get { return _values?.FirstOrDefault(); }
+            get { return _propertyValue.Value; }
         }
 
-        public IEnumerable<object> Values => _values?.AsReadOnly();
+        public IEnumerable<object> Values
+        {
+            get { return _propertyValue.Values; }
+        }
 
         /// <summary>
         /// Adds a parameter to the iCalendar object.
@@ -68,31 +78,27 @@ namespace Ical.Net
 
         public bool ContainsValue(object value)
         {
-            return _values.Contains(value);
+            return _propertyValue.ContainsValue(value);
         }
 
         public void SetValue(object value)
         {
-            _values.Clear();
-            if (value != null) { _values.Add(value); }
+            _propertyValue.SetValue(value);
         }
 
         public void SetValue(IEnumerable<object> values)
         {
-            _values.Clear();
-            _values.AddRange(values ?? Enumerable.Empty<object>());
+            _propertyValue.SetValue(values);
         }
 
         public void AddValue(object value)
         {
-            if (value == null) { return; }
-            _values.Add(value);
+            _propertyValue.AddValue(value);
         }
 
         public void RemoveValue(object value)
         {
-            if (value == null) { return; }
-            _values.Remove(value);
+            _propertyValue.RemoveValue(value);
         }
 
         public override void CopyFrom(ICopyable copyable)
