@@ -53,7 +53,7 @@ namespace Ical.Net.FrameworkUnitTests
         [Test]
         public void PropertySetValueMustAllowNull()
         {
-            var property = new CalendarProperty();
+            var property = new CalendarProperty("PROPERTY_NAME");
             Assert.DoesNotThrow(() => property.SetValue(null));
         }
     }

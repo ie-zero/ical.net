@@ -28,13 +28,14 @@ namespace Ical.Net
     {
         private List<object> _values = new List<object>();
 
-        public CalendarProperty() { }
+        // Required by GroupedValueList class.
+        public CalendarProperty() {}
 
         public CalendarProperty(string name) : base(name) { }
 
         public CalendarProperty(string name, object value) : base(name)
         {
-            _values.Add(value);
+            if (value != null) { _values.Add(value); }
         }
 
         /// <summary>
