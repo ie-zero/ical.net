@@ -49,7 +49,7 @@ namespace Ical.Net.DataTypes
             {
                 _parameters.SetParent(_associatedObject);
 
-                var parameterContainer = _associatedObject as ICalendarParameterCollectionContainer;
+                var parameterContainer = _associatedObject as IPropertyParameters;
                 if (parameterContainer != null)
                 {
                     _parameters.SetProxiedObject(parameterContainer.Parameters);
