@@ -8,9 +8,9 @@ namespace Ical.Net.Evaluation
     {
         private readonly PeriodList _periodList;
 
-        public PeriodListEvaluator(PeriodList rdt)
+        public PeriodListEvaluator(PeriodList periods)
         {
-            _periodList = rdt;
+            _periodList = periods;
         }
 
         public override HashSet<Period> Evaluate(IDateTime referenceDate, DateTime periodStart, DateTime periodEnd, bool includeReferenceDateInResults)
@@ -19,8 +19,7 @@ namespace Ical.Net.Evaluation
 
             if (includeReferenceDateInResults)
             {
-                var p = new Period(referenceDate);
-                periods.Add(p);
+                periods.Add(new Period(referenceDate));
             }
 
             if (periodEnd < periodStart)
