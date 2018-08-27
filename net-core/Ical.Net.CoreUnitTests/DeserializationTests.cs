@@ -285,30 +285,35 @@ END:VCALENDAR
         }
 
         [Test]
-        public void Google1()
+        public void Google1_ValidateOccurrenceDateTimes()
         {
-            var tzId = "Europe/Berlin";
+            // Arrange
             var calendar = Calendar.Load(IcsFiles.Google1);
-            var evt = calendar.Events["594oeajmftl3r9qlkb476rpr3c@google.com"];
-            Assert.IsNotNull(evt);
+            var calendarEvent = calendar.Events["594oeajmftl3r9qlkb476rpr3c@google.com"];
+            Assert.IsNotNull(calendarEvent);
 
-            IDateTime dtStart = new CalDateTime(2006, 12, 18, tzId);
-            IDateTime dtEnd = new CalDateTime(2006, 12, 23, tzId);
-            var occurrences = calendar.GetOccurrences(dtStart, dtEnd).OrderBy(o => o.Period.StartTime).ToList();
+            IDateTime start = new CalDateTime(2006, 12, 18, "Europe/Berlin");
+            IDateTime end = new CalDateTime(2006, 12, 23, "Europe/Berlin");
 
-            var dateTimes = new[]
+            // Act
+            var actual = calendar.GetOccurrences(start, end).OrderBy(o => o.Period.StartTime).ToList();
+
+            // Assert
+            var expected = new[]
             {
-                new CalDateTime(2006, 12, 18, 7, 0, 0, tzId),
-                new CalDateTime(2006, 12, 19, 7, 0, 0, tzId),
-                new CalDateTime(2006, 12, 20, 7, 0, 0, tzId),
-                new CalDateTime(2006, 12, 21, 7, 0, 0, tzId),
-                new CalDateTime(2006, 12, 22, 7, 0, 0, tzId)
+                new CalDateTime(2006, 12, 18, 7, 0, 0, "Europe/Berlin"),
+                new CalDateTime(2006, 12, 19, 7, 0, 0, "Europe/Berlin"),
+                new CalDateTime(2006, 12, 20, 7, 0, 0, "Europe/Berlin"),
+                new CalDateTime(2006, 12, 21, 7, 0, 0, "Europe/Berlin"),
+                new CalDateTime(2006, 12, 22, 7, 0, 0, "Europe/Berlin")
             };
 
-            for (var i = 0; i < dateTimes.Length; i++)
-                Assert.AreEqual(dateTimes[i], occurrences[i].Period.StartTime, "Event should occur at " + dateTimes[i]);
+            Assert.AreEqual(expected.Length, actual.Count);
 
-            Assert.AreEqual(dateTimes.Length, occurrences.Count, "There should be exactly " + dateTimes.Length + " occurrences; there were " + occurrences.Count);
+            for (var index = 0; index < expected.Length; index++)
+            {
+                Assert.AreEqual(expected[index], actual[index].Period.StartTime, $"Event should occur at '{expected[index]}'");
+            }
         }
 
         /// <summary>
@@ -376,33 +381,26 @@ END:VCALENDAR
         /// Tests that string escaping works with Text elements.
         /// </summary>
         [Test]
-        public void String2()
+        [TestCase(@"test\with\;characters", @"test\with;characters")]
+        [TestCase(@"C:\Path\To\My\New\Information", "C:\\Path\\To\\My\new\\Information")]
+        [TestCase(@"\""This\r\nis\Na\, test\""\;\\;,", "\"This\\r\nis\na, test\";\\;,")]
+        public void ValidateEscapingDuringDeserializationOnTextValues(string value, string expected)
         {
             var serializer = new StringSerializer(new SerializationContext());
-            var value = @"test\with\;characters";
-            var unescaped = (string)serializer.Deserialize(new StringReader(value));
+            var actual = (string)serializer.Deserialize(new StringReader(value));
 
-            Assert.AreEqual(@"test\with;characters", unescaped, "String unescaping was incorrect.");
-
-            value = @"C:\Path\To\My\New\Information";
-            unescaped = (string)serializer.Deserialize(new StringReader(value));
-            Assert.AreEqual("C:\\Path\\To\\My\new\\Information", unescaped, "String unescaping was incorrect.");
-
-            value = @"\""This\r\nis\Na\, test\""\;\\;,";
-            unescaped = (string)serializer.Deserialize(new StringReader(value));
-
-            Assert.AreEqual("\"This\\r\nis\na, test\";\\;,", unescaped, "String unescaping was incorrect.");
+            Assert.AreEqual(expected, actual);
         }
 
         [Test]
-        public void Transparency2()
+        public void TransparencyIsDeserializedCorrectly()
         {
+            // Arrange + Act
             var calendar = Calendar.Load(IcsFiles.Transparency2);
+            var calendarEvent = calendar.Events.First();
 
-            Assert.AreEqual(1, calendar.Events.Count);
-            var evt = calendar.Events.First();
-
-            Assert.AreEqual(TransparencyType.Transparent, evt.Transparency);
+            // Assert
+            Assert.AreEqual(TransparencyType.Transparent, calendarEvent.Transparency);
         }
 
         /// <summary>
@@ -410,17 +408,16 @@ END:VCALENDAR
         /// and set to the closest representable date/time in .NET.
         /// </summary>
         [Test]
-        public void DateTime1()
+        public void OutOfBoundDateTimeIsHandledCorrectly()
         {
+            // Arrange + Act
             var calendar = Calendar.Load(IcsFiles.DateTime1);
-            Assert.AreEqual(6, calendar.Events.Count);
+            var calendarEvent = calendar.Events["nc2o66s0u36iesitl2l0b8inn8@google.com"];
 
-            var evt = calendar.Events["nc2o66s0u36iesitl2l0b8inn8@google.com"];
-            Assert.IsNotNull(evt);
-
+            // Assert
             // The "Created" date is out-of-bounds.  It should be coerced to the
             // closest representable date/time.
-            Assert.AreEqual(DateTime.MinValue, evt.Created.Value);
+            Assert.AreEqual(DateTime.MinValue, calendarEvent.Created.Value);
         }
 
         [Test]
@@ -451,15 +448,19 @@ END:VCALENDAR
         /// Tests that multiple parameters are allowed in iCalObjects
         /// </summary>
         [Test]
-        public void Parameter1()
+        public void MultipleParametersWithSameNameAreAllowed()
         {
+            // Arrange
             var calendar = Calendar.Load(IcsFiles.Parameter1);
+            var calendarEvent = calendar.Events.First();
 
-            var evt = calendar.Events.First();
-            IList<CalendarParameter> parms = evt.Properties["DTSTART"].Parameters.AllOf("VALUE").ToList();
-            Assert.AreEqual(2, parms.Count);
-            Assert.AreEqual("DATE", parms[0].Values.First());
-            Assert.AreEqual("OTHER", parms[1].Values.First());
+            // Act
+            IList<CalendarParameter> parameters = calendarEvent.Properties["DTSTART"].Parameters.AllOf("VALUE").ToList();
+
+            // Assert
+            Assert.AreEqual(2, parameters.Count);
+            Assert.AreEqual("DATE", parameters[0].Values.First());
+            Assert.AreEqual("OTHER", parameters[1].Values.First());
         }
 
         /// <summary>
@@ -478,33 +479,28 @@ END:VCALENDAR
         [Test]
         public void Parse1()
         {
-            try
-            {
-                var content = IcsFiles.Parse1;
-                var calendar = Calendar.Load(content);
-                Assert.IsNotNull(calendar);
-            }
-            catch (Exception e)
-            {
-                Assert.IsInstanceOf<SerializationException>(e);
-            }
+            Assert.Throws<SerializationException>(() => {
+                var invalidFormattedCalendar = Calendar.Load(IcsFiles.Parse1);
+                Assert.IsNull(invalidFormattedCalendar);
+            });
         }
 
         /// <summary>
         /// Tests that multiple properties are allowed in iCalObjects
         /// </summary>
         [Test]
-        public void Property1()
+        public void MultiplePropertiesWithSameNameAreAllowed()
         {
+            // Arrange
             var calendar = Calendar.Load(IcsFiles.Property1);
 
-            IList<CalendarProperty> props = calendar.Properties.AllOf("VERSION").ToList();
-            Assert.AreEqual(2, props.Count);
-
-            for (var i = 0; i < props.Count; i++)
-            {
-                Assert.AreEqual("2." + i, props[i].Value);
-            }
+            // Act
+            IList<CalendarProperty> properties = calendar.Properties.AllOf("VERSION").ToList();
+            
+            // Assert
+            Assert.AreEqual(2, properties.Count);
+            Assert.AreEqual("2.0", properties[0].Value);
+            Assert.AreEqual("2.1", properties[1].Value);
         }
     }
 }

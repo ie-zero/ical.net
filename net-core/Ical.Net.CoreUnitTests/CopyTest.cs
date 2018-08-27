@@ -15,8 +15,13 @@ namespace Ical.Net.CoreUnitTests
         [Test, TestCaseSource(nameof(CopyCalendarTest_TestCases)), Category("Copy tests")]
         public void CopiedCalendarShouldBeTheSameToTheOriginal(string calendarString)
         {
+            // Arrange
             var calendar = Calendar.Load(calendarString);
+
+            // Act
             var calendarCopy = calendar.Copy();
+
+            // Assert
             SerializationTests.CompareCalendars(calendar, calendarCopy);
         }
 
@@ -45,32 +50,45 @@ namespace Ical.Net.CoreUnitTests
             yield return new TestCaseData(IcsFiles.XProperty2).SetName("XProperty2");
         }
 
-        private static readonly DateTime _now = DateTime.Now;
-        private static readonly DateTime _later = _now.AddHours(1);
-
-        private static CalendarEvent GetSimpleEvent() => new CalendarEvent
-        {
-            DtStart = new CalDateTime(_now),
-            DtEnd = new CalDateTime(_later),
-            Duration = TimeSpan.FromHours(1),
-        };
-
         [Test]
-        public void EventUid_Tests()
+        public void CopyCreatesAShallowCopyOfTheOriginal()
         {
-            var evt = GetSimpleEvent();
-            evt.Uid = "Hello";
-            var copy = evt.Copy();
-            Assert.AreEqual(evt.Uid, copy.Uid);
+            // TODO: Copy() method creates a shallow copy of the original component. Is this the intention?
 
+            // Arrange + Act
+            var calendarEvent = CreateSimpleEvent();
+            calendarEvent.Uid = "Hello";
+            var copy = calendarEvent.Copy();
             copy.Uid = "Goodbye";
 
-            const string uidPattern = "UID:";
-            var serializedOrig = SerializationUtilities.SerializeEvent(evt);
-            Assert.AreEqual(1, Regex.Matches(serializedOrig, uidPattern).Count);
+            // Assert
+            Assert.AreEqual(calendarEvent.Uid, copy.Uid);
+        }
 
-            var serializedCopy = SerializationUtilities.SerializeEvent(copy);
-            Assert.AreEqual(1, Regex.Matches(serializedCopy, uidPattern).Count);
+        [Test]
+        public void OriginalAndCopyComponentsShouldHaveIdenticalUid()
+        {
+            // TODO: This should be valid for all UniqueComponents
+
+            // Arrange
+            var calendarEvent = CreateSimpleEvent();
+            calendarEvent.Uid = "Hello";
+
+            // Act
+            var copy = calendarEvent.Copy();
+
+            // Assert
+            Assert.AreEqual(calendarEvent.Uid, copy.Uid);
+        }
+
+        private static CalendarEvent CreateSimpleEvent()
+        {
+            return new CalendarEvent
+            {
+                DtStart = new CalDateTime(2018, 10, 12, 14, 00, 00),
+                DtEnd = new CalDateTime(2018, 10, 12, 15, 00, 00),
+                Duration = TimeSpan.FromHours(1),
+            };
         }
     }
 }

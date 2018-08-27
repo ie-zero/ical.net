@@ -6,26 +6,22 @@ using NUnit.Framework;
 
 namespace Ical.Net.CoreUnitTests
 {
-    internal class CollectionHelpersTests
+    public class CollectionHelpersTests
     {
-        private static readonly DateTime _now = DateTime.UtcNow;
-
-        private static IEnumerable<PeriodList> GetExceptionDates()
-        {
-            return new PeriodList[] { new PeriodList { new Period(new CalDateTime(_now.AddDays(1).Date)) } };
-        }
-
         [Test]
         public void ExDateTests()
         {
-            Assert.AreEqual(GetExceptionDates(), GetExceptionDates());
-            Assert.AreNotEqual(GetExceptionDates(), null);
-            Assert.AreNotEqual(null, GetExceptionDates());
+            // TODO: It is still unclear what the purpose of this test actually is.
 
-            IEnumerable<PeriodList> changedPeriod = GetExceptionDates();
-            changedPeriod.First().First().StartTime = new CalDateTime(_now.AddHours(-1));
+            IEnumerable<PeriodList> changedPeriod = CreateExceptionDates();
+            changedPeriod.First().First().StartTime = new CalDateTime(2018, 10, 12).AddHours(-1);
 
-            Assert.AreNotEqual(GetExceptionDates(), changedPeriod);
+            Assert.AreNotEqual(CreateExceptionDates(), changedPeriod);
+        }
+
+        private static IEnumerable<PeriodList> CreateExceptionDates()
+        {
+            return new PeriodList[] { new PeriodList { new Period(new CalDateTime(2018, 10, 12)) } };
         }
     }
 }

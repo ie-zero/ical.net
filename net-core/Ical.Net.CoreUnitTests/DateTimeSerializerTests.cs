@@ -12,13 +12,17 @@ namespace Ical.Net.CoreUnitTests
         [Test, Category("Deserialization")]
         public void TZIDPropertyShouldBeAppliedForLocalTimezones()
         {
-            // see http://www.ietf.org/rfc/rfc2445.txt p.36
-            var result = new DateTimeSerializer(new SerializationContext())
-                .SerializeToString(
-                new CalDateTime(new DateTime(1997, 7, 14, 13, 30, 0, DateTimeKind.Local), "US-Eastern"));
+            // Arrange
+            var dateTimeWithTimezone = new CalDateTime(new DateTime(1997, 7, 14, 13, 30, 0, DateTimeKind.Local), "US-Eastern");
+            var serializer = new DateTimeSerializer(new SerializationContext());
 
+            // Act
+            // see http://www.ietf.org/rfc/rfc2445.txt p.36
+            var actual = serializer.SerializeToString(dateTimeWithTimezone);
+
+            // Assert
             // TZID is applied elsewhere - just make sure this doesn't have 'Z' appended. 
-            Assert.AreEqual("19970714T133000", result);
+            Assert.AreEqual("19970714T133000", actual);
         }
     }
 }
