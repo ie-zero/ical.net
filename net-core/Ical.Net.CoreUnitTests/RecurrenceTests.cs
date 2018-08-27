@@ -11,6 +11,7 @@ using Ical.Net.DataTypes;
 using Ical.Net.Evaluation;
 using Ical.Net.Serialization;
 using Ical.Net.Serialization.DataTypes;
+using Ical.Net.Tests.Support;
 using Ical.Net.Utilities;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
@@ -3140,7 +3141,7 @@ END:VCALENDAR";
             var start = _now.AddYears(-1);
             var end = start.AddHours(1);
             var rrule = new RecurrencePattern(FrequencyType.Daily) { Until = start.AddYears(2) };
-            var e = new CalendarEvent
+            var calendarEvent = new CalendarEvent
             {
                 DtStart = new CalDateTime(start),
                 DtEnd = new CalDateTime(end),
@@ -3148,13 +3149,13 @@ END:VCALENDAR";
             };
 
             var firstExclusion = new CalDateTime(start.AddDays(4));
-            e.ExceptionDates = new List<PeriodList> { new PeriodList { new Period(firstExclusion) } };
-            var serialized = SerializationHelpers.SerializeToString(e);
+            calendarEvent.ExceptionDates = new List<PeriodList> { new PeriodList { new Period(firstExclusion) } };
+            var serialized = SerializationUtilities.SerializeEvent(calendarEvent);
             Assert.AreEqual(1, Regex.Matches(serialized, "EXDATE:").Count);
 
             var secondExclusion = new CalDateTime(start.AddDays(5));
-            e.ExceptionDates.First().Add(new Period(secondExclusion));
-            serialized = SerializationHelpers.SerializeToString(e);
+            calendarEvent.ExceptionDates.First().Add(new Period(secondExclusion));
+            serialized = SerializationUtilities.SerializeEvent(calendarEvent);
             Assert.AreEqual(1, Regex.Matches(serialized, "EXDATE:").Count);
         }
 
@@ -3166,7 +3167,7 @@ END:VCALENDAR";
             //Repeat daily for 10 days
             var rrule = GetSimpleRecurrencePattern(10);
 
-            var e = new CalendarEvent
+            var calendarEvent = new CalendarEvent
             {
                 DtStart = new CalDateTime(_now, tzid),
                 DtEnd = new CalDateTime(_later, tzid),
@@ -3175,14 +3176,14 @@ END:VCALENDAR";
 
             var exceptionDateList = new PeriodList { TzId = tzid };
             exceptionDateList.Add(new Period(new CalDateTime(_now.AddDays(1))));
-            e.ExceptionDates.Add(exceptionDateList);
+            calendarEvent.ExceptionDates.Add(exceptionDateList);
 
-            var serialized = SerializationHelpers.SerializeToString(e);
+            var serialized = SerializationUtilities.SerializeEvent(calendarEvent);
             const string expected = "TZID=Europe/Stockholm";
             Assert.AreEqual(3, Regex.Matches(serialized, expected).Count);
 
-            e.ExceptionDates.First().Add(new Period(new CalDateTime(_now.AddDays(2))));
-            serialized = SerializationHelpers.SerializeToString(e);
+            calendarEvent.ExceptionDates.First().Add(new Period(new CalDateTime(_now.AddDays(2))));
+            serialized = SerializationUtilities.SerializeEvent(calendarEvent);
             Assert.AreEqual(3, Regex.Matches(serialized, expected).Count);
         }
 

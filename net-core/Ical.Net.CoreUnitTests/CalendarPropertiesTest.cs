@@ -36,16 +36,16 @@ namespace Ical.Net.CoreUnitTests
 
             var start = DateTime.Now;
             var end = start.AddHours(1);
-            var @event = new CalendarEvent
+            var evt = new CalendarEvent
             {
                 Start = new CalDateTime(start),
                 End = new CalDateTime(end),
                 Description = "This is a description",
             };
             var property = new CalendarProperty("X-ALT-DESC", formatted);
-            @event.AddProperty(property);
+            evt.AddProperty(property);
             var calendar = new Calendar();
-            calendar.Events.Add(@event);
+            calendar.Events.Add(evt);
 
             var serialized = SerializationUtilities.SerializeCalendar(calendar);
             Assert.IsTrue(serialized.Contains("X-ALT-DESC;"));

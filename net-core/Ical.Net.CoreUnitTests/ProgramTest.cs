@@ -14,8 +14,8 @@ namespace Ical.Net.CoreUnitTests
         {
             // The following code loads and displays an iCalendar
             // with US Holidays for 2006.
-            var iCal = Calendar.Load(IcsFiles.UsHolidays);
-            Assert.IsNotNull(iCal, "iCalendar did not load.");
+            var calendar = Calendar.Load(IcsFiles.UsHolidays);
+            Assert.IsNotNull(calendar, "Calendar did not load.");
         }
 
         private const string _tzid = "US-Eastern";
@@ -26,15 +26,15 @@ namespace Ical.Net.CoreUnitTests
         [Test]
         public void Merge1()
         {
-            var iCal1 = Calendar.Load(IcsFiles.MonthlyCountByMonthDay3);
-            var iCal2 = Calendar.Load(IcsFiles.MonthlyByDay1);
+            var calendar1 = Calendar.Load(IcsFiles.MonthlyCountByMonthDay3);
+            var calendar2 = Calendar.Load(IcsFiles.MonthlyByDay1);
 
             // Change the UID of the 2nd event to make sure it's different
-            iCal2.Events[iCal1.Events[0].Uid].Uid = "1234567890";
-            iCal1.MergeWith(iCal2);
+            calendar2.Events[calendar1.Events[0].Uid].Uid = "1234567890";
+            calendar1.MergeWith(calendar2);
 
-            var evt1 = iCal1.Events.First();
-            var evt2 = iCal1.Events.Skip(1).First();
+            var evt1 = calendar1.Events.First();
+            var evt2 = calendar1.Events.Skip(1).First();
 
             // Get occurrences for the first event
             var occurrences = evt1.GetOccurrences(

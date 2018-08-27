@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using Ical.Net.Components;
 using Ical.Net.DataTypes;
 using Ical.Net.Serialization;
+using Ical.Net.Tests.Support;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 
@@ -17,24 +18,22 @@ namespace Ical.Net.CoreUnitTests
 
         private static readonly DateTime _nowTime = DateTime.Now;
         private static readonly DateTime _later = _nowTime.AddHours(1);
-        private static CalendarSerializer GetNewSerializer() => new CalendarSerializer(new SerializationContext());
-        private static string SerializeToString(Calendar c) => GetNewSerializer().SerializeToString(c);
-        private static CalendarEvent GetSimpleEvent() => new CalendarEvent {DtStart = new CalDateTime(_nowTime), DtEnd = new CalDateTime(_later), Duration = _later - _nowTime};
+        private static CalendarEvent CreateSimpleEvent() => new CalendarEvent {DtStart = new CalDateTime(_nowTime), DtEnd = new CalDateTime(_later), Duration = _later - _nowTime};
         private static Calendar UnserializeCalendar(string s) => Calendar.Load(s);
 
         [Test, TestCaseSource(nameof(Event_TestCases))]
-        public void Event_Tests(Calendar iCalendar)
+        public void Event_Tests(Calendar calendar)
         {
-            var originalEvent = iCalendar.Events.Single();
+            var originalEvent = calendar.Events.Single();
 
-            var serializedCalendar = SerializeToString(iCalendar);
+            var serializedCalendar = SerializationUtilities.SerializeCalendar(calendar);
             var unserializedCalendar = UnserializeCalendar(serializedCalendar);
 
             var onlyEvent = unserializedCalendar.Events.Single();
 
             Assert.AreEqual(originalEvent.GetHashCode(), onlyEvent.GetHashCode());
             Assert.AreEqual(originalEvent, onlyEvent);
-            Assert.AreEqual(iCalendar, unserializedCalendar);
+            Assert.AreEqual(calendar, unserializedCalendar);
         }
 
         public static IEnumerable<ITestCaseData> Event_TestCases()
@@ -52,7 +51,7 @@ namespace Ical.Net.CoreUnitTests
             calendar.Events.Add(e);
             yield return new TestCaseData(calendar).SetName("readme.md example");
 
-            e = GetSimpleEvent();
+            e = CreateSimpleEvent();
             e.Description = "This is an event description that is really rather long. Hopefully the line breaks work now, and it's serialized properly.";
             calendar = new Calendar();
             calendar.Events.Add(e);
@@ -82,11 +81,11 @@ namespace Ical.Net.CoreUnitTests
         {
             var calendar = new Calendar();
             calendar.AddTimeZone(new VTimeZone("America/Los_Angeles"));
-            var someEvent = GetSimpleEvent();
+            var someEvent = CreateSimpleEvent();
             someEvent.Attendees = new List<Attendee> {attendee};
             calendar.Events.Add(someEvent);
 
-            var serialized = SerializeToString(calendar);
+            var serialized = SerializationUtilities.SerializeCalendar(calendar);
             var unserialized = UnserializeCalendar(serialized);
 
             Assert.AreEqual(calendar.GetHashCode(), unserialized.GetHashCode());
@@ -128,11 +127,11 @@ namespace Ical.Net.CoreUnitTests
             var binaryAttachment = new Attachment(asBytes);
 
             var calendar = new Calendar();
-            var vEvent = GetSimpleEvent();
+            var vEvent = CreateSimpleEvent();
             vEvent.Attachments = new List<Attachment> { binaryAttachment };
             calendar.Events.Add(vEvent);
 
-            var serialized = SerializeToString(calendar);
+            var serialized = SerializationUtilities.SerializeCalendar(calendar);
             var unserialized = UnserializeCalendar(serialized);
             var unserializedAttachment = unserialized
                 .Events
@@ -171,11 +170,11 @@ namespace Ical.Net.CoreUnitTests
             var attachment = new Attachment(uri);
 
             var calendar = new Calendar();
-            var vEvent = GetSimpleEvent();
+            var vEvent = CreateSimpleEvent();
             vEvent.Attachments = new List<Attachment> { attachment };
             calendar.Events.Add(vEvent);
 
-            var serialized = SerializeToString(calendar);
+            var serialized = SerializationUtilities.SerializeCalendar(calendar);
             var unserialized = UnserializeCalendar(serialized);
             var unserializedUri = unserialized
                 .Events
@@ -201,17 +200,17 @@ namespace Ical.Net.CoreUnitTests
         [Test, Ignore("TODO: Fix CATEGORIES multiple serializations")]
         public void CategoriesTest()
         {
-            var vEvent = GetSimpleEvent();
-            vEvent.Categories = new List<string> { "Foo", "Bar", "Baz" };
-            var c = new Calendar();
-            c.Events.Add(vEvent);
+            var calendarEvent = CreateSimpleEvent();
+            calendarEvent.Categories = new List<string> { "Foo", "Bar", "Baz" };
+            var calendar = new Calendar();
+            calendar.Events.Add(calendarEvent);
 
-            var serialized = SerializeToString(c);
+            var serialized = SerializationUtilities.SerializeCalendar(calendar);
             var categoriesCount = Regex.Matches(serialized, "CATEGORIES").Count;
             Assert.AreEqual(1, categoriesCount);
 
             var deserialized = UnserializeCalendar(serialized);
-            Assert.AreEqual(vEvent, deserialized);
+            Assert.AreEqual(calendarEvent, deserialized);
         }
     }
 }

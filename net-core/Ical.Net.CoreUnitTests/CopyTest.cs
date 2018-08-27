@@ -13,11 +13,11 @@ namespace Ical.Net.CoreUnitTests
     public class CopyTest
     {
         [Test, TestCaseSource(nameof(CopyCalendarTest_TestCases)), Category("Copy tests")]
-        public void CopyCalendarTest(string calendarString)
+        public void CopiedCalendarShouldBeTheSameToTheOriginal(string calendarString)
         {
-            var iCal1 = Calendar.Load(calendarString);
-            var iCal2 = iCal1.Copy();
-            SerializationTests.CompareCalendars(iCal1, iCal2);
+            var calendar = Calendar.Load(calendarString);
+            var calendarCopy = calendar.Copy();
+            SerializationTests.CompareCalendars(calendar, calendarCopy);
         }
 
         public static IEnumerable<ITestCaseData> CopyCalendarTest_TestCases()
@@ -58,15 +58,15 @@ namespace Ical.Net.CoreUnitTests
         [Test]
         public void EventUid_Tests()
         {
-            var e = GetSimpleEvent();
-            e.Uid = "Hello";
-            var copy = e.Copy();
-            Assert.AreEqual(e.Uid, copy.Uid);
+            var evt = GetSimpleEvent();
+            evt.Uid = "Hello";
+            var copy = evt.Copy();
+            Assert.AreEqual(evt.Uid, copy.Uid);
 
             copy.Uid = "Goodbye";
 
             const string uidPattern = "UID:";
-            var serializedOrig = SerializationUtilities.SerializeEvent(e);
+            var serializedOrig = SerializationUtilities.SerializeEvent(evt);
             Assert.AreEqual(1, Regex.Matches(serializedOrig, uidPattern).Count);
 
             var serializedCopy = SerializationUtilities.SerializeEvent(copy);

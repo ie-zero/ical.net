@@ -101,7 +101,7 @@ namespace Ical.Net.CoreUnitTests
         public void DailyExceptSunday_Test()
         {
             //An event that happens daily through 2016, except for Sundays
-            var vEvent = new CalendarEvent
+            var calendarEvent = new CalendarEvent
             {
                 DtStart = new CalDateTime(DateTime.Parse("2016-01-01T07:00")),
                 DtEnd = new CalDateTime(DateTime.Parse("2016-12-31T08:00")),
@@ -113,10 +113,10 @@ namespace Ical.Net.CoreUnitTests
             {
                 ByDay = new List<WeekDay> { new WeekDay(DayOfWeek.Sunday) }
             };
-            vEvent.ExceptionRules = new List<RecurrencePattern> {exceptionRule};
+            calendarEvent.ExceptionRules = new List<RecurrencePattern> {exceptionRule};
 
             var calendar = new Calendar();
-            calendar.Events.Add(vEvent);
+            calendar.Events.Add(calendarEvent);
 
             // We are essentially counting all the days that aren't Sunday in 2016, so there should be 314
             var searchStart = DateTime.Parse("2015-12-31");

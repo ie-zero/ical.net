@@ -19,9 +19,8 @@ namespace Ical.Net.CoreUnitTests
     {
         private static readonly DateTime _nowTime = DateTime.Now;
         private static readonly DateTime _later = _nowTime.AddHours(1);
-        private static CalendarSerializer GetNewSerializer() => new CalendarSerializer(SerializationContext.Default);
-        private static string SerializeToString(Calendar c) => GetNewSerializer().SerializeToString(c);
-        private static string SerializeToString(CalendarEvent e) => SerializeToString(new Calendar { Events = { e } });
+        //private static string SerializeToString(Calendar calendar) => new CalendarSerializer(SerializationContext.Default).SerializeToString(calendar);
+        //private static string SerializeToString(CalendarEvent calendarEvent) => SerializeToString(new Calendar { Events = { calendarEvent } });
         private static CalendarEvent GetSimpleEvent() => new CalendarEvent { DtStart = new CalDateTime(_nowTime), DtEnd = new CalDateTime(_later), Duration = _later - _nowTime };
         private static Calendar UnserializeCalendar(string s) => Calendar.Load(s);
 
@@ -356,7 +355,7 @@ namespace Ical.Net.CoreUnitTests
             var originalDuration = e.Duration;
             var c = new Calendar();
             c.Events.Add(e);
-            var serialized = SerializeToString(c);
+            var serialized = SerializationUtilities.SerializeCalendar(c);
             Assert.AreEqual(originalDuration, e.Duration);
             Assert.IsTrue(!serialized.Contains("DURATION"));
         }
@@ -366,7 +365,7 @@ namespace Ical.Net.CoreUnitTests
         {
             var e = GetSimpleEvent();
             e.Status = EventStatus.Confirmed;
-            var serialized = SerializeToString(e);
+            var serialized = SerializationUtilities.SerializeEvent(e);
             Assert.IsTrue(serialized.Contains(EventStatus.Confirmed, EventStatus.Comparison));
 
             var calendar = UnserializeCalendar(serialized);
@@ -377,13 +376,13 @@ namespace Ical.Net.CoreUnitTests
         [Test]
         public void ToDoStatusAllCaps()
         {
-            var component = new Todo
+            var todo = new Todo
             {
                 Status = TodoStatus.NeedsAction
             };
 
-            var c = new Calendar {Todos = {component}};
-            var serialized = SerializeToString(c);
+            var calender = new Calendar {Todos = {todo}};
+            var serialized = SerializationUtilities.SerializeCalendar(calender);
             Assert.IsTrue(serialized.Contains(TodoStatus.NeedsAction, TodoStatus.Comparison));
 
             var calendar = UnserializeCalendar(serialized);
@@ -394,13 +393,13 @@ namespace Ical.Net.CoreUnitTests
         [Test]
         public void JournalStatusAllCaps()
         {
-            var component = new Journal
+            var journal = new Journal
             {
                 Status = JournalStatus.Final,
             };
 
-            var c = new Calendar { Journals = {component} };
-            var serialized = SerializeToString(c);
+            var c = new Calendar { Journals = {journal} };
+            var serialized = SerializationUtilities.SerializeCalendar(c);
             Assert.IsTrue(serialized.Contains(JournalStatus.Final, JournalStatus.Comparison));
 
             var calendar = UnserializeCalendar(serialized);
@@ -471,12 +470,12 @@ END:VEVENT";
         [Test(Description = "PRODID and VERSION should use ical.net values instead of preserving deserialized values")]
         public void LibraryMetadataTests()
         {
-            var c = new Calendar
+            var calendar = new Calendar
             {
                 ProductId = "FOO",
                 Version = "BAR"
             };
-            var serialized = SerializationUtilities.SerializeCalendar(c);
+            var serialized = SerializationUtilities.SerializeCalendar(calendar);
             var expectedProdid = $"PRODID:{LibraryMetadata.ProdId}";
             Assert.IsTrue(serialized.Contains(expectedProdid, StringComparison.Ordinal));
 

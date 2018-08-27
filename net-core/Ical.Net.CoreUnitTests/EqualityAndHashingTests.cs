@@ -96,7 +96,7 @@ namespace Ical.Net.CoreUnitTests
                 Count = 5
             };
 
-            var e = new CalendarEvent
+            var calendarEvent = new CalendarEvent
             {
                 DtStart = new CalDateTime(_nowTime),
                 DtEnd = new CalDateTime(_later),
@@ -105,7 +105,7 @@ namespace Ical.Net.CoreUnitTests
             };
 
             var actualCalendar = new Calendar();
-            actualCalendar.Events.Add(e);
+            actualCalendar.Events.Add(calendarEvent);
 
             //Work around referential equality...
             var rruleB = new RecurrencePattern(FrequencyType.Daily, 1)
@@ -314,7 +314,7 @@ namespace Ical.Net.CoreUnitTests
         [Test]
         public void PeriodListTests()
         {
-            var startTimesA = new List<DateTime>
+            var startTimesA = new DateTime[]
             {
                 new DateTime(2017, 03, 02, 06, 00, 00),
                 new DateTime(2017, 03, 03, 06, 00, 00),

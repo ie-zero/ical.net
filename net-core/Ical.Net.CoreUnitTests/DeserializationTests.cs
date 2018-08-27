@@ -19,10 +19,10 @@ namespace Ical.Net.CoreUnitTests
         [Test]
         public void Attendee1()
         {
-            var iCal = Calendar.Load(IcsFiles.Attendee1);
-            Assert.AreEqual(1, iCal.Events.Count);
+            var calendar = Calendar.Load(IcsFiles.Attendee1);
+            Assert.AreEqual(1, calendar.Events.Count);
 
-            var evt = iCal.Events.First();
+            var evt = calendar.Events.First();
             // Ensure there are 2 attendees
             Assert.AreEqual(2, evt.Attendees.Count);
 
@@ -56,10 +56,10 @@ namespace Ical.Net.CoreUnitTests
         [Test]
         public void Attendee2()
         {
-            var iCal = Calendar.Load(IcsFiles.Attendee2);
-            Assert.AreEqual(1, iCal.Events.Count);
+            var calendar = Calendar.Load(IcsFiles.Attendee2);
+            Assert.AreEqual(1, calendar.Events.Count);
 
-            var evt = iCal.Events.First();
+            var evt = calendar.Events.First();
             // Ensure there is 1 attendee
             Assert.AreEqual(1, evt.Attendees.Count);
 
@@ -83,9 +83,9 @@ namespace Ical.Net.CoreUnitTests
         [Test]
         public void Bug2033495()
         {
-            var iCal = Calendar.Load(IcsFiles.Bug2033495);
-            Assert.AreEqual(1, iCal.Events.Count);
-            Assert.AreEqual(iCal.Properties["X-LOTUS-CHILD_UID"].Value, "XXX");
+            var calendar = Calendar.Load(IcsFiles.Bug2033495);
+            Assert.AreEqual(1, calendar.Events.Count);
+            Assert.AreEqual(calendar.Properties["X-LOTUS-CHILD_UID"].Value, "XXX");
         }
 
         /// <summary>
@@ -95,10 +95,10 @@ namespace Ical.Net.CoreUnitTests
         [Test]
         public void Bug2938007()
         {
-            var iCal = Calendar.Load(IcsFiles.Bug2938007);
-            Assert.AreEqual(1, iCal.Events.Count);
+            var calendar = Calendar.Load(IcsFiles.Bug2938007);
+            Assert.AreEqual(1, calendar.Events.Count);
 
-            var evt = iCal.Events.First();
+            var evt = calendar.Events.First();
             Assert.AreEqual(true, evt.Start.HasTime);
             Assert.AreEqual(true, evt.End.HasTime);
 
@@ -131,16 +131,16 @@ namespace Ical.Net.CoreUnitTests
         [Test]
         public void CaseInsensitive4()
         {
-            var iCal = Calendar.Load(IcsFiles.CaseInsensitive4);
-            Assert.AreEqual("2.5", iCal.Version);
+            var calendar = Calendar.Load(IcsFiles.CaseInsensitive4);
+            Assert.AreEqual("2.5", calendar.Version);
         }
 
         [Test]
         public void Categories1_2()
         {
-            var iCal = Calendar.Load(IcsFiles.Categories1);
-            AssertUtilities.AssertCalendarHasComponents(iCal);
-            var evt = iCal.Events.First();
+            var calendar = Calendar.Load(IcsFiles.Categories1);
+            AssertUtilities.AssertCalendarHasComponents(calendar);
+            var evt = calendar.Events.First();
 
             var items = new List<string>();
             items.AddRange(new[]
@@ -165,8 +165,8 @@ namespace Ical.Net.CoreUnitTests
         [Test]
         public void EmptyLines1()
         {
-            var iCal = Calendar.Load(IcsFiles.EmptyLines1);
-            Assert.AreEqual(2, iCal.Events.Count, "iCalendar should have 2 events");
+            var calendar = Calendar.Load(IcsFiles.EmptyLines1);
+            Assert.AreEqual(2, calendar.Events.Count, "iCalendar should have 2 events");
         }
 
         [Test]
@@ -185,8 +185,8 @@ namespace Ical.Net.CoreUnitTests
         [Test]
         public void EmptyLines3()
         {
-            var iCal = Calendar.Load(IcsFiles.EmptyLines3);
-            Assert.AreEqual(1, iCal.Todos.Count, "iCalendar should have 1 todo");
+            var calendar = Calendar.Load(IcsFiles.EmptyLines3);
+            Assert.AreEqual(1, calendar.Todos.Count, "iCalendar should have 1 todo");
         }
 
         /// <summary>
@@ -195,16 +195,16 @@ namespace Ical.Net.CoreUnitTests
         [Test]
         public void EmptyLines4()
         {
-            var iCal = Calendar.Load(IcsFiles.EmptyLines4);
-            Assert.AreEqual(28, iCal.Events.Count);
+            var calendar = Calendar.Load(IcsFiles.EmptyLines4);
+            Assert.AreEqual(28, calendar.Events.Count);
         }
 
         [Test]
         public void Encoding2()
         {
-            var iCal = Calendar.Load(IcsFiles.Encoding2);
-            AssertUtilities.AssertCalendarHasComponents(iCal);
-            var evt = iCal.Events.First();
+            var calendar = Calendar.Load(IcsFiles.Encoding2);
+            AssertUtilities.AssertCalendarHasComponents(calendar);
+            var evt = calendar.Events.First();
 
             Assert.AreEqual(
 "This is a test to try out base64 encoding without being too large.\r\n" +
@@ -226,9 +226,9 @@ namespace Ical.Net.CoreUnitTests
         [Test]
         public void Encoding3()
         {
-            var iCal = Calendar.Load(IcsFiles.Encoding3);
-            AssertUtilities.AssertCalendarHasComponents(iCal);
-            var evt = iCal.Events.First();
+            var calendar = Calendar.Load(IcsFiles.Encoding3);
+            AssertUtilities.AssertCalendarHasComponents(calendar);
+            var evt = calendar.Events.First();
 
             Assert.AreEqual("uuid1153170430406", evt.Uid, "UID should be 'uuid1153170430406'; it is " + evt.Uid);
             Assert.AreEqual(1, evt.Sequence, "SEQUENCE should be 1; it is " + evt.Sequence);
@@ -267,18 +267,18 @@ UID:ebfbd3e3-cc1e-4a64-98eb-ced2598b3908
 END:VEVENT
 END:VCALENDAR
 ";
-            var iCal = Calendar.Load(sr);
-            Assert.IsTrue(iCal.Events.Count == 2, "There should be 2 events in the parsed calendar");
-            Assert.IsNotNull(iCal.Events["fd940618-45e2-4d19-b118-37fd7a8e3906"], "Event fd940618-45e2-4d19-b118-37fd7a8e3906 should exist in the calendar");
-            Assert.IsNotNull(iCal.Events["ebfbd3e3-cc1e-4a64-98eb-ced2598b3908"], "Event ebfbd3e3-cc1e-4a64-98eb-ced2598b3908 should exist in the calendar");
+            var calendar = Calendar.Load(sr);
+            Assert.IsTrue(calendar.Events.Count == 2, "There should be 2 events in the parsed calendar");
+            Assert.IsNotNull(calendar.Events["fd940618-45e2-4d19-b118-37fd7a8e3906"], "Event fd940618-45e2-4d19-b118-37fd7a8e3906 should exist in the calendar");
+            Assert.IsNotNull(calendar.Events["ebfbd3e3-cc1e-4a64-98eb-ced2598b3908"], "Event ebfbd3e3-cc1e-4a64-98eb-ced2598b3908 should exist in the calendar");
         }
 
         [Test]
         public void GeographicLocation1_2()
         {
-            var iCal = Calendar.Load(IcsFiles.GeographicLocation1);
-            AssertUtilities.AssertCalendarHasComponents(iCal);
-            var evt = iCal.Events.First();
+            var calendar = Calendar.Load(IcsFiles.GeographicLocation1);
+            AssertUtilities.AssertCalendarHasComponents(calendar);
+            var evt = calendar.Events.First();
 
             Assert.AreEqual(37.386013, evt.GeographicLocation.Latitude, "Latitude should be 37.386013; it is not.");
             Assert.AreEqual(-122.082932, evt.GeographicLocation.Longitude, "Longitude should be -122.082932; it is not.");
@@ -288,13 +288,13 @@ END:VCALENDAR
         public void Google1()
         {
             var tzId = "Europe/Berlin";
-            var iCal = Calendar.Load(IcsFiles.Google1);
-            var evt = iCal.Events["594oeajmftl3r9qlkb476rpr3c@google.com"];
+            var calendar = Calendar.Load(IcsFiles.Google1);
+            var evt = calendar.Events["594oeajmftl3r9qlkb476rpr3c@google.com"];
             Assert.IsNotNull(evt);
 
             IDateTime dtStart = new CalDateTime(2006, 12, 18, tzId);
             IDateTime dtEnd = new CalDateTime(2006, 12, 23, tzId);
-            var occurrences = iCal.GetOccurrences(dtStart, dtEnd).OrderBy(o => o.Period.StartTime).ToList();
+            var occurrences = calendar.GetOccurrences(dtStart, dtEnd).OrderBy(o => o.Period.StartTime).ToList();
 
             var dateTimes = new[]
             {
@@ -317,24 +317,24 @@ END:VCALENDAR
         [Test]
         public void RecurrenceDates1()
         {
-            var iCal = Calendar.Load(IcsFiles.RecurrenceDates1);
-            Assert.AreEqual(1, iCal.Events.Count);
-            Assert.AreEqual(3, iCal.Events.First().RecurrenceDates.Count);
+            var calendar = Calendar.Load(IcsFiles.RecurrenceDates1);
+            Assert.AreEqual(1, calendar.Events.Count);
+            Assert.AreEqual(3, calendar.Events.First().RecurrenceDates.Count);
 
-            Assert.AreEqual((CalDateTime)new DateTime(1997, 7, 14, 12, 30, 0, DateTimeKind.Utc), iCal.Events.First().RecurrenceDates[0][0].StartTime);
-            Assert.AreEqual((CalDateTime)new DateTime(1996, 4, 3, 2, 0, 0, DateTimeKind.Utc), iCal.Events.First().RecurrenceDates[1][0].StartTime);
-            Assert.AreEqual((CalDateTime)new DateTime(1996, 4, 3, 4, 0, 0, DateTimeKind.Utc), iCal.Events.First().RecurrenceDates[1][0].EndTime);
-            Assert.AreEqual(new CalDateTime(1997, 1, 1), iCal.Events.First().RecurrenceDates[2][0].StartTime);
-            Assert.AreEqual(new CalDateTime(1997, 1, 20), iCal.Events.First().RecurrenceDates[2][1].StartTime);
-            Assert.AreEqual(new CalDateTime(1997, 2, 17), iCal.Events.First().RecurrenceDates[2][2].StartTime);
-            Assert.AreEqual(new CalDateTime(1997, 4, 21), iCal.Events.First().RecurrenceDates[2][3].StartTime);
-            Assert.AreEqual(new CalDateTime(1997, 5, 26), iCal.Events.First().RecurrenceDates[2][4].StartTime);
-            Assert.AreEqual(new CalDateTime(1997, 7, 4), iCal.Events.First().RecurrenceDates[2][5].StartTime);
-            Assert.AreEqual(new CalDateTime(1997, 9, 1), iCal.Events.First().RecurrenceDates[2][6].StartTime);
-            Assert.AreEqual(new CalDateTime(1997, 10, 14), iCal.Events.First().RecurrenceDates[2][7].StartTime);
-            Assert.AreEqual(new CalDateTime(1997, 11, 28), iCal.Events.First().RecurrenceDates[2][8].StartTime);
-            Assert.AreEqual(new CalDateTime(1997, 11, 29), iCal.Events.First().RecurrenceDates[2][9].StartTime);
-            Assert.AreEqual(new CalDateTime(1997, 12, 25), iCal.Events.First().RecurrenceDates[2][10].StartTime);
+            Assert.AreEqual((CalDateTime)new DateTime(1997, 7, 14, 12, 30, 0, DateTimeKind.Utc), calendar.Events.First().RecurrenceDates[0][0].StartTime);
+            Assert.AreEqual((CalDateTime)new DateTime(1996, 4, 3, 2, 0, 0, DateTimeKind.Utc), calendar.Events.First().RecurrenceDates[1][0].StartTime);
+            Assert.AreEqual((CalDateTime)new DateTime(1996, 4, 3, 4, 0, 0, DateTimeKind.Utc), calendar.Events.First().RecurrenceDates[1][0].EndTime);
+            Assert.AreEqual(new CalDateTime(1997, 1, 1), calendar.Events.First().RecurrenceDates[2][0].StartTime);
+            Assert.AreEqual(new CalDateTime(1997, 1, 20), calendar.Events.First().RecurrenceDates[2][1].StartTime);
+            Assert.AreEqual(new CalDateTime(1997, 2, 17), calendar.Events.First().RecurrenceDates[2][2].StartTime);
+            Assert.AreEqual(new CalDateTime(1997, 4, 21), calendar.Events.First().RecurrenceDates[2][3].StartTime);
+            Assert.AreEqual(new CalDateTime(1997, 5, 26), calendar.Events.First().RecurrenceDates[2][4].StartTime);
+            Assert.AreEqual(new CalDateTime(1997, 7, 4), calendar.Events.First().RecurrenceDates[2][5].StartTime);
+            Assert.AreEqual(new CalDateTime(1997, 9, 1), calendar.Events.First().RecurrenceDates[2][6].StartTime);
+            Assert.AreEqual(new CalDateTime(1997, 10, 14), calendar.Events.First().RecurrenceDates[2][7].StartTime);
+            Assert.AreEqual(new CalDateTime(1997, 11, 28), calendar.Events.First().RecurrenceDates[2][8].StartTime);
+            Assert.AreEqual(new CalDateTime(1997, 11, 29), calendar.Events.First().RecurrenceDates[2][9].StartTime);
+            Assert.AreEqual(new CalDateTime(1997, 12, 25), calendar.Events.First().RecurrenceDates[2][10].StartTime);
         }
 
         /// <summary>
@@ -343,29 +343,29 @@ END:VCALENDAR
         [Test]
         public void RequestStatus1()
         {
-            var iCal = Calendar.Load(IcsFiles.RequestStatus1);
-            Assert.AreEqual(1, iCal.Events.Count);
-            Assert.AreEqual(4, iCal.Events.First().RequestStatuses.Count);
+            var calendar = Calendar.Load(IcsFiles.RequestStatus1);
+            Assert.AreEqual(1, calendar.Events.Count);
+            Assert.AreEqual(4, calendar.Events.First().RequestStatuses.Count);
 
-            var rs = iCal.Events.First().RequestStatuses[0];
+            var rs = calendar.Events.First().RequestStatuses[0];
             Assert.AreEqual(2, rs.StatusCode.Primary);
             Assert.AreEqual(0, rs.StatusCode.Secondary);
             Assert.AreEqual("Success", rs.Description);
             Assert.IsNull(rs.ExtraData);
 
-            rs = iCal.Events.First().RequestStatuses[1];
+            rs = calendar.Events.First().RequestStatuses[1];
             Assert.AreEqual(3, rs.StatusCode.Primary);
             Assert.AreEqual(1, rs.StatusCode.Secondary);
             Assert.AreEqual("Invalid property value", rs.Description);
             Assert.AreEqual("DTSTART:96-Apr-01", rs.ExtraData);
 
-            rs = iCal.Events.First().RequestStatuses[2];
+            rs = calendar.Events.First().RequestStatuses[2];
             Assert.AreEqual(2, rs.StatusCode.Primary);
             Assert.AreEqual(8, rs.StatusCode.Secondary);
             Assert.AreEqual(" Success, repeating event ignored. Scheduled as a single event.", rs.Description);
             Assert.AreEqual("RRULE:FREQ=WEEKLY;INTERVAL=2", rs.ExtraData);
 
-            rs = iCal.Events.First().RequestStatuses[3];
+            rs = calendar.Events.First().RequestStatuses[3];
             Assert.AreEqual(4, rs.StatusCode.Primary);
             Assert.AreEqual(1, rs.StatusCode.Secondary);
             Assert.AreEqual("Event conflict. Date/time is busy.", rs.Description);
@@ -397,10 +397,10 @@ END:VCALENDAR
         [Test]
         public void Transparency2()
         {
-            var iCal = Calendar.Load(IcsFiles.Transparency2);
+            var calendar = Calendar.Load(IcsFiles.Transparency2);
 
-            Assert.AreEqual(1, iCal.Events.Count);
-            var evt = iCal.Events.First();
+            Assert.AreEqual(1, calendar.Events.Count);
+            var evt = calendar.Events.First();
 
             Assert.AreEqual(TransparencyType.Transparent, evt.Transparency);
         }
@@ -412,10 +412,10 @@ END:VCALENDAR
         [Test]
         public void DateTime1()
         {
-            var iCal = Calendar.Load(IcsFiles.DateTime1);
-            Assert.AreEqual(6, iCal.Events.Count);
+            var calendar = Calendar.Load(IcsFiles.DateTime1);
+            Assert.AreEqual(6, calendar.Events.Count);
 
-            var evt = iCal.Events["nc2o66s0u36iesitl2l0b8inn8@google.com"];
+            var evt = calendar.Events["nc2o66s0u36iesitl2l0b8inn8@google.com"];
             Assert.IsNotNull(evt);
 
             // The "Created" date is out-of-bounds.  It should be coerced to the
@@ -426,15 +426,15 @@ END:VCALENDAR
         [Test]
         public void Language4()
         {
-            var iCal = Calendar.Load(IcsFiles.Language4);
-            Assert.IsNotNull(iCal);
+            var calendar = Calendar.Load(IcsFiles.Language4);
+            Assert.IsNotNull(calendar);
         }
 
         [Test]
         public void Outlook2007_LineFolds1()
         {
-            var iCal = Calendar.Load(IcsFiles.Outlook2007LineFolds);
-            var events = iCal.GetOccurrences(new CalDateTime(2009, 06, 20), new CalDateTime(2009, 06, 22));
+            var calendar = Calendar.Load(IcsFiles.Outlook2007LineFolds);
+            var events = calendar.GetOccurrences(new CalDateTime(2009, 06, 20), new CalDateTime(2009, 06, 22));
             Assert.AreEqual(1, events.Count);
         }
 
@@ -442,8 +442,8 @@ END:VCALENDAR
         public void Outlook2007_LineFolds2()
         {
             var longName = "The Exceptionally Long Named Meeting Room Whose Name Wraps Over Several Lines When Exported From Leading Calendar and Office Software Application Microsoft Office 2007";
-            var iCal = Calendar.Load(IcsFiles.Outlook2007LineFolds);
-            var events = iCal.GetOccurrences<CalendarEvent>(new CalDateTime(2009, 06, 20), new CalDateTime(2009, 06, 22)).OrderBy(o => o.Period.StartTime).ToList();
+            var calendar = Calendar.Load(IcsFiles.Outlook2007LineFolds);
+            var events = calendar.GetOccurrences<CalendarEvent>(new CalDateTime(2009, 06, 20), new CalDateTime(2009, 06, 22)).OrderBy(o => o.Period.StartTime).ToList();
             Assert.AreEqual(longName, ((CalendarEvent)events[0].Source).Location);
         }
 
@@ -453,9 +453,9 @@ END:VCALENDAR
         [Test]
         public void Parameter1()
         {
-            var iCal = Calendar.Load(IcsFiles.Parameter1);
+            var calendar = Calendar.Load(IcsFiles.Parameter1);
 
-            var evt = iCal.Events.First();
+            var evt = calendar.Events.First();
             IList<CalendarParameter> parms = evt.Properties["DTSTART"].Parameters.AllOf("VALUE").ToList();
             Assert.AreEqual(2, parms.Count);
             Assert.AreEqual("DATE", parms[0].Values.First());
@@ -468,8 +468,8 @@ END:VCALENDAR
         [Test]
         public void Parameter2()
         {
-            var iCal = Calendar.Load(IcsFiles.Parameter2);
-            Assert.AreEqual(2, iCal.Events.Count);
+            var calendar = Calendar.Load(IcsFiles.Parameter2);
+            Assert.AreEqual(2, calendar.Events.Count);
         }
 
         /// <summary>
@@ -481,8 +481,8 @@ END:VCALENDAR
             try
             {
                 var content = IcsFiles.Parse1;
-                var iCal = Calendar.Load(content);
-                Assert.IsNotNull(iCal);
+                var calendar = Calendar.Load(content);
+                Assert.IsNotNull(calendar);
             }
             catch (Exception e)
             {
@@ -496,9 +496,9 @@ END:VCALENDAR
         [Test]
         public void Property1()
         {
-            var iCal = Calendar.Load(IcsFiles.Property1);
+            var calendar = Calendar.Load(IcsFiles.Property1);
 
-            IList<CalendarProperty> props = iCal.Properties.AllOf("VERSION").ToList();
+            IList<CalendarProperty> props = calendar.Properties.AllOf("VERSION").ToList();
             Assert.AreEqual(2, props.Count);
 
             for (var i = 0; i < props.Count; i++)

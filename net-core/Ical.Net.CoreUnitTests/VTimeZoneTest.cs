@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Ical.Net.Components;
 using Ical.Net.DataTypes;
-using Ical.Net.Serialization;
 using Ical.Net.Tests.Support;
 using NUnit.Framework;
 
@@ -25,8 +24,8 @@ namespace Ical.Net.CoreUnitTests
         [Test, Category("VTimeZone")]
         public void VTimeZoneAmericaPhoenixShouldSerializeProperly()
         {
-            var iCal = CreateTestCalendar("America/Phoenix");
-            var serialized = SerializationUtilities.SerializeCalendar(iCal);
+            var calendar = CreateTestCalendar("America/Phoenix");
+            var serialized = SerializationUtilities.SerializeCalendar(calendar);
 
             Assert.IsTrue(serialized.Contains("TZID:America/Phoenix"), "Time zone not found in serialization");
             Assert.IsTrue(serialized.Contains("DTSTART:19670430T020000"), "Daylight savings for Phoenix was not serialized properly.");
@@ -35,8 +34,8 @@ namespace Ical.Net.CoreUnitTests
         [Test, Category("VTimeZone")]
         public void VTimeZoneAmericaPhoenixShouldSerializeProperly2()
         {
-            var iCal = CreateTestCalendar("America/Phoenix", DateTime.Now, false);
-            var serialized = SerializationUtilities.SerializeCalendar(iCal);
+            var calendar = CreateTestCalendar("America/Phoenix", DateTime.Now, false);
+            var serialized = SerializationUtilities.SerializeCalendar(calendar);
 
             Assert.IsTrue(serialized.Contains("TZID:America/Phoenix"), "Time zone not found in serialization");
             Assert.IsFalse(serialized.Contains("BEGIN:DAYLIGHT"), "Daylight savings should not exist for Phoenix.");
@@ -45,8 +44,8 @@ namespace Ical.Net.CoreUnitTests
         [Test, Category("VTimeZone")]
         public void VTimeZoneUsMountainStandardTimeShouldSerializeProperly()
         {
-            var iCal = CreateTestCalendar("US Mountain Standard Time");
-            var serialized = SerializationUtilities.SerializeCalendar(iCal);
+            var calendar = CreateTestCalendar("US Mountain Standard Time");
+            var serialized = SerializationUtilities.SerializeCalendar(calendar);
 
             Assert.IsTrue(serialized.Contains("TZID:US Mountain Standard Time"), "Time zone not found in serialization");
             Assert.IsTrue(serialized.Contains("BEGIN:STANDARD"));
@@ -57,8 +56,8 @@ namespace Ical.Net.CoreUnitTests
         [Test, Category("VTimeZone")]
         public void VTimeZoneCentralAmericaStandardTimeShouldSerializeProperly()
         {
-            var iCal = CreateTestCalendar("Central America Standard Time");
-            var serialized = SerializationUtilities.SerializeCalendar(iCal);
+            var calendar = CreateTestCalendar("Central America Standard Time");
+            var serialized = SerializationUtilities.SerializeCalendar(calendar);
 
             Assert.IsTrue(serialized.Contains("TZID:Central America Standard Time"), "Time zone not found in serialization");
         }
@@ -66,8 +65,8 @@ namespace Ical.Net.CoreUnitTests
         [Test, Category("VTimeZone")]
         public void VTimeZoneEasternStandardTimeShouldSerializeProperly()
         {
-            var iCal = CreateTestCalendar("Eastern Standard Time");
-            var serialized = SerializationUtilities.SerializeCalendar(iCal);
+            var calendar = CreateTestCalendar("Eastern Standard Time");
+            var serialized = SerializationUtilities.SerializeCalendar(calendar);
 
             Assert.IsTrue(serialized.Contains("TZID:Eastern Standard Time"), "Time zone not found in serialization");
         }
@@ -75,8 +74,8 @@ namespace Ical.Net.CoreUnitTests
         [Test, Category("VTimeZone")]
         public void VTimeZoneEuropeMoscowShouldSerializeProperly()
         {
-            var iCal = CreateTestCalendar("Europe/Moscow");
-            var serialized = SerializationUtilities.SerializeCalendar(iCal);
+            var calendar = CreateTestCalendar("Europe/Moscow");
+            var serialized = SerializationUtilities.SerializeCalendar(calendar);
 
             Assert.IsTrue(serialized.Contains("TZID:Europe/Moscow"), "Time zone not found in serialization");
             Assert.IsTrue(serialized.Contains("BEGIN:STANDARD"), "The standard timezone info was not serialized");
@@ -97,8 +96,8 @@ namespace Ical.Net.CoreUnitTests
         [Test, Category("VTimeZone")]
         public void VTimeZoneAmericaChicagoShouldSerializeProperly()
         {
-            var iCal = CreateTestCalendar("America/Chicago");
-            var serialized = SerializationUtilities.SerializeCalendar(iCal);
+            var calendar = CreateTestCalendar("America/Chicago");
+            var serialized = SerializationUtilities.SerializeCalendar(calendar);
 
             Assert.IsTrue(serialized.Contains("TZID:America/Chicago"), "Time zone not found in serialization");
             Assert.IsTrue(serialized.Contains("BEGIN:STANDARD"), "The standard timezone info was not serialized");
@@ -119,8 +118,8 @@ namespace Ical.Net.CoreUnitTests
         [Test, Category("VTimeZone")]
         public void VTimeZoneAmericaLosAngelesShouldSerializeProperly()
         {
-            var iCal = CreateTestCalendar("America/Los_Angeles");
-            var serialized = SerializationUtilities.SerializeCalendar(iCal);
+            var calendar = CreateTestCalendar("America/Los_Angeles");
+            var serialized = SerializationUtilities.SerializeCalendar(calendar);
 
             Assert.IsTrue(serialized.Contains("TZID:America/Los_Angeles"), "Time zone not found in serialization");
             Assert.IsTrue(serialized.Contains("BEGIN:STANDARD"), "The standard timezone info was not serialized");
@@ -141,8 +140,8 @@ namespace Ical.Net.CoreUnitTests
         [Test, Category("VTimeZone")]
         public void VTimeZoneAmericaAnchorageShouldSerializeProperly()
         {
-            var iCal = CreateTestCalendar("America/Anchorage");
-            var serialized = SerializationUtilities.SerializeCalendar(iCal);
+            var calendar = CreateTestCalendar("America/Anchorage");
+            var serialized = SerializationUtilities.SerializeCalendar(calendar);
 
             Assert.IsTrue(serialized.Contains("TZID:America/Anchorage"), "Time zone not found in serialization");
             Assert.IsTrue(serialized.Contains("BEGIN:STANDARD"), "The standard timezone info was not serialized");
@@ -162,8 +161,8 @@ namespace Ical.Net.CoreUnitTests
         [Test, Category("VTimeZone")]
         public void VTimeZoneAmericaEirunepeShouldSerializeProperly()
         {
-            var iCal = CreateTestCalendar("America/Eirunepe");
-            var serialized = SerializationUtilities.SerializeCalendar(iCal);
+            var calendar = CreateTestCalendar("America/Eirunepe");
+            var serialized = SerializationUtilities.SerializeCalendar(calendar);
 
             Assert.IsTrue(serialized.Contains("TZID:America/Eirunepe"), "Time zone not found in serialization");
             Assert.IsTrue(serialized.Contains("BEGIN:STANDARD"), "The standard timezone info was not serialized");
@@ -182,8 +181,8 @@ namespace Ical.Net.CoreUnitTests
         [Test, Category("VTimeZone")]
         public void VTimeZoneAmericaDetroitShouldSerializeProperly()
         {
-            var iCal = CreateTestCalendar("America/Detroit");
-            var serialized = SerializationUtilities.SerializeCalendar(iCal);
+            var calendar = CreateTestCalendar("America/Detroit");
+            var serialized = SerializationUtilities.SerializeCalendar(calendar);
 
             Assert.IsTrue(serialized.Contains("TZID:America/Detroit"), "Time zone not found in serialization");
             Assert.IsTrue(serialized.Contains("BEGIN:STANDARD"), "The standard timezone info was not serialized");
@@ -197,32 +196,35 @@ namespace Ical.Net.CoreUnitTests
 
         private static Calendar CreateTestCalendar(string tzId, DateTime? earliestTime = null, bool includeHistoricalData = true)
         {
-            var iCal = new Calendar();
+            var calendar = new Calendar();
 
             if (earliestTime == null)
             {
                 earliestTime = new DateTime(1900, 1, 1);
             }
-            iCal.AddTimeZone(tzId, earliestTime.Value, includeHistoricalData);
+            calendar.AddTimeZone(tzId, earliestTime.Value, includeHistoricalData);
 
-            var calEvent = new CalendarEvent
-            {
-                Description = "Test Recurring Event",
-                Start = new CalDateTime(DateTime.Now, tzId),
-                End = new CalDateTime(DateTime.Now.AddHours(1), tzId),
-                RecurrenceRules = new List<RecurrencePattern> { new RecurrencePattern(FrequencyType.Daily) }
-            };
-            iCal.Events.Add(calEvent);
+            calendar.Events.Add(
+                new CalendarEvent
+                {
+                    Description = "Test Recurring Event",
+                    Start = new CalDateTime(DateTime.Now, tzId),
+                    End = new CalDateTime(DateTime.Now.AddHours(1), tzId),
+                    RecurrenceRules = new List<RecurrencePattern> { new RecurrencePattern(FrequencyType.Daily) }
+                }
+            );
 
-            var calEvent2 = new CalendarEvent
-            {
-                Description = "Test Recurring Event 2",
-                Start = new CalDateTime(DateTime.Now.AddHours(2), tzId),
-                End = new CalDateTime(DateTime.Now.AddHours(3), tzId),
-                RecurrenceRules = new List<RecurrencePattern> { new RecurrencePattern(FrequencyType.Daily) }
-            };
-            iCal.Events.Add(calEvent2);
-            return iCal;
+            calendar.Events.Add(
+                new CalendarEvent
+                {
+                    Description = "Test Recurring Event 2",
+                    Start = new CalDateTime(DateTime.Now.AddHours(2), tzId),
+                    End = new CalDateTime(DateTime.Now.AddHours(3), tzId),
+                    RecurrenceRules = new List<RecurrencePattern> { new RecurrencePattern(FrequencyType.Daily) }
+                }
+            );
+
+            return calendar;
         }
     }
 }

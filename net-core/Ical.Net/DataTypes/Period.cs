@@ -114,6 +114,8 @@ namespace Ical.Net.DataTypes
 
         public int CompareTo(Period other)
         {
+            // TODO: Consider expanding implementation of CompareTo() on Period class.
+
             if (StartTime.Equals(other.StartTime))
             {
                 return 0;
@@ -126,6 +128,8 @@ namespace Ical.Net.DataTypes
             {
                 return 1;
             }
+
+            // CompareTo() method should not throw exceptions.
             throw new Exception("An error occurred while comparing two Periods.");
         }
 
