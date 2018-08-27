@@ -1,9 +1,10 @@
-using System;
+using System.Collections.Generic;
+using System.Linq;
 using Ical.Net.Components;
 
 namespace Ical.Net.DataTypes
 {
-    public class Occurrence : IComparable<Occurrence>
+    public class Occurrence
     {
         public Occurrence(Occurrence occurrence)
         {
@@ -11,57 +12,43 @@ namespace Ical.Net.DataTypes
             Source = occurrence.Source;
         }
 
-        public Occurrence(IRecurrable recurrable, Period period)
+        public Occurrence(IRecurrable source, Period period)
         {
-            Source = recurrable;
+            Source = source;
             Period = period;
         }
 
-        public Period Period { get; set; }
+        public IRecurrable Source { get; }
 
-        public IRecurrable Source { get; set; }
-
-        public int CompareTo(Occurrence other)
-        {
-            return Period.CompareTo(other.Period);
-        }
-
-        public bool Equals(Occurrence other)
-        {
-            return Equals(Period, other.Period) && Equals(Source, other.Source);
-        }
+        public Period Period { get; }
 
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj))
-            {
-                return false;
-            }
-            return obj is Occurrence && Equals((Occurrence) obj);
+            if (ReferenceEquals(null, obj)) { return false; }
+            if (ReferenceEquals(this, obj)) { return true; }
+            if (obj.GetType() != GetType()) { return false; }
+
+            var occurrence = (Occurrence)obj;
+
+            return GetEqualityComponents().SequenceEqual(occurrence.GetEqualityComponents());
         }
 
         public override int GetHashCode()
         {
-            unchecked
-            {
-                return ((Period?.GetHashCode() ?? 0) * 397) ^ (Source?.GetHashCode() ?? 0);
-            }
+            return GetEqualityComponents()
+                .Aggregate(1, (current, obj) =>
+                {
+                    unchecked
+                    {
+                        return current * 23 + (obj?.GetHashCode() ?? 0);
+                    }
+                });
         }
 
-        public override string ToString()
+        protected IEnumerable<object> GetEqualityComponents()
         {
-            var output = "Occurrence";
-            if (Source != null)
-            {
-                output = Source.GetType().Name + " ";
-            }
-
-            if (Period != null)
-            {
-                output += "(" + Period.StartTime + ")";
-            }
-
-            return output;
+            yield return Source;
+            yield return Period;
         }
     }
 }
