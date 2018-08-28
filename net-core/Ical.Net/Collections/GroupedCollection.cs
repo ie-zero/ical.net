@@ -19,20 +19,17 @@ namespace Ical.Net.Collections
             _dictionary = new Dictionary<string, IList<T>>();
         }
 
-        // TODO: Review - The implementation of this[int] property appear to be incorrect.
         public T this[int index]
         {
-            get { return ListForIndex(index); }
+            get { return GetItem(index); }
         }
 
-        private T ListForIndex(int index)
+        private T GetItem(int index)
         {
-            foreach (var list in _lists.Where(list => 0 <= index && list.Count > index))
-            {
-                return list[index];
-            }
+            if (index < 0 && index >= Count) { return null; }
 
-            return null;
+            var allItems = Values().ToList();
+            return allItems[index];
         }
 
         public event EventHandler<ItemProcessedEventArgs<T>> ItemAdded;
