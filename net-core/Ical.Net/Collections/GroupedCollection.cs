@@ -34,7 +34,7 @@ namespace Ical.Net.Collections
 
         private TItem GetItem(int index)
         {
-            if (index < 0 && index >= Count) { return default(TItem); }
+            if (index < 0 || index >= Count) { return default(TItem); }
 
             var allItems = Values().ToList();
             return allItems[index];
@@ -117,7 +117,9 @@ namespace Ical.Net.Collections
 
         public IEnumerable<TItem> Values(TKey group)
         {
-            return _dictionary.ContainsKey(group) ? _dictionary[group].ToArray() : new TItem[0];
+            if (group == null) { return Enumerable.Empty<TItem>(); }
+
+            return _dictionary.ContainsKey(group) ? _dictionary[group].ToArray() : Enumerable.Empty<TItem>();
         }
 
         public bool Remove(TItem item)
