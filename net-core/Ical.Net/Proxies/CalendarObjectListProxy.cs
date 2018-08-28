@@ -12,7 +12,7 @@ namespace Ical.Net.Proxies
     {
         readonly GroupedCollectionProxy<ICalendarObject, T> _list;
 
-        public CalendarObjectListProxy(IGroupedCollection<ICalendarObject> list)
+        public CalendarObjectListProxy(IGroupedCollection<string, ICalendarObject> list)
         {
             _list = new GroupedCollectionProxy<ICalendarObject, T>(list);
         }

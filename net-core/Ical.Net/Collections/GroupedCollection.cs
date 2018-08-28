@@ -8,43 +8,43 @@ namespace Ical.Net.Collections
     /// <summary>
     /// A list of objects that are keyed.
     /// </summary>
-    public class GroupedCollection<T> : IGroupedCollection<T> where T : IGroupedObject
+    public class GroupedCollection<TKey, TItem> : IGroupedCollection<TKey, TItem> where TItem : IGroupedObject<TKey>
     {
-        private readonly List<IList<T>> _lists;
-        private readonly Dictionary<string, IList<T>> _dictionary;
+        private readonly List<IList<TItem>> _lists;
+        private readonly Dictionary<TKey, IList<TItem>> _dictionary;
 
         public GroupedCollection()
         {
-            _lists = new List<IList<T>>();
-            _dictionary = new Dictionary<string, IList<T>>();
+            _lists = new List<IList<TItem>>();
+            _dictionary = new Dictionary<TKey, IList<TItem>>();
         }
 
-        public T this[int index]
+        public TItem this[int index]
         {
             get { return GetItem(index); }
         }
 
-        private T GetItem(int index)
+        private TItem GetItem(int index)
         {
-            if (index < 0 && index >= Count) { return default(T); }
+            if (index < 0 && index >= Count) { return default(TItem); }
 
             var allItems = Values().ToList();
             return allItems[index];
         }
 
-        public IEnumerable<T> this[string group]
+        public IEnumerable<TItem> this[TKey group]
         {
             get { return Values(group); }
         }
 
-        public event EventHandler<ItemProcessedEventArgs<T>> ItemAdded;
+        public event EventHandler<ItemProcessedEventArgs<TItem>> ItemAdded;
 
-        protected void OnItemAdded(T obj, int index)
+        protected void OnItemAdded(TItem obj, int index)
         {
-            ItemAdded?.Invoke(this, new ItemProcessedEventArgs<T>(obj, index));
+            ItemAdded?.Invoke(this, new ItemProcessedEventArgs<TItem>(obj, index));
         }
 
-        public void Add(T item)
+        public void Add(TItem item)
         {
             if (item == null) { return; }
 
@@ -55,9 +55,9 @@ namespace Ical.Net.Collections
             OnItemAdded(item, list.Count);
         }
 
-        private IList<T> GetOrCreateList(string group)
+        private IList<TItem> GetOrCreateList(TKey group)
         {
-            if (string.IsNullOrWhiteSpace(group))
+            if (group == null)
             {
                 return null;
             }
@@ -67,7 +67,7 @@ namespace Ical.Net.Collections
                 return _dictionary[group];
             }
 
-            var list = new List<T>();
+            var list = new List<TItem>();
             _dictionary[group] = list;
 
             _lists.Add(list);
@@ -80,7 +80,7 @@ namespace Ical.Net.Collections
             _lists.Clear();
         }
 
-        public void Clear(string group)
+        public void Clear(TKey group)
         {
             if (!_dictionary.ContainsKey(group))
             {
@@ -91,13 +91,13 @@ namespace Ical.Net.Collections
             _dictionary[group].Clear();
         }
 
-        public bool Contains(T item)
+        public bool Contains(TItem item)
         {
             var group = item.Group;
             return _dictionary.ContainsKey(group) && _dictionary[group].Contains(item);
         }
 
-        public bool Contains(string group)
+        public bool Contains(TKey group)
         {
             return _dictionary.ContainsKey(group);
         }
@@ -110,17 +110,17 @@ namespace Ical.Net.Collections
             get { return _lists.Sum(list => list.Count); }
         }
 
-        public IEnumerable<T> Values()
+        public IEnumerable<TItem> Values()
         {
             return _dictionary.Values.SelectMany(item => item);
         }
 
-        public IEnumerable<T> Values(string group)
+        public IEnumerable<TItem> Values(TKey group)
         {
-            return _dictionary.ContainsKey(group) ? _dictionary[group].ToArray() : new T[0];
+            return _dictionary.ContainsKey(group) ? _dictionary[group].ToArray() : new TItem[0];
         }
 
-        public bool Remove(T item)
+        public bool Remove(TItem item)
         {
             var group = item.Group;
             if (!_dictionary.ContainsKey(group))
@@ -140,7 +140,7 @@ namespace Ical.Net.Collections
             return true;
         }
 
-        public bool Remove(string group)
+        public bool Remove(TKey group)
         {
             if (!_dictionary.ContainsKey(group))
             {
@@ -155,9 +155,9 @@ namespace Ical.Net.Collections
             return true;
         }
 
-        public IEnumerator<T> GetEnumerator()
+        public IEnumerator<TItem> GetEnumerator()
         {
-            return new GroupedCollectionEnumerator<T>(_lists);
+            return new GroupedCollectionEnumerator<TItem>(_lists);
         }
 
         IEnumerator IEnumerable.GetEnumerator()

@@ -7,8 +7,8 @@ using Ical.Net.Collections.Proxies;
 namespace Ical.Net.Collections
 {
     public class GroupedValueList<TItem, TValueType> :
-        GroupedCollection<TItem>
-        where TItem : class, IGroupedObject, IValueObject<TValueType>, new()        
+        GroupedCollection<string, TItem>
+        where TItem : class, IGroupedObject<string>, IValueObject<TValueType>, new()        
     {
         public void Set(string group, TValueType value)
         {

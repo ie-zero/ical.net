@@ -1,7 +1,7 @@
 namespace Ical.Net.Collections
 {
-    public interface IGroupedObject
+    public interface IGroupedObject<TKey>
     {
-        string Group { get; set; }
+        TKey Group { get; set; }
     }
 }

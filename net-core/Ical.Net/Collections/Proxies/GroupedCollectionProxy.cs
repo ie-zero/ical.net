@@ -9,18 +9,18 @@ namespace Ical.Net.Collections.Proxies
     /// A proxy for a keyed list.
     /// </summary>
     public class GroupedCollectionProxy<TOriginal, TNew> :
-        IGroupedCollection<TNew>
-        where TOriginal : class, IGroupedObject
+        IGroupedCollection<string, TNew>
+        where TOriginal : class, IGroupedObject<string>
         where TNew : class, TOriginal
     {
-        public GroupedCollectionProxy(IGroupedCollection<TOriginal> realObject)
+        public GroupedCollectionProxy(IGroupedCollection<string, TOriginal> realObject)
         {
             RealObject = realObject;
         }
 
         public bool IsReadOnly => false;
 
-        public IGroupedCollection<TOriginal> RealObject { get; }
+        public IGroupedCollection<string, TOriginal> RealObject { get; }
 
         public event EventHandler<ItemProcessedEventArgs<TNew>> ItemAdded;
 
