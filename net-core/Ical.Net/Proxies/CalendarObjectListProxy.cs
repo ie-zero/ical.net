@@ -3,50 +3,56 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Ical.Net.Collections;
-using Ical.Net.Collections.Proxies;
 
 namespace Ical.Net.Proxies
 {
     public class CalendarObjectListProxy<T> : ICalendarObjectList<T>
         where T : class, ICalendarObject
     {
-        readonly GroupedCollectionProxy<ICalendarObject, T> _list;
+        private readonly GroupedCollection<string, ICalendarObject> _realObject;
 
-        public CalendarObjectListProxy(IGroupedCollection<string, ICalendarObject> list)
+        public CalendarObjectListProxy(IGroupedCollection<string, ICalendarObject> realObject)
         {
-            _list = new GroupedCollectionProxy<ICalendarObject, T>(list);
+            _realObject = (GroupedCollection<string, ICalendarObject>)realObject;
         }
 
         public T this[int index]
         {
-            get { return _list.Skip(index).FirstOrDefault(); }
+            get { return (T)_realObject.Skip(index).FirstOrDefault(); }
         }
 
         public int Count
         {
-            get { return _list.Count(); }
+            get { return _realObject.OfType<T>().Count(); }
         }
 
         public event EventHandler<ItemProcessedEventArgs<T>> ItemAdded;
 
         public void Add(T item)
         {
-            _list.Add(item);
+            _realObject.Add(item);
         }
 
         public void Clear()
         {
-            throw new NotImplementedException();
+            var items = _realObject
+                .OfType<T>()
+                .ToArray();
+
+            foreach (var item in items)
+            {
+                _realObject.Remove(item);
+            }
         }
 
         public bool Contains(T item)
         {
-            throw new NotImplementedException();
+            return _realObject.Contains(item);
         }
 
         public bool Contains(string group)
         {
-            return _list.Contains(group);
+            return _realObject.Contains(group);
         }
 
         public IEnumerable<T> Values(string group)
@@ -71,17 +77,17 @@ namespace Ical.Net.Proxies
 
         public bool Remove(T item)
         {
-            return _list.Remove(item);
+            return _realObject.Remove(item);
         }
 
         public IEnumerator<T> GetEnumerator()
         {
-            return _list.GetEnumerator();
+            return _realObject.OfType<T>().GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return _list.GetEnumerator();
+            return GetEnumerator();
         }
     }
 }
