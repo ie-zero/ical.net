@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Ical.Net.Collections
 {
-    public interface IGroupedCollection<T> : IEnumerable<T>, IEnumerable where T : class, IGroupedObject
+    public interface IGroupedCollection<T> : IEnumerable<T>, IEnumerable where T : IGroupedObject
     {
         /// <summary>
         /// Fired after an item is added to the collection.

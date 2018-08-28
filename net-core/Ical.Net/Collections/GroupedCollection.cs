@@ -8,7 +8,7 @@ namespace Ical.Net.Collections
     /// <summary>
     /// A list of objects that are keyed.
     /// </summary>
-    public class GroupedCollection<T> : IGroupedCollection<T> where T : class, IGroupedObject
+    public class GroupedCollection<T> : IGroupedCollection<T> where T : IGroupedObject
     {
         private readonly List<IList<T>> _lists;
         private readonly Dictionary<string, IList<T>> _dictionary;
@@ -26,7 +26,7 @@ namespace Ical.Net.Collections
 
         private T GetItem(int index)
         {
-            if (index < 0 && index >= Count) { return null; }
+            if (index < 0 && index >= Count) { return default(T); }
 
             var allItems = Values().ToList();
             return allItems[index];
