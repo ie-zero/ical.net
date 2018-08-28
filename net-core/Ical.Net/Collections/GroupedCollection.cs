@@ -178,8 +178,8 @@ namespace Ical.Net.Collections
             }
         }
 
-        public IEnumerator<T> GetEnumerator() => new GroupedListEnumerator<T>(_lists);
+        public IEnumerator<T> GetEnumerator() => new GroupedCollectionEnumerator<T>(_lists);
 
-        IEnumerator IEnumerable.GetEnumerator() => new GroupedListEnumerator<T>(_lists);
+        IEnumerator IEnumerable.GetEnumerator() => new GroupedCollectionEnumerator<T>(_lists);
     }    
 }

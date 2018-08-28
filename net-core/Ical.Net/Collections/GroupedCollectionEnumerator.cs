@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 namespace Ical.Net.Collections
 {
-    public class GroupedListEnumerator<T> : IEnumerator<T>
+    public class GroupedCollectionEnumerator<T> : IEnumerator<T>
     {
         private readonly IList<IList<T>> _lists;
 
         private IEnumerator<T> _itemEnumerator;
         private IEnumerator<IList<T>> _listsEnumerator;
 
-        public GroupedListEnumerator(IList<IList<T>> lists)
+        public GroupedCollectionEnumerator(IList<IList<T>> lists)
         {
             _lists = lists;
         }
