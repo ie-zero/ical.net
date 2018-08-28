@@ -19,6 +19,14 @@ namespace Ical.Net.Collections
             _dictionary = new Dictionary<TKey, IList<TItem>>();
         }
 
+        /// <summary>
+        /// Returns the total number of elements stored for all the groups.
+        /// </summary>
+        public int Count
+        {
+            get { return _lists.Sum(list => list.Count); }
+        }
+
         public TItem this[int index]
         {
             get { return GetItem(index); }
@@ -100,14 +108,6 @@ namespace Ical.Net.Collections
         public bool Contains(TKey group)
         {
             return _dictionary.ContainsKey(group);
-        }
-
-        /// <summary>
-        /// Returns the total number of elements stored for all the groups.
-        /// </summary>
-        public int Count
-        {
-            get { return _lists.Sum(list => list.Count); }
         }
 
         public IEnumerable<TItem> Values()

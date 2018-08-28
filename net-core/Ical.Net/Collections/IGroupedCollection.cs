@@ -11,6 +11,19 @@ namespace Ical.Net.Collections
         /// </summary>
         event EventHandler<ItemProcessedEventArgs<TItem>> ItemAdded;
 
+        int Count { get; }
+
+        void Add(TItem item);
+
+        bool Contains(TItem item);
+
+        /// <summary>
+        /// Returns true if the list contains at least one object with a matching group, false otherwise.
+        /// </summary>
+        bool Contains(TKey group);
+
+        bool Remove(TItem item);
+
         /// <summary>
         /// Removes all items with the matching group from the collection.
         /// </summary>        
@@ -18,20 +31,9 @@ namespace Ical.Net.Collections
         bool Remove(TKey group);
 
         /// <summary>
-        /// Returns true if the list contains at least one 
-        /// object with a matching group, false otherwise.
-        /// </summary>
-        bool Contains(TKey group);
-        
-        /// <summary>
         /// Returns a list of objects that
         /// match the specified group.
         /// </summary>
         IEnumerable<TItem> Values(TKey group);
-
-        int Count { get; }       
-        bool Contains(TItem item);    
-        void Add(TItem item);
-        bool Remove(TItem item);
     }
 }
