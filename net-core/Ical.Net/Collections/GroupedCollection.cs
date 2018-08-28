@@ -32,6 +32,11 @@ namespace Ical.Net.Collections
             return allItems[index];
         }
 
+        public IEnumerable<T> this[string group]
+        {
+            get { return Values(group); }
+        }
+
         public event EventHandler<ItemProcessedEventArgs<T>> ItemAdded;
 
         protected void OnItemAdded(T obj, int index)
@@ -112,7 +117,7 @@ namespace Ical.Net.Collections
 
         public IEnumerable<T> Values(string group)
         {
-            return _dictionary.ContainsKey(group) ? _dictionary[group] : new T[0];
+            return _dictionary.ContainsKey(group) ? _dictionary[group].ToArray() : new T[0];
         }
 
         public bool Remove(T item)
