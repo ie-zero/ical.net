@@ -27,18 +27,11 @@ namespace Ical.Net.Proxies
             get { return _list.Count(); }
         }
 
-        public bool IsReadOnly => throw new NotImplementedException(); 
-
         public event EventHandler<ItemProcessedEventArgs<T>> ItemAdded;
 
         public void Add(T item)
         {
             _list.Add(item);
-        }
-
-        public void Clear(string group)
-        {
-            throw new NotImplementedException();
         }
 
         public void Clear()

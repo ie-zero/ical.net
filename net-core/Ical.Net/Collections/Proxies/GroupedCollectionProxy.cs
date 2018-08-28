@@ -18,8 +18,6 @@ namespace Ical.Net.Collections.Proxies
             RealObject = realObject;
         }
 
-        public bool IsReadOnly => false;
-
         public IGroupedCollection<string, TOriginal> RealObject { get; }
 
         public event EventHandler<ItemProcessedEventArgs<TNew>> ItemAdded;
@@ -36,6 +34,7 @@ namespace Ical.Net.Collections.Proxies
 
         public int CountOf(string group)
         {
+            // TODO: The implementation of CountOf() is incorrect. 
             return RealObject.OfType<string>().Count();
         }
 
@@ -69,15 +68,6 @@ namespace Ical.Net.Collections.Proxies
         public bool Contains(TNew item)
         {
             return RealObject.Contains(item);
-        }
-
-        public void CopyTo(TNew[] array, int arrayIndex)
-        {
-            var i = 0;
-            foreach (var item in this)
-            {
-                array[arrayIndex + (i++)] = item;
-            }
         }
 
         public int Count
