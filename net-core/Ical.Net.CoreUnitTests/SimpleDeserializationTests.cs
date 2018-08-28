@@ -456,7 +456,7 @@ END:VCALENDAR
             var calendar = SerializationUtilities.DeserializeCalendar(IcsFiles.Parameter1);
 
             var evt = calendar.Events.First();
-            IList<CalendarParameter> parms = evt.Properties["DTSTART"].Parameters.AllOf("VALUE").ToList();
+            IList<CalendarParameter> parms = evt.Properties["DTSTART"].Parameters.Values("VALUE").ToList();
             Assert.AreEqual(2, parms.Count);
             Assert.AreEqual("DATE", parms[0].Values.First());
             Assert.AreEqual("OTHER", parms[1].Values.First());

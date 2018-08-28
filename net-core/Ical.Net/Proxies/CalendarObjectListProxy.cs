@@ -56,7 +56,7 @@ namespace Ical.Net.Proxies
             return _list.ContainsKey(group);
         }
 
-        public IEnumerable<T> AllOf(string group)
+        public IEnumerable<T> Values(string group)
         {
             throw new NotImplementedException();
         }

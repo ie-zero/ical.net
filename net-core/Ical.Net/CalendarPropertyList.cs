@@ -34,7 +34,7 @@ namespace Ical.Net
 
         public IEnumerable<CalendarProperty> AllOf(string group)
         {
-            return _list.AllOf(group);
+            return _list.Values(group);
         }
 
         public bool ContainsKey(string group)

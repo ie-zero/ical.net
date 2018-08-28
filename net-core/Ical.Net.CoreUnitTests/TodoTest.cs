@@ -23,7 +23,7 @@ namespace Ical.Net.CoreUnitTests
             {
                 var dt = calDateTime.Key;
                 dt.TzId = _tzid;
-                Assert.AreEqual(calDateTime.Value, todo[0].IsActive(dt));
+                Assert.AreEqual(calDateTime.Value, todo.First().IsActive(dt));
             }
         }
 
@@ -173,7 +173,7 @@ namespace Ical.Net.CoreUnitTests
             {
                 var dt = calDateTime.Key;
                 dt.TzId = _tzid;
-                Assert.AreEqual(calDateTime.Value, todo[0].IsCompleted(dt));
+                Assert.AreEqual(calDateTime.Value, todo.First().IsCompleted(dt));
             }
         }
 
@@ -208,7 +208,7 @@ namespace Ical.Net.CoreUnitTests
                 new CalDateTime(2007, 4, 6, 9, 0, 0, _tzid)
             };
 
-            var occurrences = todo[0].GetOccurrences(
+            var occurrences = todo.First().GetOccurrences(
                 new CalDateTime(2006, 7, 1, 9, 0, 0),
                 new CalDateTime(2007, 7, 1, 9, 0, 0)).OrderBy(o => o.Period.StartTime).ToList();
 

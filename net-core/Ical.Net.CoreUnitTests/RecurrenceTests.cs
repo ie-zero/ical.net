@@ -2365,7 +2365,7 @@ namespace Ical.Net.CoreUnitTests
         public void Bug2912657()
         {
             var iCal = Calendar.Load(IcsFiles.Bug2912657);
-            var localTzid = iCal.TimeZones[0].TzId;
+            var localTzid = iCal.TimeZones.First().TzId;
 
             // Daily recurrence
             EventOccurrenceTest(
@@ -2423,7 +2423,7 @@ namespace Ical.Net.CoreUnitTests
         public void Bug2916581()
         {
             var iCal = Calendar.Load(IcsFiles.Bug2916581);
-            var localTzid = iCal.TimeZones[0].TzId;
+            var localTzid = iCal.TimeZones.First().TzId;
 
             // Weekly across year boundary
             EventOccurrenceTest(
@@ -2463,7 +2463,7 @@ namespace Ical.Net.CoreUnitTests
         public void Bug2959692()
         {
             var iCal = Calendar.Load(IcsFiles.Bug2959692);
-            var localTzid = iCal.TimeZones[0].TzId;
+            var localTzid = iCal.TimeZones.First().TzId;
 
             EventOccurrenceTest(
                 iCal,
@@ -2493,7 +2493,7 @@ namespace Ical.Net.CoreUnitTests
         public void Bug2966236()
         {
             var iCal = Calendar.Load(IcsFiles.Bug2966236);
-            var localTzid = iCal.TimeZones[0].TzId;
+            var localTzid = iCal.TimeZones.First().TzId;
 
             EventOccurrenceTest(
                 iCal,

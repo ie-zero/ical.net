@@ -226,6 +226,6 @@ namespace Ical.Net.Collections.Proxies
 
         public IEnumerable<TItem> Items => _group == null
             ? _realObject
-            : _realObject.AllOf(_group);
+            : _realObject.Values(_group);
     }
 }

@@ -27,7 +27,7 @@ namespace Ical.Net.Collections
         /// Returns a list of objects that
         /// match the specified group.
         /// </summary>
-        IEnumerable<T> AllOf(string group);
+        IEnumerable<T> Values(string group);
 
         int Count { get; }       
         bool Contains(T item);    

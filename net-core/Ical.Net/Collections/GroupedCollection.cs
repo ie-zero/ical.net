@@ -10,12 +10,52 @@ namespace Ical.Net.Collections
     /// </summary>
     public class GroupedCollection<T> : IGroupedCollection<T> where T : class, IGroupedObject
     {
-        private readonly List<IList<T>> _lists = new List<IList<T>>();
-        private readonly Dictionary<string, IList<T>> _dictionary = new Dictionary<string, IList<T>>();
+        private readonly List<IList<T>> _lists;
+        private readonly Dictionary<string, IList<T>> _dictionary;
 
-        private IList<T> EnsureList(string group)
+        public GroupedCollection()
         {
-            if (group == null)
+            _lists = new List<IList<T>>();
+            _dictionary = new Dictionary<string, IList<T>>();
+        }
+
+        // TODO: Review - The implementation of this[int] property appear to be incorrect.
+        public T this[int index]
+        {
+            get { return ListForIndex(index); }
+        }
+
+        private T ListForIndex(int index)
+        {
+            foreach (var list in _lists.Where(list => 0 <= index && list.Count > index))
+            {
+                return list[index];
+            }
+
+            return null;
+        }
+
+        public event EventHandler<ItemProcessedEventArgs<T>> ItemAdded;
+
+        protected void OnItemAdded(T obj, int index)
+        {
+            ItemAdded?.Invoke(this, new ItemProcessedEventArgs<T>(obj, index));
+        }
+
+        public void Add(T item)
+        {
+            if (item == null) { return; }
+
+            var list = GetOrCreateList(item.Group);
+            if (list == null) { return; }
+
+            list.Add(item);
+            OnItemAdded(item, list.Count);
+        }
+
+        private IList<T> GetOrCreateList(string group)
+        {
+            if (string.IsNullOrWhiteSpace(group))
             {
                 return null;
             }
@@ -32,32 +72,10 @@ namespace Ical.Net.Collections
             return list;
         }
 
-        private IList<T> ListForIndex(int index, out int relativeIndex)
+        public void Clear()
         {
-            foreach (var list in _lists.Where(list => 0 <= index && list.Count > index))
-            {
-                relativeIndex = index;
-                return list;
-            }
-            relativeIndex = -1;
-            return null;
-        }
-
-        public event EventHandler<ItemProcessedEventArgs<T>> ItemAdded;
-
-        protected void OnItemAdded(T obj, int index)
-        {
-            ItemAdded?.Invoke(this, new ItemProcessedEventArgs<T>(obj, index));
-        }
-
-        public void Add(T item)
-        {
-            if (item == null) { return; }
-
-            // Add a new list if necessary
-            var list = EnsureList(item.Group);
-            list.Add(item);
-            OnItemAdded(item, list.Count);
+            _dictionary.Clear();
+            _lists.Clear();
         }
 
         public void Clear(string group)
@@ -71,32 +89,45 @@ namespace Ical.Net.Collections
             _dictionary[group].Clear();
         }
 
-        public void Clear()
+        public bool Contains(T item)
         {
-            _dictionary.Clear();
-            _lists.Clear();
+            var group = item.Group;
+            return _dictionary.ContainsKey(group) && _dictionary[group].Contains(item);
         }
 
-        public bool ContainsKey(string group) => _dictionary.ContainsKey(group);
-
-        public int Count => _lists.Sum(list => list.Count);
-
-        public IEnumerable<T> Values() => _dictionary.Values.SelectMany(i => i);
-
-        public IEnumerable<T> AllOf(string group) => _dictionary.ContainsKey(@group)
-            ? (IEnumerable<T>) _dictionary[@group]
-            : new T[0];
-
-        public bool Remove(T obj)
+        public bool ContainsKey(string group)
         {
-            var group = obj.Group;
+            return _dictionary.ContainsKey(group);
+        }
+
+        /// <summary>
+        /// Returns the total number of elements stored for all the groups.
+        /// </summary>
+        public int Count
+        {
+            get { return _lists.Sum(list => list.Count); }
+        }
+
+        public IEnumerable<T> Values()
+        {
+            return _dictionary.Values.SelectMany(item => item);
+        }
+
+        public IEnumerable<T> Values(string group)
+        {
+            return _dictionary.ContainsKey(group) ? _dictionary[group] : new T[0];
+        }
+
+        public bool Remove(T item)
+        {
+            var group = item.Group;
             if (!_dictionary.ContainsKey(group))
             {
                 return false;
             }
 
             var items = _dictionary[group];
-            var index = items.IndexOf(obj);
+            var index = items.IndexOf(item);
 
             if (index < 0)
             {
@@ -115,71 +146,21 @@ namespace Ical.Net.Collections
             }
 
             var list = _dictionary[group];
-            for (var i = list.Count - 1; i >= 0; i--)
+            for (var index = list.Count - 1; index >= 0; index--)
             {
-                list.RemoveAt(i);
+                list.RemoveAt(index);
             }
             return true;
         }
 
-        public bool Contains(T item)
+        public IEnumerator<T> GetEnumerator()
         {
-            var group = item.Group;
-            return _dictionary.ContainsKey(group) && _dictionary[group].Contains(item);
+            return new GroupedCollectionEnumerator<T>(_lists);
         }
 
-        public void Insert(int index, T item)
+        IEnumerator IEnumerable.GetEnumerator()
         {
-            int relativeIndex;
-            var list = ListForIndex(index, out relativeIndex);
-            if (list == null)
-            {
-                return;
-            }
-
-            list.Insert(relativeIndex, item);
-            OnItemAdded(item, index);
+            return GetEnumerator();
         }
-
-        public void RemoveAt(int index)
-        {
-            int relativeIndex;
-            var list = ListForIndex(index, out relativeIndex);
-            if (list == null)
-            {
-                return;
-            }
-            var item = list[relativeIndex];
-            list.RemoveAt(relativeIndex);
-        }
-
-        public T this[int index]
-        {
-            get
-            {
-                int relativeIndex;
-                var list = ListForIndex(index, out relativeIndex);
-                return list?[relativeIndex];
-            }
-            private set
-            {
-                int relativeIndex;
-                var list = ListForIndex(index, out relativeIndex);
-                if (list == null)
-                {
-                    return;
-                }
-
-                // Remove the item at that index and replace it
-                var item = list[relativeIndex];
-                list.RemoveAt(relativeIndex);
-                list.Insert(relativeIndex, value);
-                OnItemAdded(item, index);
-            }
-        }
-
-        public IEnumerator<T> GetEnumerator() => new GroupedCollectionEnumerator<T>(_lists);
-
-        IEnumerator IEnumerable.GetEnumerator() => new GroupedCollectionEnumerator<T>(_lists);
     }    
 }

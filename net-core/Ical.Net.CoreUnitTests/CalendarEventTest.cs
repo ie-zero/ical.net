@@ -34,7 +34,7 @@ namespace Ical.Net.CoreUnitTests
 
             cal.Events.Add(evt);
             Assert.AreEqual(1, cal.Children.Count);
-            Assert.AreSame(evt, cal.Children[0]);
+            Assert.AreSame(evt, cal.Children.First());
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace Ical.Net.CoreUnitTests
 
             cal.Events.Add(evt);
             Assert.AreEqual(1, cal.Children.Count);
-            Assert.AreSame(evt, cal.Children[0]);
+            Assert.AreSame(evt, cal.Children.First());
 
             cal.RemoveChild(evt);
             Assert.AreEqual(0, cal.Children.Count);
@@ -78,7 +78,7 @@ namespace Ical.Net.CoreUnitTests
 
             cal.Events.Add(evt);
             Assert.AreEqual(1, cal.Children.Count);
-            Assert.AreSame(evt, cal.Children[0]);
+            Assert.AreSame(evt, cal.Children.First());
 
             cal.Events.Remove(evt);
             Assert.AreEqual(0, cal.Children.Count);

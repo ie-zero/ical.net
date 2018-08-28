@@ -455,7 +455,7 @@ END:VCALENDAR
             var calendarEvent = calendar.Events.First();
 
             // Act
-            IList<CalendarParameter> parameters = calendarEvent.Properties["DTSTART"].Parameters.AllOf("VALUE").ToList();
+            IList<CalendarParameter> parameters = calendarEvent.Properties["DTSTART"].Parameters.Values("VALUE").ToList();
 
             // Assert
             Assert.AreEqual(2, parameters.Count);

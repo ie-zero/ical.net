@@ -39,9 +39,9 @@ namespace Ical.Net.Collections.Proxies
             return RealObject.OfType<string>().Count();
         }
 
-        public IEnumerable<TNew> AllOf(string group)
+        public IEnumerable<TNew> Values(string group)
         {
-            return RealObject.AllOf(group).OfType<TNew>();
+            return RealObject.Values(group).OfType<TNew>();
         }
 
         public void Add(TNew item)

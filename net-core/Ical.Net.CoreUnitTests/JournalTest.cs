@@ -14,7 +14,7 @@ namespace Ical.Net.CoreUnitTests
             var calendar = Calendar.Load(IcsFiles.Journal1);
             AssertUtilities.AssertCalendarHasComponents(calendar);
             Assert.AreEqual(1, calendar.Journals.Count);
-            var journal = calendar.Journals[0];
+            var journal = calendar.Journals.First();
 
             Assert.IsNotNull(journal, "Journal entry was null");
             Assert.AreEqual(JournalStatus.Draft, journal.Status, "Journal entry should have been in DRAFT status, but it was in " + journal.Status + " status.");

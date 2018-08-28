@@ -30,7 +30,7 @@ namespace Ical.Net.CoreUnitTests
             var calendar2 = Calendar.Load(IcsFiles.MonthlyByDay1);
 
             // Change the UID of the 2nd event to make sure it's different
-            calendar2.Events[calendar1.Events[0].Uid].Uid = "1234567890";
+            calendar2.Events[calendar1.Events.First().Uid].Uid = "1234567890";
             calendar1.MergeWith(calendar2);
 
             var evt1 = calendar1.Events.First();

@@ -19,7 +19,7 @@ namespace Ical.Net.Collections
         {
             if (ContainsKey(group))
             {
-                AllOf(group)?.FirstOrDefault()?.SetValue(values);
+                Values(group)?.FirstOrDefault()?.SetValue(values);
                 return;
             }
 
@@ -32,7 +32,7 @@ namespace Ical.Net.Collections
 
         public TType Get<TType>(string group)
         {
-            var firstItem = AllOf(group).FirstOrDefault();
+            var firstItem = Values(group).FirstOrDefault();
             if (firstItem?.Values != null)
             {
                 return firstItem
