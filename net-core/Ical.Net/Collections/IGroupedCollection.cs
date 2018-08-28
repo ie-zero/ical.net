@@ -21,7 +21,7 @@ namespace Ical.Net.Collections
         /// Returns true if the list contains at least one 
         /// object with a matching group, false otherwise.
         /// </summary>
-        bool ContainsKey(string group);
+        bool Contains(string group);
         
         /// <summary>
         /// Returns a list of objects that

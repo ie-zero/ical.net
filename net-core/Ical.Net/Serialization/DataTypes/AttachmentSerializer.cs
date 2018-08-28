@@ -20,7 +20,7 @@ namespace Ical.Net.Serialization.DataTypes
 
             if (a.Uri != null)
             {
-                if (a.Parameters.ContainsKey("VALUE"))
+                if (a.Parameters.Contains("VALUE"))
                 {
                     // Ensure no VALUE type is provided
                     a.Parameters.Remove("VALUE");

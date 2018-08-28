@@ -97,7 +97,7 @@ namespace Ical.Net.Collections
             return _dictionary.ContainsKey(group) && _dictionary[group].Contains(item);
         }
 
-        public bool ContainsKey(string group)
+        public bool Contains(string group)
         {
             return _dictionary.ContainsKey(group);
         }

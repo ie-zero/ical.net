@@ -29,9 +29,9 @@ namespace Ical.Net.Collections.Proxies
             ItemAdded?.Invoke(this, new ItemProcessedEventArgs<TNew>(item, index));
         }
 
-        public bool ContainsKey(string group)
+        public bool Contains(string group)
         {
-            return RealObject.ContainsKey(group);
+            return RealObject.Contains(group);
         }
 
         public int CountOf(string group)

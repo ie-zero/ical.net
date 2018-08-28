@@ -45,7 +45,7 @@ namespace Ical.Net.Serialization.DataTypes
                 return entry;
             }
 
-            if (!entry.Parameters.ContainsKey("FBTYPE"))
+            if (!entry.Parameters.Contains("FBTYPE"))
             {
                 return entry;
             }

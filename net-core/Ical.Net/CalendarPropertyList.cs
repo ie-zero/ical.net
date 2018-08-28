@@ -39,7 +39,7 @@ namespace Ical.Net
 
         public bool ContainsKey(string group)
         {
-            return _list.ContainsKey(group);
+            return _list.Contains(group);
         }
 
         public void Clear()

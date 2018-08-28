@@ -51,9 +51,9 @@ namespace Ical.Net.Proxies
             throw new NotImplementedException();
         }
 
-        public bool ContainsKey(string group)
+        public bool Contains(string group)
         {
-            return _list.ContainsKey(group);
+            return _list.Contains(group);
         }
 
         public IEnumerable<T> Values(string group)

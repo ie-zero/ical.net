@@ -17,7 +17,7 @@ namespace Ical.Net.Collections
 
         public void Set(string group, IEnumerable<TValueType> values)
         {
-            if (ContainsKey(group))
+            if (Contains(group))
             {
                 Values(group)?.FirstOrDefault()?.SetValue(values);
                 return;

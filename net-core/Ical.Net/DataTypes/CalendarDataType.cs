@@ -123,7 +123,7 @@ namespace Ical.Net.DataTypes
         public Type GetValueType()
         {
             // See RFC 5545 Section 3.2.20.
-            if (_parameters != null && _parameters.ContainsKey("VALUE"))
+            if (_parameters != null && _parameters.Contains("VALUE"))
             {
                 switch (_parameters.Get("VALUE"))
                 {

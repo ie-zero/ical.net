@@ -434,7 +434,7 @@ namespace Ical.Net
             {
                 if (child is IUniqueComponent)
                 {
-                    if (!UniqueComponents.ContainsKey(((IUniqueComponent)child).Uid))
+                    if (!UniqueComponents.Contains(((IUniqueComponent)child).Uid))
                     {
                         this.AddChild(child);
                     }

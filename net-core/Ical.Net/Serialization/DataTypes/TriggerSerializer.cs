@@ -69,7 +69,7 @@ namespace Ical.Net.Serialization.DataTypes
                 value = Decode(t, value);
 
                 // Set the trigger relation
-                if (t.Parameters.ContainsKey("RELATED") && t.Parameters.Get("RELATED").Equals("END"))
+                if (t.Parameters.Contains("RELATED") && t.Parameters.Get("RELATED").Equals("END"))
                 {
                     t.Related = TriggerRelation.End;
                 }
