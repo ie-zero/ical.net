@@ -272,7 +272,26 @@ namespace Ical.Net.CoreUnitTests.Collections
         [Test]
         public void RemoveGroupShouldEliminateAllItemsInTheSpecifiedGroup()
         {
-            Assert.Inconclusive("Consider what is the difference between Remove(TKey) and Clear(TKey)");
+            // Arrange
+            var collection = new GroupedCollection<string, DummyGroupedItem>();
+            var toRemain = new[] {
+                new DummyGroupedItem() { Group = "GROUP_A", Id = 1 },
+                new DummyGroupedItem() { Group = "GROUP_C", Id = 2 },
+            };
+            var toRemove = new[] {
+                new DummyGroupedItem() { Group = "GROUP_B", Id = 3 },
+                new DummyGroupedItem() { Group = "GROUP_B", Id = 4 },
+            };
+
+            foreach (var item in toRemain) { collection.Add(item); }
+            foreach (var item in toRemove) { collection.Add(item); }
+
+            // Act
+            var expected = collection.Remove("GROUP_B");
+
+            // Assert
+            Assert.IsTrue(expected);
+            CollectionAssert.AreEquivalent(toRemain, collection);
         }
 
         [Test]

@@ -90,13 +90,7 @@ namespace Ical.Net.Collections
 
         public void Clear(TKey group)
         {
-            if (!_dictionary.ContainsKey(group))
-            {
-                return;
-            }
-
-            // Clear the list (note that this also clears the list in the _Lists object).
-            _dictionary[group].Clear();
+            Remove(group);
         }
 
         public bool Contains(TItem item)
@@ -145,19 +139,12 @@ namespace Ical.Net.Collections
             return true;
         }
 
-        // TODO: Consider what is the difference between Remove(TKey) and Clear(TKey).
         public bool Remove(TKey group)
         {
-            if (!_dictionary.ContainsKey(group))
-            {
-                return false;
-            }
+            if (!_dictionary.ContainsKey(group)) { return false; }
 
-            var list = _dictionary[group];
-            for (var index = list.Count - 1; index >= 0; index--)
-            {
-                list.RemoveAt(index);
-            }
+            // Clear the list (note that this also clears the list in the _Lists object).
+            _dictionary[group].Clear();
             return true;
         }
 
