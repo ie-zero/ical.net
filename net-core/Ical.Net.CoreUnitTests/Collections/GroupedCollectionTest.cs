@@ -221,13 +221,13 @@ namespace Ical.Net.CoreUnitTests.Collections
         public static IEnumerable<ITestCaseData> ContainsItemNotFound_TestCases()
         {
             yield return new TestCaseData(null)
-                .SetName("ContainsItem_Null");
+                .SetName("ContainsItemNotFound_Null");
 
             yield return new TestCaseData(new DummyGroupedItem() { Group = "GROUP_NOT_EXISTS" })
-                .SetName("ContainsItem_GroupNotFound");
+                .SetName("ContainsItemNotFound_GroupNotFound");
 
             yield return new TestCaseData(new DummyGroupedItem() { Group = "GROUP_A", Id = 5 })
-                .SetName("ContainsItem_ItemNotFound");
+                .SetName("ContainsItemNotFound_ItemNotFound");
         }
 
         [Test]
