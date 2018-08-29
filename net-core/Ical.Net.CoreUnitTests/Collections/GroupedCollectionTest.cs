@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Ical.Net.Collections;
 using NUnit.Framework;
+using NUnit.Framework.Interfaces;
 
 namespace Ical.Net.CoreUnitTests.Collections
 {
@@ -175,13 +174,13 @@ namespace Ical.Net.CoreUnitTests.Collections
                 new DummyGroupedItem() { Group = "GROUP_A", Id = 1 },
                 new DummyGroupedItem() { Group = "GROUP_C", Id = 2 },
             };
-            var toDelete = new[] {
+            var toClear = new[] {
                 new DummyGroupedItem() { Group = "GROUP_B", Id = 3 },
                 new DummyGroupedItem() { Group = "GROUP_B", Id = 4 },
             };
 
             foreach (var item in toRemain) { collection.Add(item); }
-            foreach (var item in toDelete) { collection.Add(item); }
+            foreach (var item in toClear) { collection.Add(item); }
 
             // Act
             collection.Clear("GROUP_B");
@@ -190,7 +189,110 @@ namespace Ical.Net.CoreUnitTests.Collections
             CollectionAssert.AreEquivalent(toRemain, collection);
         }
 
-        private class DummyGroupedItem : IGroupedObject<string>
+        [Test]
+        [TestCase(null)]
+        [TestCase("GROUP_NOT_EXISTS")]
+        public void ContainsGroupShouldReturnFalseWhenNotFound(string group)
+        {
+            // Arrange
+            var collection = new GroupedCollection<string, DummyGroupedItem>();
+
+            // Act + Assert
+            Assert.IsTrue(!collection.Contains(group));
+        }
+
+        [Test, TestCaseSource(nameof(ContainsItemNotFound_TestCases))]
+        public void ContainsItemNotFound(DummyGroupedItem item)
+        {
+            // Arrange
+            var collection = new GroupedCollection<string, DummyGroupedItem>();
+            var elements = new[] {
+                new DummyGroupedItem() { Group = "GROUP_A", Id = 1 },
+                new DummyGroupedItem() { Group = "GROUP_B", Id = 2 },
+                new DummyGroupedItem() { Group = "GROUP_B", Id = 3 },
+            };
+
+            foreach (var elem in elements) { collection.Add(elem); }
+
+            // Act + Assert
+            Assert.IsTrue(!collection.Contains(item));
+        }
+
+        public static IEnumerable<ITestCaseData> ContainsItemNotFound_TestCases()
+        {
+            yield return new TestCaseData(null)
+                .SetName("ContainsItem_Null");
+
+            yield return new TestCaseData(new DummyGroupedItem() { Group = "GROUP_NOT_EXISTS" })
+                .SetName("ContainsItem_GroupNotFound");
+
+            yield return new TestCaseData(new DummyGroupedItem() { Group = "GROUP_A", Id = 5 })
+                .SetName("ContainsItem_ItemNotFound");
+        }
+
+        [Test]
+        public void ContainsItemFound()
+        {
+            // Arrange
+            var collection = new GroupedCollection<string, DummyGroupedItem>();
+            var items = new[] {
+                new DummyGroupedItem() { Group = "GROUP_A", Id = 1 },
+                new DummyGroupedItem() { Group = "GROUP_B", Id = 2 },
+                new DummyGroupedItem() { Group = "GROUP_C", Id = 3 },
+            };
+            var expected = new DummyGroupedItem() { Group = "GROUP_B", Id = 4 };
+
+            foreach (var item in items) { collection.Add(item); }
+            collection.Add(expected);
+
+            // Act + Assert
+            Assert.IsTrue(collection.Contains(expected));
+        }
+
+        [Test]
+        public void RemoveItemShouldDecreaseGroupItemCount()
+        {
+            // Arrange
+            var collection = new GroupedCollection<string, DummyGroupedItem>();
+            var groupedItem = new DummyGroupedItem() { Group = "GROUP_NAME" };
+
+            collection.Add(groupedItem);
+            
+            // Act 
+            Assert.AreEqual(1, collection.Count);
+            Assert.AreEqual(1, collection.Values("GROUP_NAME").Count());
+
+            collection.Remove(groupedItem);
+
+            // Assert
+            Assert.AreEqual(0, collection.Count);
+            Assert.AreEqual(0, collection.Values("GROUP_NAME").Count());
+        }
+
+        [Test]
+        public void RemoveGroupShouldEliminateAllItemsInTheSpecifiedGroup()
+        {
+            Assert.Inconclusive("Consider what is the difference between Remove(TKey) and Clear(TKey)");
+        }
+
+        [Test]
+        public void ImplementEnumeratorInterface()
+        {
+            // Arrange
+            var collection = new GroupedCollection<string, DummyGroupedItem>();
+            var items = new[] {
+                new DummyGroupedItem() { Group = "GROUP_A", Id = 1 },
+                new DummyGroupedItem() { Group = "GROUP_B", Id = 2 },
+                new DummyGroupedItem() { Group = "GROUP_B", Id = 3 },
+            };
+
+            foreach (var item in items) { collection.Add(item); }
+
+            // Act + Assert
+            CollectionAssert.AreEquivalent(items, collection);
+        }
+
+        public class DummyGroupedItem : IGroupedObject<string>
         {
             public string Group { get; set; }
             public int Id { get; set; }

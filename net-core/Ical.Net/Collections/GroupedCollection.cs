@@ -101,12 +101,15 @@ namespace Ical.Net.Collections
 
         public bool Contains(TItem item)
         {
+            if (item == null) { return false; }
+
             var group = item.Group;
             return _dictionary.ContainsKey(group) && _dictionary[group].Contains(item);
         }
 
         public bool Contains(TKey group)
         {
+            if (group == null) { return false; }
             return _dictionary.ContainsKey(group);
         }
 
@@ -142,6 +145,7 @@ namespace Ical.Net.Collections
             return true;
         }
 
+        // TODO: Consider what is the difference between Remove(TKey) and Clear(TKey).
         public bool Remove(TKey group)
         {
             if (!_dictionary.ContainsKey(group))
