@@ -6,16 +6,15 @@ using Ical.Net.Collections.Proxies;
 
 namespace Ical.Net.Collections
 {
-    public class GroupedValueList<TItem, TValueType> :
-        GroupedCollection<string, TItem>
-        where TItem : class, IGroupedObject<string>, IValueObject<TValueType>, new()        
+    public class GroupedValueList<TItem, TValue> : GroupedCollection<string, TItem>
+        where TItem : class, IGroupedObject<string>, IValueObject<TValue>, new()        
     {
-        public void Set(string group, TValueType value)
+        public void Set(string group, TValue value)
         {
             Set(group, new[] { value });
         }
 
-        public void Set(string group, IEnumerable<TValueType> values)
+        public void Set(string group, IEnumerable<TValue> values)
         {
             if (Contains(group))
             {
@@ -30,22 +29,22 @@ namespace Ical.Net.Collections
             obj.SetValue(values);
         }
 
-        public TType Get<TType>(string group)
+        public T Get<T>(string group)
         {
             var firstItem = Values(group).FirstOrDefault();
             if (firstItem?.Values != null)
             {
                 return firstItem
                     .Values
-                    .OfType<TType>()
+                    .OfType<T>()
                     .FirstOrDefault();
             }
-            return default(TType);
+            return default(T);
         }
 
-        public IList<TType> GetMany<TType>(string group)
+        public IList<T> GetMany<T>(string group)
         {
-            return new GroupedValueListProxy<TItem, TValueType, TType>(this, group);
+            return new GroupedValueListProxy<TItem, TValue, T>(this, group);
         }
     }
 }
