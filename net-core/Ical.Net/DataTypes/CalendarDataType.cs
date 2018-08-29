@@ -10,7 +10,7 @@ namespace Ical.Net.DataTypes
     public abstract class CalendarDataType : ICalendarDataType, ICopyable
     {
         protected ICalendarObject _associatedObject;
-        private ParameterList _parameters;
+        private ParameterCollection _parameters;
         private ServiceProvider _serviceProvider;
 
         protected CalendarDataType()
@@ -189,7 +189,7 @@ namespace Ical.Net.DataTypes
 
         private void Initialize()
         {
-            _parameters = new ParameterList();
+            _parameters = new ParameterCollection();
             _serviceProvider = new ServiceProvider();
         }
     }
