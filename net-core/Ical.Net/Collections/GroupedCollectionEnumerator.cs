@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Ical.Net.Collections
 {
-    public class GroupedCollectionEnumerator<T> : IEnumerator<T>
+    internal class GroupedCollectionEnumerator<T> : IEnumerator<T>
     {
         private readonly IList<IList<T>> _lists;
 
