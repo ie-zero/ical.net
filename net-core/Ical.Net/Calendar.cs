@@ -25,24 +25,24 @@ namespace Ical.Net
         public static Calendar Load(Stream s)
             => CalendarCollection.Load(new StreamReader(s, Encoding.UTF8)).SingleOrDefault();
 
-        public static Calendar Load(TextReader tr)
-            => CalendarCollection.Load(tr).OfType<Calendar>().SingleOrDefault();
+        public static Calendar Load(TextReader reader)
+            => CalendarCollection.Load(reader).OfType<Calendar>().SingleOrDefault();
 
         public static IList<T> Load<T>(Stream s, Encoding e)
             => Load<T>(new StreamReader(s, e));
 
-        public static IList<T> Load<T>(TextReader tr)
-            => SimpleDeserializer.Default.Deserialize(tr).OfType<T>().ToList();
+        public static IList<T> Load<T>(TextReader reader)
+            => SimpleDeserializer.Default.Deserialize(reader).OfType<T>().ToList();
 
-        public static IList<T> Load<T>(string ical)
-            => Load<T>(new StringReader(ical));
+        public static IList<T> Load<T>(string iCalendarString)
+            => Load<T>(new StringReader(iCalendarString));
 
-        private IUniqueComponentList<IUniqueComponent> _mUniqueComponents;
-        private IUniqueComponentList<CalendarEvent> _mEvents;
-        private IUniqueComponentList<Todo> _mTodos;
-        private ICalendarObjectList<Journal> _mJournals;
-        private IUniqueComponentList<FreeBusy> _mFreeBusy;
-        private ICalendarObjectList<VTimeZone> _mTimeZones;
+        private IUniqueComponentList<IUniqueComponent> _uniqueComponents;
+        private IUniqueComponentList<CalendarEvent> _events;
+        private IUniqueComponentList<Todo> _todos;
+        private ICalendarObjectList<Journal> _journals;
+        private IUniqueComponentList<FreeBusy> _freeBusy;
+        private ICalendarObjectList<VTimeZone> _timeZones;
 
         /// <summary>
         /// To load an existing an iCalendar object, use one of the provided LoadFromXXX methods.
@@ -61,12 +61,12 @@ namespace Ical.Net
 
         private void Initialize()
         {
-            _mUniqueComponents = new UniqueComponentListProxy<IUniqueComponent>(Children);
-            _mEvents = new UniqueComponentListProxy<CalendarEvent>(Children);
-            _mTodos = new UniqueComponentListProxy<Todo>(Children);
-            _mJournals = new CalendarObjectListProxy<Journal>(Children);
-            _mFreeBusy = new UniqueComponentListProxy<FreeBusy>(Children);
-            _mTimeZones = new CalendarObjectListProxy<VTimeZone>(Children);
+            _uniqueComponents = new UniqueComponentListProxy<IUniqueComponent>(Children);
+            _events = new UniqueComponentListProxy<CalendarEvent>(Children);
+            _todos = new UniqueComponentListProxy<Todo>(Children);
+            _journals = new CalendarObjectListProxy<Journal>(Children);
+            _freeBusy = new UniqueComponentListProxy<FreeBusy>(Children);
+            _timeZones = new CalendarObjectListProxy<VTimeZone>(Children);
         }
 
         protected override void OnDeserializing(StreamingContext context)
@@ -113,34 +113,34 @@ namespace Ical.Net
             }
         }
 
-        public virtual IUniqueComponentList<IUniqueComponent> UniqueComponents => _mUniqueComponents;
+        public virtual IUniqueComponentList<IUniqueComponent> UniqueComponents => _uniqueComponents;
 
         public virtual IEnumerable<IRecurrable> RecurringItems => Children.OfType<IRecurrable>();
 
         /// <summary>
         /// A collection of <see cref="Components.Event"/> components in the iCalendar.
         /// </summary>
-        public virtual IUniqueComponentList<CalendarEvent> Events => _mEvents;
+        public virtual IUniqueComponentList<CalendarEvent> Events => _events;
 
         /// <summary>
         /// A collection of <see cref="CalendarComponents.FreeBusy"/> components in the iCalendar.
         /// </summary>
-        public virtual IUniqueComponentList<FreeBusy> FreeBusy => _mFreeBusy;
+        public virtual IUniqueComponentList<FreeBusy> FreeBusy => _freeBusy;
 
         /// <summary>
         /// A collection of <see cref="Journal"/> components in the iCalendar.
         /// </summary>
-        public virtual ICalendarObjectList<Journal> Journals => _mJournals;
+        public virtual ICalendarObjectList<Journal> Journals => _journals;
 
         /// <summary>
         /// A collection of VTimeZone components in the iCalendar.
         /// </summary>
-        public virtual ICalendarObjectList<VTimeZone> TimeZones => _mTimeZones;
+        public virtual ICalendarObjectList<VTimeZone> TimeZones => _timeZones;
 
         /// <summary>
         /// A collection of <see cref="Todo"/> components in the iCalendar.
         /// </summary>
-        public virtual IUniqueComponentList<Todo> Todos => _mTodos;
+        public virtual IUniqueComponentList<Todo> Todos => _todos;
 
         public virtual string Version
         {
