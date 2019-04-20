@@ -6,26 +6,22 @@ namespace Ical.Net.Serialization
 {
     public abstract class SerializerBase : IStringSerializer
     {
-        private SerializationContext _mSerializationContext;
-
         protected SerializerBase()
         {
-            _mSerializationContext = SerializationContext.Default;
+            SerializationContext = SerializationContext.Default;
         }
 
         protected SerializerBase(SerializationContext ctx)
         {
-            _mSerializationContext = ctx;
+            SerializationContext = ctx;
         }
 
-        public virtual SerializationContext SerializationContext
-        {
-            get => _mSerializationContext;
-            set => _mSerializationContext = value;
-        }
+        public SerializationContext SerializationContext { get; }
 
         public abstract Type TargetType { get; }
+
         public abstract string SerializeToString(object obj);
+
         public abstract object Deserialize(TextReader tr);
 
         public object Deserialize(Stream stream, Encoding encoding)
@@ -43,12 +39,15 @@ namespace Ical.Net.Serialization
 
         public void Serialize(object obj, Stream stream, Encoding encoding)
         {
+            // TODO: Check 'stream' for null. 
+            // TODO: Check 'encoding' for null. 
+
             // NOTE: we don't use a 'using' statement here because
             // we don't want the stream to be closed by this serialization.
             // Fixes bug #3177278 - Serialize closes stream
 
             const int defaultBuffer = 1024;     //This is StreamWriter's built-in default buffer size
-            using (var sw = new StreamWriter(stream, encoding, defaultBuffer, leaveOpen: true))
+            using (var writer = new StreamWriter(stream, encoding, defaultBuffer, leaveOpen: true))
             {
                 // Push the current object onto the serialization stack
                 SerializationContext.Push(obj);
@@ -57,7 +56,7 @@ namespace Ical.Net.Serialization
                 var encodingStack = GetService<EncodingStack>();
                 encodingStack.Push(encoding);
 
-                sw.Write(SerializeToString(obj));
+                writer.Write(SerializeToString(obj));
 
                 // Pop the current encoding off the serialization stack
                 encodingStack.Pop();

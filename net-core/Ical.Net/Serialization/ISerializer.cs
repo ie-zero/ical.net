@@ -6,7 +6,7 @@ namespace Ical.Net.Serialization
 {
     public interface ISerializer : IServiceProvider
     {
-        SerializationContext SerializationContext { get; set; }
+        SerializationContext SerializationContext { get; }
 
         Type TargetType { get; }
         void Serialize(object obj, Stream stream, Encoding encoding);
