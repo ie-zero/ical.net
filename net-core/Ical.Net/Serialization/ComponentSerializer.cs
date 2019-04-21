@@ -30,7 +30,7 @@ namespace Ical.Net.Serialization
             sb.Append(TextUtil.FoldLines($"BEGIN:{upperName}"));
 
             // Get a serializer factory
-            var sf = GetService<ISerializerFactory>();
+            var sf = SerializationContext.GetService<ISerializerFactory>();
 
             // Sort the calendar properties in alphabetical order before serializing them!
             var properties = c.Properties.OrderBy(p => p.Name).ToList();

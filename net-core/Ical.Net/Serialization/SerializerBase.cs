@@ -13,7 +13,7 @@ namespace Ical.Net.Serialization
 
         protected SerializerBase(SerializationContext ctx)
         {
-            SerializationContext = ctx;
+            SerializationContext = ctx ?? throw new ArgumentNullException(nameof(ctx));
         }
 
         public SerializationContext SerializationContext { get; }
@@ -29,7 +29,7 @@ namespace Ical.Net.Serialization
             object obj;
             using (var sr = new StreamReader(stream, encoding))
             {
-                var encodingStack = GetService<EncodingStack>();
+                var encodingStack = SerializationContext.GetService<EncodingStack>();
                 encodingStack.Push(encoding);
                 obj = Deserialize(sr);
                 encodingStack.Pop();
@@ -53,7 +53,7 @@ namespace Ical.Net.Serialization
                 SerializationContext.Push(obj);
 
                 // Push the current encoding on the stack
-                var encodingStack = GetService<EncodingStack>();
+                var encodingStack = SerializationContext.GetService<EncodingStack>();
                 encodingStack.Push(encoding);
 
                 writer.Write(SerializeToString(obj));
@@ -64,54 +64,6 @@ namespace Ical.Net.Serialization
                 // Pop the current object off the serialization stack
                 SerializationContext.Pop();
             }
-        }
-
-        public object GetService(Type serviceType)
-        {
-            return SerializationContext?.GetService(serviceType);
-        }
-
-        public object GetService(string name)
-        {
-            return SerializationContext?.GetService(name);
-        }
-
-        public T GetService<T>()
-        {
-            if (SerializationContext != null)
-            {
-                return SerializationContext.GetService<T>();
-            }
-            return default(T);
-        }
-
-        public T GetService<T>(string name)
-        {
-            if (SerializationContext != null)
-            {
-                return SerializationContext.GetService<T>(name);
-            }
-            return default(T);
-        }
-
-        public void SetService(string name, object obj)
-        {
-            SerializationContext?.SetService(name, obj);
-        }
-
-        public void SetService(object obj)
-        {
-            SerializationContext?.SetService(obj);
-        }
-
-        public void RemoveService(Type type)
-        {
-            SerializationContext?.RemoveService(type);
-        }
-
-        public void RemoveService(string name)
-        {
-            SerializationContext?.RemoveService(name);
         }
     }
 }

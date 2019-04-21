@@ -106,7 +106,7 @@ namespace Ical.Net.Serialization.DataTypes
         public override string SerializeToString(object obj)
         {
             var recur = obj as RecurrencePattern;
-            var factory = GetService<ISerializerFactory>();
+            var factory = SerializationContext.GetService<ISerializerFactory>();
             if (recur == null || factory == null)
             {
                 return null;
@@ -217,7 +217,7 @@ namespace Ical.Net.Serialization.DataTypes
 
             // Instantiate the data type
             var r = CreateAndAssociate() as RecurrencePattern;
-            var factory = GetService<ISerializerFactory>();
+            var factory = SerializationContext.GetService<ISerializerFactory>();
             if (r == null || factory == null)
             {
                 return r;

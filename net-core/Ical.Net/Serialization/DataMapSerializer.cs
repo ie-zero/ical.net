@@ -12,8 +12,8 @@ namespace Ical.Net.Serialization
 
         protected IStringSerializer GetMappedSerializer()
         {
-            var sf = GetService<ISerializerFactory>();
-            var mapper = GetService<DataTypeMapper>();
+            var sf = SerializationContext.GetService<ISerializerFactory>();
+            var mapper = SerializationContext.GetService<DataTypeMapper>();
             if (sf == null || mapper == null)
             {
                 return null;

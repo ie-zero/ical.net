@@ -40,7 +40,7 @@ namespace Ical.Net.Serialization
             }
 
             // Get a serializer for the inner type
-            var sf = GetService<ISerializerFactory>();
+            var sf = SerializationContext.GetService<ISerializerFactory>();
             var stringSerializer = sf.Build(_innerType, SerializationContext) as IStringSerializer;
             if (stringSerializer == null)
             {

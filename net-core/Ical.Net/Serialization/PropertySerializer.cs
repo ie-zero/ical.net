@@ -28,7 +28,7 @@ namespace Ical.Net.Serialization
 
             // Get a serializer factory that we can use to serialize
             // the property and parameter values
-            var sf = GetService<ISerializerFactory>();
+            var sf = SerializationContext.GetService<ISerializerFactory>();
 
             var result = new StringBuilder();
             foreach (var v in prop.Values.Where(value => value != null))
