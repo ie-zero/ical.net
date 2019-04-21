@@ -2,7 +2,7 @@
 
 namespace Ical.Net
 {
-    public interface ICalendarObject : IGroupedObject<string>, ILoadable, ICopyable, ITypedServicesProvider, INamedServicesProvider
+    public interface ICalendarObject : IGroupedObject<string>, ILoadable, ICopyable, INamedServicesProvider
     {
         /// <summary>
         /// The name of the calendar object.
