@@ -3,7 +3,7 @@ using Ical.Net.DataTypes;
 
 namespace Ical.Net.CalendarComponents
 {
-    public interface IRecurrable : IGetOccurrences, IServiceProvider
+    public interface IRecurrable : IGetOccurrences, ITypedServicesProvider, INamedServicesProvider
     {
         /// <summary>
         /// Gets/sets the start date/time of the component.

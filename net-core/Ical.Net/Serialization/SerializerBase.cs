@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Ical.Net.Serialization
 {
-    public abstract class SerializerBase : IStringSerializer, IServiceProvider
+    public abstract class SerializerBase : IStringSerializer, ITypedServicesProvider, INamedServicesProvider
     {
         protected SerializerBase()
         {

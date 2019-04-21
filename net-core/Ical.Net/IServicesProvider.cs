@@ -2,15 +2,19 @@
 
 namespace Ical.Net
 {
-    public interface IServiceProvider
+    public interface ITypedServicesProvider
     {
-        object GetService(string name);
         object GetService(Type type);
         T GetService<T>();
-        T GetService<T>(string name);
-        void SetService(string name, object obj);
         void SetService(object obj);
         void RemoveService(Type type);
+    }
+
+    public interface INamedServicesProvider
+    {
+        object GetService(string name);
+        T GetService<T>(string name);
+        void SetService(string name, object obj);
         void RemoveService(string name);
     }
 }
