@@ -16,7 +16,7 @@ namespace Ical.Net.Serialization
             SerializationContext = ctx ?? throw new ArgumentNullException(nameof(ctx));
         }
 
-        public SerializationContext SerializationContext { get; }
+        protected SerializationContext SerializationContext { get; }
 
         public abstract Type TargetType { get; }
 
