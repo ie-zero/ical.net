@@ -11,7 +11,8 @@ namespace Ical.Net.DataTypes
     {
         private IParameterCollection _parameters;
         private ParameterCollectionProxy _proxy;
-        private ServiceProvider _serviceProvider;
+        private TypedServicesProvider _typedServices;
+        private NamedServicesProvider _namedServices;
 
         protected ICalendarObject _AssociatedObject;
 
@@ -24,7 +25,8 @@ namespace Ical.Net.DataTypes
         {
             _parameters = new ParameterList();
             _proxy = new ParameterCollectionProxy(_parameters);
-            _serviceProvider = new ServiceProvider();
+            _typedServices = new TypedServicesProvider();
+            _namedServices = new NamedServicesProvider();
         }
 
         [OnDeserializing]
@@ -166,20 +168,45 @@ namespace Ical.Net.DataTypes
 
         public virtual IParameterCollection Parameters => _proxy;
 
-        public virtual object GetService(Type serviceType) => _serviceProvider.GetService(serviceType);
+        public virtual object GetService(Type serviceType)
+        {
+            return _typedServices.GetService(serviceType);
+        }
 
-        public object GetService(string name) => _serviceProvider.GetService(name);
+        public object GetService(string name)
+        {
+            return _namedServices.GetService(name);
+        }
 
-        public T GetService<T>() => _serviceProvider.GetService<T>();
+        public T GetService<T>()
+        {
+            return _typedServices.GetService<T>();
+        }
 
-        public T GetService<T>(string name) => _serviceProvider.GetService<T>(name);
+        public T GetService<T>(string name)
+        {
+            return _namedServices.GetService<T>(name);
+        }
 
-        public void SetService(string name, object obj) => _serviceProvider.SetService(name, obj);
+        public void SetService(string name, object obj)
+        {
+            _namedServices.SetService(name, obj);
+        }
 
-        public void SetService(object obj) => _serviceProvider.SetService(obj);
+        public void SetService(object obj)
+        {
+            _typedServices.SetService(obj);
+        }
 
-        public void RemoveService(Type type) => _serviceProvider.RemoveService(type);
+        public void RemoveService(Type type)
+        {
+            _typedServices.RemoveService(type);
+        }
 
-        public void RemoveService(string name) => _serviceProvider.RemoveService(name);
+        public void RemoveService(string name)
+        {
+            _namedServices.RemoveService(name);
+        }
+
     }
 }

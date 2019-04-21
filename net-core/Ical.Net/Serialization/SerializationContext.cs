@@ -27,17 +27,22 @@ namespace Ical.Net.Serialization
                 // objects weren't pushed onto a stack referenced by a static variable.
                 var ctx = new SerializationContext
                 {
-                    _mServiceProvider = _default._mServiceProvider
+                    _typedServices = _default._typedServices,
+                    _namedServices = _default._namedServices
                 };
                 return ctx;
             }
         }
 
         private readonly Stack<WeakReference> _mStack = new Stack<WeakReference>();
-        private ServiceProvider _mServiceProvider = new ServiceProvider();
+        private TypedServicesProvider _typedServices;
+        private NamedServicesProvider _namedServices;
 
         public SerializationContext()
         {
+            _typedServices = new TypedServicesProvider();
+            _namedServices = new NamedServicesProvider();
+
             // Add some services by default
             SetService(new SerializerFactory());
             SetService(new CalendarComponentFactory());
@@ -80,32 +85,44 @@ namespace Ical.Net.Serialization
             return null;
         }
 
-        public virtual object GetService(Type serviceType) => _mServiceProvider.GetService(serviceType);
+        public virtual object GetService(Type serviceType)
+        {
+            return _typedServices.GetService(serviceType);
+        }
 
-        public virtual object GetService(string name) => _mServiceProvider.GetService(name);
+        public virtual object GetService(string name)
+        {
+            return _namedServices.GetService(name);
+        }
 
-        public virtual T GetService<T>() => _mServiceProvider.GetService<T>();
+        public virtual T GetService<T>()
+        {
+            return _typedServices.GetService<T>();
+        }
 
-        public virtual T GetService<T>(string name) => _mServiceProvider.GetService<T>(name);
+        public virtual T GetService<T>(string name)
+        {
+            return _namedServices.GetService<T>(name);
+        }
 
         public virtual void SetService(string name, object obj)
         {
-            _mServiceProvider.SetService(name, obj);
+            _namedServices.SetService(name, obj);
         }
 
-        public virtual void SetService(object obj)
+        public void SetService(object obj)
         {
-            _mServiceProvider.SetService(obj);
+            _typedServices.SetService(obj);
         }
 
         public virtual void RemoveService(Type type)
         {
-            _mServiceProvider.RemoveService(type);
+            _typedServices.RemoveService(type);
         }
 
         public virtual void RemoveService(string name)
         {
-            _mServiceProvider.RemoveService(name);
+            _namedServices.RemoveService(name);
         }
     }
 }

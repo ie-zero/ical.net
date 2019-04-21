@@ -10,7 +10,9 @@ namespace Ical.Net
     public class CalendarObject : CalendarObjectBase, ICalendarObject
     {
         private ICalendarObjectList<ICalendarObject> _children;
-        private ServiceProvider _serviceProvider;
+
+        private TypedServicesProvider _typedServices;
+        private NamedServicesProvider _namedServices;
 
         internal CalendarObject()
         {
@@ -33,7 +35,9 @@ namespace Ical.Net
             //ToDo: I'm fairly certain this is ONLY used for null checking. If so, maybe it can just be a bool? CalendarObjectList is an empty object, and
             //ToDo: its constructor parameter is ignored
             _children = new CalendarObjectList(this);
-            _serviceProvider = new ServiceProvider();
+
+            _typedServices = new TypedServicesProvider();
+            _namedServices = new NamedServicesProvider();
 
             _children.ItemAdded += Children_ItemAdded;
         }
@@ -120,21 +124,45 @@ namespace Ical.Net
 
         public virtual int Column { get; set; }
 
-        public virtual object GetService(Type serviceType) => _serviceProvider.GetService(serviceType);
+        public virtual object GetService(Type serviceType)
+        {
+            return _typedServices.GetService(serviceType);
+        }
 
-        public virtual object GetService(string name) => _serviceProvider.GetService(name);
+        public virtual object GetService(string name)
+        {
+            return _namedServices.GetService(name);
+        }
 
-        public virtual T GetService<T>() => _serviceProvider.GetService<T>();
+        public virtual T GetService<T>()
+        {
+            return _typedServices.GetService<T>();
+        }
 
-        public virtual T GetService<T>(string name) => _serviceProvider.GetService<T>(name);
+        public virtual T GetService<T>(string name)
+        {
+            return _namedServices.GetService<T>(name);
+        }
 
-        public virtual void SetService(string name, object obj) => _serviceProvider.SetService(name, obj);
+        public virtual void SetService(string name, object obj)
+        {
+            _namedServices.SetService(name, obj);
+        }
 
-        public virtual void SetService(object obj) => _serviceProvider.SetService(obj);
+        public virtual void SetService(object obj)
+        {
+            _typedServices.SetService(obj);
+        }
 
-        public virtual void RemoveService(Type type) => _serviceProvider.RemoveService(type);
+        public virtual void RemoveService(Type type)
+        {
+            _typedServices.RemoveService(type);
+        }
 
-        public virtual void RemoveService(string name) => _serviceProvider.RemoveService(name);
+        public virtual void RemoveService(string name)
+        {
+            _namedServices.RemoveService(name);
+        }
 
         public virtual string Group
         {
