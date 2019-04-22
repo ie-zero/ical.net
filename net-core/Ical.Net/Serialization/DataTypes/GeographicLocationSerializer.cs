@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
+using System.Text;
 using Ical.Net.DataTypes;
 
 namespace Ical.Net.Serialization.DataTypes
@@ -11,18 +12,19 @@ namespace Ical.Net.Serialization.DataTypes
 
         public GeographicLocationSerializer(SerializationContext ctx) : base(ctx) { }
 
-        public override Type TargetType => typeof (GeographicLocation);
+        public override Type TargetType => typeof(GeographicLocation);
 
         public override string SerializeToString(object obj)
         {
             var g = obj as GeographicLocation;
-            if (g == null)
-            {
-                return null;
-            }
+            if (g == null) { return null; }
 
-            var value = g.Latitude.ToString("0.000000", CultureInfo.InvariantCulture.NumberFormat) + ";"
-                + g.Longitude.ToString("0.000000", CultureInfo.InvariantCulture.NumberFormat);
+            var value = new StringBuilder()
+                .AppendFormat(CultureInfo.InvariantCulture.NumberFormat, "{0:0.000000}", g.Latitude)
+                .Append(';')
+                .AppendFormat(CultureInfo.InvariantCulture.NumberFormat, "{0:0.000000}", g.Longitude)
+                .ToString();
+
             return Encode(g, value);
         }
 
@@ -34,10 +36,7 @@ namespace Ical.Net.Serialization.DataTypes
             }
 
             var g = CreateAndAssociate() as GeographicLocation;
-            if (g == null)
-            {
-                return null;
-            }
+            if (g == null) { return null; }
 
             // Decode the value, if necessary!
             value = Decode(g, value);
