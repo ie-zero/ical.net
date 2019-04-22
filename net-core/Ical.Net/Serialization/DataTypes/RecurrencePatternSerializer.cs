@@ -16,6 +16,9 @@ namespace Ical.Net.Serialization.DataTypes
 
         public static DayOfWeek GetDayOfWeek(string value)
         {
+            if (value == null)
+                throw new ArgumentNullException(nameof(value));
+
             switch (value.ToUpper())
             {
                 case "SU":
@@ -62,11 +65,16 @@ namespace Ical.Net.Serialization.DataTypes
 
         public virtual void CheckRange(string name, int value, int min, int max, bool allowZero)
         {
-            if (value != int.MinValue && (value < min || value > max || (!allowZero && value == 0)))
+            if (IsValueWithinRange(value, min, max, allowZero))
             {
                 throw new ArgumentException(name + " value " + value + " is out of range. Valid values are between " + min + " and " + max +
                                             (allowZero ? "" : ", excluding zero (0)") + ".");
             }
+        }
+
+        private bool IsValueWithinRange(int value, int min, int max, bool allowZero)
+        {
+            return value != int.MinValue && (value < min || value > max || (!allowZero && value == 0));
         }
 
         public virtual void CheckMutuallyExclusive<T, TU>(string name1, string name2, T obj1, TU obj2)
@@ -93,14 +101,6 @@ namespace Ical.Net.Serialization.DataTypes
             throw new ArgumentException("Both " + name1 + " and " + name2 + " cannot be supplied together; they are mutually exclusive.");
         }
 
-        private void SerializeByValue(List<string> aggregate, IList<int> byValue, string name)
-        {
-            if (byValue.Any())
-            {
-                aggregate.Add(name + "=" + string.Join(",", byValue.Select(i => i.ToString())));
-            }
-        }
-
         public override Type TargetType => typeof (RecurrencePattern);
 
         public override string SerializeToString(object obj)
@@ -114,12 +114,71 @@ namespace Ical.Net.Serialization.DataTypes
 
             // Push the recurrence pattern onto the serialization stack
             SerializationContext.Push(recur);
-            var values = new List<string>()
+
+            // TODO: Ensure that only one (UNTIL or COUNT) parameter is used.
+            //      Extract from RFC "either UNTIL or COUNT may appear in a 'recur', but UNTIL and COUNT MUST NOT occur in the same 'recur'"
+
+            var values = new List<string>();
+            SerializeParameter_Frequency(values, recur.Frequency);
+            SerializeParameter_Interval(values, recur.Interval);
+            SerializeParameter_Until(values, recur.Until, factory);
+            SerializeParameter_WeekStart(values, recur.FirstDayOfWeek);
+            SerializeParameter_Count(values, recur.Count);
+
+            SerializeParameter_ByDay(values, recur.ByDay, factory);
+
+            SerializeParameter_ByValue(values, recur.ByHour, "BYHOUR");
+            SerializeParameter_ByValue(values, recur.ByMinute, "BYMINUTE");
+            SerializeParameter_ByValue(values, recur.ByMonth, "BYMONTH");
+            SerializeParameter_ByValue(values, recur.ByMonthDay, "BYMONTHDAY");
+            SerializeParameter_ByValue(values, recur.BySecond, "BYSECOND");
+            SerializeParameter_ByValue(values, recur.BySetPosition, "BYSETPOS");
+            SerializeParameter_ByValue(values, recur.ByWeekNo, "BYWEEKNO");
+            SerializeParameter_ByValue(values, recur.ByYearDay, "BYYEARDAY");
+
+            // Pop the recurrence pattern off the serialization stack
+            SerializationContext.Pop();
+
+            return Encode(recur, string.Join(";", values));
+        }
+
+        private static void SerializeParameter_Frequency(ICollection<string> values, FrequencyType frequency)
+        {
+            values.Add("FREQ=" + Enum.GetName(typeof(FrequencyType), frequency).ToUpper());
+        }
+
+        private static void SerializeParameter_Count(ICollection<string> values, int count)
+        {
+            if (count != int.MinValue)
             {
-                "FREQ=" + Enum.GetName(typeof(FrequencyType), recur.Frequency).ToUpper()
-            };
+                values.Add("COUNT=" + count);
+            }
+        }
 
+        private static void SerializeParameter_WeekStart(ICollection<string> values, DayOfWeek firstDayOfWeek)
+        {
+            if (firstDayOfWeek != DayOfWeek.Monday)
+            {
+                values.Add("WKST=" + Enum.GetName(typeof(DayOfWeek), firstDayOfWeek).ToUpper().Substring(0, 2));
+            }
+        }
 
+        private void SerializeParameter_Until(ICollection<string> values, DateTime untilDateTime, ISerializerFactory factory)
+        {
+            if (untilDateTime != DateTime.MinValue)
+            {
+                var serializer = factory.Build(typeof(IDateTime), SerializationContext) as IStringSerializer;
+                if (serializer != null)
+                {
+                    IDateTime until = new CalDateTime(untilDateTime);
+                    until.HasTime = true;
+                    values.Add("UNTIL=" + serializer.SerializeToString(until));
+                }
+            }
+        }
+
+        private static void SerializeParameter_Interval(ICollection<string> values, int interval)
+        {        
             //-- FROM RFC2445 --
             //The INTERVAL rule part contains a positive integer representing how
             //often the recurrence rule repeats. The default value is "1", meaning
@@ -127,7 +186,8 @@ namespace Ical.Net.Serialization.DataTypes
             //rule, every hour for an HOURLY rule, every day for a DAILY rule,
             //every week for a WEEKLY rule, every month for a MONTHLY rule and
             //every year for a YEARLY rule.
-            var interval = recur.Interval;
+
+            // Any negative and zero values are ignored.
             if (interval == int.MinValue)
             {
                 interval = 1;
@@ -137,54 +197,30 @@ namespace Ical.Net.Serialization.DataTypes
             {
                 values.Add("INTERVAL=" + interval);
             }
+        }
 
-            if (recur.Until != DateTime.MinValue)
+        private void SerializeParameter_ByDay(ICollection<string> values, IEnumerable<WeekDay> byWeekDays, ISerializerFactory factory)
+        {
+            if (byWeekDays.Count() > 0)
             {
-                var serializer = factory.Build(typeof (IDateTime), SerializationContext) as IStringSerializer;
+                var bydayValues = new List<string>(byWeekDays.Count());
+
+                var serializer = factory.Build(typeof(WeekDay), SerializationContext) as IStringSerializer;
                 if (serializer != null)
                 {
-                    IDateTime until = new CalDateTime(recur.Until);
-                    until.HasTime = true;
-                    values.Add("UNTIL=" + serializer.SerializeToString(until));
-                }
-            }
-
-            if (recur.FirstDayOfWeek != DayOfWeek.Monday)
-            {
-                values.Add("WKST=" + Enum.GetName(typeof (DayOfWeek), recur.FirstDayOfWeek).ToUpper().Substring(0, 2));
-            }
-
-            if (recur.Count != int.MinValue)
-            {
-                values.Add("COUNT=" + recur.Count);
-            }
-
-            if (recur.ByDay.Count > 0)
-            {
-                var bydayValues = new List<string>(recur.ByDay.Count);
-
-                var serializer = factory.Build(typeof (WeekDay), SerializationContext) as IStringSerializer;
-                if (serializer != null)
-                {
-                    bydayValues.AddRange(recur.ByDay.Select(byday => serializer.SerializeToString(byday)));
+                    bydayValues.AddRange(byWeekDays.Select(byday => serializer.SerializeToString(byday)));
                 }
 
                 values.Add("BYDAY=" + string.Join(",", bydayValues));
             }
+        }
 
-            SerializeByValue(values, recur.ByHour, "BYHOUR");
-            SerializeByValue(values, recur.ByMinute, "BYMINUTE");
-            SerializeByValue(values, recur.ByMonth, "BYMONTH");
-            SerializeByValue(values, recur.ByMonthDay, "BYMONTHDAY");
-            SerializeByValue(values, recur.BySecond, "BYSECOND");
-            SerializeByValue(values, recur.BySetPosition, "BYSETPOS");
-            SerializeByValue(values, recur.ByWeekNo, "BYWEEKNO");
-            SerializeByValue(values, recur.ByYearDay, "BYYEARDAY");
-
-            // Pop the recurrence pattern off the serialization stack
-            SerializationContext.Pop();
-
-            return Encode(recur, string.Join(";", values));
+        private void SerializeParameter_ByValue(ICollection<string> aggregate, IEnumerable<int> byValue, string parameterName)
+        {
+            if (byValue.Any())
+            {
+                aggregate.Add(parameterName + "=" + string.Join(",", byValue.Select(i => i.ToString())));
+            }
         }
 
         //Compiling these is a one-time penalty of about 80ms
