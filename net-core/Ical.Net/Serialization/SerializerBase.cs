@@ -24,14 +24,27 @@ namespace Ical.Net.Serialization
 
         public abstract object Deserialize(TextReader tr);
 
+        // TODO: 'SerializerBase' class is the only place the Push() and Pop() methods of the EncodingStack are used. 
+        //      Consider removing the Deserialize(Stream, ...) and Serialize(..., Stream, ...) methods all together or using UTF8 enciding.
+        // 
+        // RFC5545   - 8.1. iCalendar Media Type Registration
+        // The "charset" parameter is defined in [RFC2046] for subtypes of
+        // the "text" media type.It is used to indicate the charset used in
+        // the body part.The charset supported by this revision of
+        // iCalendar is UTF-8.  The use of any other charset is deprecated by
+        // this revision of iCalendar; however, note that this revision
+        // requires that compliant applications MUST accept iCalendar streams
+        // using either the UTF-8 or US-ASCII charset.
+        // 
+
         public object Deserialize(Stream stream, Encoding encoding)
         {
             object obj;
-            using (var sr = new StreamReader(stream, encoding))
+            using (var reader = new StreamReader(stream, encoding))
             {
                 var encodingStack = SerializationContext.GetService<EncodingStack>();
                 encodingStack.Push(encoding);
-                obj = Deserialize(sr);
+                obj = Deserialize(reader);
                 encodingStack.Pop();
             }
             return obj;
@@ -40,7 +53,7 @@ namespace Ical.Net.Serialization
         public void Serialize(object obj, Stream stream, Encoding encoding)
         {
             // TODO: Check 'stream' for null. 
-            // TODO: Check 'encoding' for null. 
+            // TODO: Check 'encoding' for null.
 
             // NOTE: we don't use a 'using' statement here because
             // we don't want the stream to be closed by this serialization.
