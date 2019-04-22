@@ -12,10 +12,10 @@ namespace Ical.Net.Collections
         IGroupedList<TGroup, TItem>
         where TItem : class, IGroupedObject<TGroup>
     {
-        private readonly List<IMultiLinkedList<TItem>> _lists = new List<IMultiLinkedList<TItem>>();
-        private readonly Dictionary<TGroup, IMultiLinkedList<TItem>> _dictionary = new Dictionary<TGroup, IMultiLinkedList<TItem>>();
+        private readonly List<IList<TItem>> _lists = new List<IList<TItem>>();
+        private readonly Dictionary<TGroup, IList<TItem>> _dictionary = new Dictionary<TGroup, IList<TItem>>();
 
-        private IMultiLinkedList<TItem> EnsureList(TGroup group)
+        private IList<TItem> EnsureList(TGroup group)
         {
             if (group == null)
             {
@@ -27,18 +27,18 @@ namespace Ical.Net.Collections
                 return _dictionary[group];
             }
 
-            var list = new MultiLinkedList<TItem>();
+            var list = new List<TItem>();
             _dictionary[group] = list;
 
             _lists.Add(list);
             return list;
         }
 
-        private IMultiLinkedList<TItem> ListForIndex(int index, out int relativeIndex)
+        private IList<TItem> ListForIndex(int index, out int relativeIndex)
         {
-            foreach (var list in _lists.Where(list => list.StartIndex <= index && list.ExclusiveEnd > index))
+            foreach (var list in _lists.Where(list => 0 <= index && list.Count > index))
             {
-                relativeIndex = index - list.StartIndex;
+                relativeIndex = index;
                 return list;
             }
             relativeIndex = -1;
@@ -64,7 +64,7 @@ namespace Ical.Net.Collections
             var list = EnsureList(group);
             var index = list.Count;
             list.Add(item);
-            OnItemAdded(item, list.StartIndex + index);
+            OnItemAdded(item, index);
         }
 
         public virtual int IndexOf(TItem item)
@@ -82,8 +82,7 @@ namespace Ical.Net.Collections
             var index = list.IndexOf(item);
 
             // Return the index within the overall KeyedList
-            if (index >= 0)
-                return list.StartIndex + index;
+            if (index >= 0) return  index;
             return -1;
         }
 
