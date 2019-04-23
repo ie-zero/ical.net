@@ -32,7 +32,8 @@ namespace Ical.Net.Serialization.DataTypes
                     dt = new DateTime(year, month, day, hour, minute, second, kind);
                 }
             }
-            catch {}
+            // TODO: Review code - exceptions are swallowed silently
+            catch { }
 
             return dt;
         }
@@ -77,19 +78,27 @@ namespace Ical.Net.Serialization.DataTypes
                 dt.SetValueType("DATE");
             }
 
-            var value = new StringBuilder();
-            value.Append($"{dt.Year:0000}{dt.Month:00}{dt.Day:00}");
+            string value = SerializeDateTimeValue(dt);
+
+            // Encode the value as necessary
+            return Encode(dt, value);
+        }
+
+        private static string SerializeDateTimeValue(IDateTime dt)
+        {
+            var builder = new StringBuilder();
+            builder.Append($"{dt.Year:0000}{dt.Month:00}{dt.Day:00}");
+
             if (dt.HasTime)
             {
-                value.Append($"T{dt.Hour:00}{dt.Minute:00}{dt.Second:00}");
+                builder.Append($"T{dt.Hour:00}{dt.Minute:00}{dt.Second:00}");
                 if (dt.IsUtc)
                 {
-                    value.Append("Z");
+                    builder.Append("Z");
                 }
             }
 
-            // Encode the value as necessary
-            return Encode(dt, value.ToString());
+            return builder.ToString();
         }
 
         private const RegexOptions _ciCompiled = RegexOptions.Compiled | RegexOptions.IgnoreCase;

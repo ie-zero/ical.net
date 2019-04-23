@@ -32,6 +32,7 @@ namespace Ical.Net.Serialization.DataTypes
             }
             catch
             {
+                // TODO: Review code - exceptions are swallowed silently
                 return null;
             }
         }
@@ -59,7 +60,8 @@ namespace Ical.Net.Serialization.DataTypes
                     return i;
                 }
             }
-            catch {}
+            // TODO: Review code - exceptions are swallowed silently
+            catch { }
 
             return value;
         }
