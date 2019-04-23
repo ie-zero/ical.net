@@ -39,9 +39,9 @@ namespace Ical.Net.Serialization.DataTypes
             return base.SerializeToString(obj);
         }
 
-        public override object Deserialize(TextReader tr)
+        public override object Deserialize(TextReader reader)
         {
-            var entry = base.Deserialize(tr) as FreeBusyEntry;
+            var entry = base.Deserialize(reader) as FreeBusyEntry;
             if (entry == null)
             {
                 return entry;

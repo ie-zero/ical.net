@@ -14,30 +14,33 @@ namespace Ical.Net.Serialization.DataTypes
 
         public override string SerializeToString(object obj)
         {
+            var organizer = obj as Organizer;
+            if (organizer?.Value == null) return null;
+
             try
             {
-                var o = obj as Organizer;
-                return o?.Value == null
-                    ? null
-                    : Encode(o, Escape(o.Value.OriginalString));
+                // TODO: Review code as only the value property from Organiser is serialized.
+
+                return Encode(organizer, Escape(organizer.Value.OriginalString));
             }
             catch
             {
+                // TODO: Review code - exceptions are swallowed silently
                 return null;
             }
         }
 
-        public override object Deserialize(TextReader tr)
+        public override object Deserialize(TextReader reader)
         {
-            var value = tr.ReadToEnd();
+            if (reader == null) return null;
+            var value = reader.ReadToEnd();
 
-            Organizer o = null;
             try
             {
-                o = CreateAndAssociate() as Organizer;
-                if (o != null)
+                var organizer = CreateAndAssociate() as Organizer;
+                if (organizer != null)
                 {
-                    var uriString = Unescape(Decode(o, value));
+                    var uriString = Unescape(Decode(organizer, value));
 
                     // Prepend "mailto:" if necessary
                     if (!uriString.StartsWith("mailto:", StringComparison.OrdinalIgnoreCase))
@@ -45,12 +48,16 @@ namespace Ical.Net.Serialization.DataTypes
                         uriString = "mailto:" + uriString;
                     }
 
-                    o.Value = new Uri(uriString);
+                    organizer.Value = new Uri(uriString);
                 }
-            }
-            catch {}
 
-            return o;
+                return organizer;
+            }
+            catch
+            {
+                // TODO: Review code - exceptions are swallowed silently
+                return null;
+            }
         }
     }
 }

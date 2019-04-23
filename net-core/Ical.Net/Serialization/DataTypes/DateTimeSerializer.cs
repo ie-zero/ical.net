@@ -43,10 +43,7 @@ namespace Ical.Net.Serialization.DataTypes
         public override string SerializeToString(object obj)
         {
             var dt = obj as IDateTime;
-            if (dt == null)
-            {
-                return null;
-            }
+            if (dt == null)  return null;
 
             // RFC 5545 3.3.5: 
             // The date with UTC time, or absolute time, is identified by a LATIN
@@ -105,15 +102,13 @@ namespace Ical.Net.Serialization.DataTypes
         internal static readonly Regex DateOnlyMatch = new Regex(@"^((\d{4})(\d{2})(\d{2}))?$", _ciCompiled);
         internal static readonly Regex FullDateTimePatternMatch = new Regex(@"^((\d{4})(\d{2})(\d{2}))T((\d{2})(\d{2})(\d{2})(Z)?)$", _ciCompiled);
 
-        public override object Deserialize(TextReader tr)
+        public override object Deserialize(TextReader reader)
         {
-            var value = tr.ReadToEnd();
+            if (reader == null) return null;
+            var value = reader.ReadToEnd();
 
             var dt = CreateAndAssociate() as IDateTime;
-            if (dt == null)
-            {
-                return null;
-            }
+            if (dt == null) return null;
 
             // Decode the value as necessary
             value = Decode(dt, value);
@@ -128,6 +123,9 @@ namespace Ical.Net.Serialization.DataTypes
             {
                 return null;
             }
+
+            // TODO: Review Deserialize() on DateTimeSerializer class as it sets the value to current date and time. 
+
             var now = DateTime.Now;
 
             var year = now.Year;

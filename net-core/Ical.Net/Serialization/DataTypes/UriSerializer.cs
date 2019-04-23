@@ -10,16 +10,12 @@ namespace Ical.Net.Serialization.DataTypes
 
         public UriSerializer(SerializationContext ctx) : base(ctx) {}
 
-        public override Type TargetType => typeof (string);
+        public override Type TargetType => typeof(string);
 
         public override string SerializeToString(object obj)
         {
-            if (!(obj is Uri))
-            {
-                return null;
-            }
-
-            var uri = (Uri) obj;
+            var uri = obj as Uri;
+            if (uri == null) return null;
 
             if (SerializationContext.Peek() is ICalendarObject co)
             {
@@ -32,14 +28,11 @@ namespace Ical.Net.Serialization.DataTypes
             return uri.OriginalString;
         }
 
-        public override object Deserialize(TextReader tr)
+        public override object Deserialize(TextReader reader)
         {
-            if (tr == null)
-            {
-                return null;
-            }
+            if (reader == null) return null;
 
-            var value = tr.ReadToEnd();
+            var value = reader.ReadToEnd();
 
             if (SerializationContext.Peek() is ICalendarObject co)
             {
@@ -52,10 +45,10 @@ namespace Ical.Net.Serialization.DataTypes
 
             try
             {
-                var uri = new Uri(value);
-                return uri;
+                return new Uri(value);
             }
-            catch {}
+            // TODO: Review code - exceptions are swallowed silently
+            catch { }
             return null;
         }
     }

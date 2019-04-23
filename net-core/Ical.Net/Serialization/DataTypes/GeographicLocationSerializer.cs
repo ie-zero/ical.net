@@ -30,10 +30,7 @@ namespace Ical.Net.Serialization.DataTypes
 
         public GeographicLocation Deserialize(string value)
         {
-            if (string.IsNullOrWhiteSpace(value))
-            {
-                return null;
-            }
+            if (string.IsNullOrWhiteSpace(value)) return null;
 
             var g = CreateAndAssociate() as GeographicLocation;
             if (g == null) { return null; }
@@ -47,16 +44,20 @@ namespace Ical.Net.Serialization.DataTypes
                 return null;
             }
 
-            double lat;
-            double lon;
-            double.TryParse(values[0], NumberStyles.Any, CultureInfo.InvariantCulture, out lat);
-            double.TryParse(values[1], NumberStyles.Any, CultureInfo.InvariantCulture, out lon);
+            // TODO: Parsing of GeographicLocation can succeed partially i.e. only Latitude or Longitude
+            double.TryParse(values[0], NumberStyles.Any, CultureInfo.InvariantCulture, out double lat);
+            double.TryParse(values[1], NumberStyles.Any, CultureInfo.InvariantCulture, out double lon);
             g.Latitude = lat;
             g.Longitude = lon;
 
             return g;
         }
 
-        public override object Deserialize(TextReader tr) => Deserialize(tr.ReadToEnd());
+        public override object Deserialize(TextReader reader)
+        {
+            if (reader == null) return null;
+
+            return Deserialize(reader.ReadToEnd());
+        }
     }
 }

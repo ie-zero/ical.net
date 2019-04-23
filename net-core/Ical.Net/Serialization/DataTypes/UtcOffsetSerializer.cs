@@ -12,38 +12,43 @@ namespace Ical.Net.Serialization.DataTypes
 
         public UtcOffsetSerializer(SerializationContext ctx) : base(ctx) { }
 
-        public override Type TargetType => typeof (UtcOffset);
+        public override Type TargetType => typeof(UtcOffset);
 
         public override string SerializeToString(object obj)
         {
             var offset = obj as UtcOffset;
-            if (offset != null)
-            {
-                var value = (offset.Positive ? "+" : "-") + offset.Hours.ToString("00") + offset.Minutes.ToString("00") +
-                            (offset.Seconds != 0 ? offset.Seconds.ToString("00") : string.Empty);
+            if (offset == null) return null;
+            
+            var value = (offset.Positive ? "+" : "-") + offset.Hours.ToString("00") + offset.Minutes.ToString("00") +
+                        (offset.Seconds != 0 ? offset.Seconds.ToString("00") : string.Empty);
 
-                // Encode the value as necessary
-                return Encode(offset, value);
-            }
-            return null;
+            // Encode the value as necessary
+            return Encode(offset, value);
+            
         }
 
         internal static readonly Regex DecodeOffset = new Regex(@"(\+|-)(\d{2})(\d{2})(\d{2})?", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        public override object Deserialize(TextReader tr)
+        public override object Deserialize(TextReader reader)
         {
-            var offsetString = tr.ReadToEnd();
-            var offset = new UtcOffset(offsetString);
-            return offset;
+            if (reader == null) return null;
+
+            string value = reader.ReadToEnd();
+            return new UtcOffset(value); ;
         }
 
+        // TODO: Consider moving GetOffset(string) method to UtcOffset clas
         public static TimeSpan GetOffset(string rawOffset)
         {
+            if (string.IsNullOrWhiteSpace(rawOffset))
+                throw new ArgumentException($"'{nameof(rawOffset)}' cannot be null or empty", nameof(rawOffset));
+
             if (rawOffset.EndsWith("00"))
             {
                 rawOffset = rawOffset.Substring(0, rawOffset.Length - 2);
             }
 
+            // TODO: Investigate why there is a hard-coded value in the DateTimeOffset.TryParse()
             DateTimeOffset temp;
             if (DateTimeOffset.TryParse("2016-01-01 00:00:00 " + rawOffset, out temp))
             {

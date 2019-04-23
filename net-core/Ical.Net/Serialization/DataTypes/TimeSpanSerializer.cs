@@ -15,10 +15,7 @@ namespace Ical.Net.Serialization.DataTypes
 
         public override string SerializeToString(object obj)
         {
-            if (!(obj is TimeSpan))
-            {
-                return null;
-            }
+            if (!(obj is TimeSpan)) return null;
 
             var ts = (TimeSpan) obj;
 
@@ -70,9 +67,11 @@ namespace Ical.Net.Serialization.DataTypes
             new Regex(@"^(?<sign>\+|-)?P(((?<week>\d+)W)|(?<main>((?<day>\d+)D)?(?<time>T((?<hour>\d+)H)?((?<minute>\d+)M)?((?<second>\d+)S)?)?))$",
                 RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        public override object Deserialize(TextReader tr)
+        public override object Deserialize(TextReader reader)
         {
-            var value = tr.ReadToEnd();
+            if (reader == null) return null;
+
+            var value = reader.ReadToEnd();
 
             try
             {
@@ -120,7 +119,8 @@ namespace Ical.Net.Serialization.DataTypes
                     return new TimeSpan(days * mult, hours * mult, minutes * mult, seconds * mult);
                 }
             }
-            catch {}
+            // TODO: Review code - exceptions are swallowed silently
+            catch { }
 
             return value;
         }

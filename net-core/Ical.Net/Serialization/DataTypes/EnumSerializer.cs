@@ -1,27 +1,42 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
 using Ical.Net.DataTypes;
 
 namespace Ical.Net.Serialization.DataTypes
 {
     public class EnumSerializer : EncodableDataTypeSerializer
     {
-        private readonly Type _mEnumType;
+        private readonly Type _enumType;
 
         public EnumSerializer(Type enumType)
         {
-            _mEnumType = enumType;
+            if (enumType == null)
+                throw new ArgumentNullException(nameof(enumType));
+
+            if (!enumType.GetTypeInfo().IsEnum)
+                throw new ArgumentException($"'{nameof(enumType)}' is not an enumeration type", nameof(enumType));
+
+            _enumType = enumType;
         }
 
         public EnumSerializer(Type enumType, SerializationContext ctx) : base(ctx)
         {
-            _mEnumType = enumType;
+            if (enumType == null)
+                throw new ArgumentNullException(nameof(enumType));
+
+            if (!enumType.GetTypeInfo().IsEnum)
+                throw new ArgumentException($"'{nameof(enumType)}' is not an enumeration type", nameof(enumType));
+
+            _enumType = enumType;
         }
 
-        public override Type TargetType => _mEnumType;
+        public override Type TargetType => _enumType;
 
         public override string SerializeToString(object enumValue)
         {
+            if (enumValue == null) return null;
+
             try
             {
                 var obj = SerializationContext.Peek() as ICalendarObject;
@@ -38,13 +53,16 @@ namespace Ical.Net.Serialization.DataTypes
             }
             catch
             {
+                // TODO: Review code - exceptions are swallowed silently
                 return null;
             }
         }
 
-        public override object Deserialize(TextReader tr)
+        public override object Deserialize(TextReader reader)
         {
-            var value = tr.ReadToEnd();
+            if (reader == null) return null;
+
+            string value = reader.ReadToEnd();
 
             try
             {
@@ -60,9 +78,10 @@ namespace Ical.Net.Serialization.DataTypes
                 }
 
                 // Remove "-" characters while parsing Enum values.
-                return Enum.Parse(_mEnumType, value.Replace("-", ""), true);
+                return Enum.Parse(_enumType, value.Replace("-", ""), true);
             }
-            catch {}
+            // TODO: Review code - exceptions are swallowed silently
+            catch { }
 
             return value;
         }
