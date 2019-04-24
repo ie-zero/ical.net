@@ -44,7 +44,7 @@ namespace Ical.Net.Serialization
             return serializer?.SerializeToString(obj);
         }
 
-        public override object Deserialize(TextReader tr)
+        public override object Deserialize(TextReader reader)
         {
             var serializer = GetMappedSerializer();
             if (serializer == null)
@@ -52,7 +52,9 @@ namespace Ical.Net.Serialization
                 return null;
             }
 
-            var value = tr.ReadToEnd();
+            if (reader == null) return null;
+            var value = reader.ReadToEnd();
+
             var returnValue = serializer.Deserialize(new StringReader(value));
 
             // Default to returning the string representation of the value
