@@ -19,10 +19,7 @@ namespace Ical.Net.Serialization.DataTypes
             try
             {
                 var rs = obj as RequestStatus;
-                if (rs == null)
-                {
-                    return null;
-                }
+                if (rs == null) return null;
 
                 // Push the object onto the serialization stack
                 SerializationContext.Push(rs);
@@ -55,6 +52,7 @@ namespace Ical.Net.Serialization.DataTypes
             }
             catch
             {
+                // TODO: Review code - exceptions are swallowed silently
                 return null;
             }
         }
@@ -62,9 +60,10 @@ namespace Ical.Net.Serialization.DataTypes
         internal static readonly Regex NarrowRequestMatch = new Regex(@"(.*?[^\\]);(.*?[^\\]);(.+)", RegexOptions.Compiled);
         internal static readonly Regex BroadRequestMatch = new Regex(@"(.*?[^\\]);(.+)", RegexOptions.Compiled);
 
-        public override object Deserialize(TextReader tr)
+        public override object Deserialize(TextReader reader)
         {
-            var value = tr.ReadToEnd();
+            if (reader == null) return null;
+            var value = reader.ReadToEnd();
 
             var rs = CreateAndAssociate() as RequestStatus;
             if (rs == null)

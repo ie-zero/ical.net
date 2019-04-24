@@ -57,9 +57,10 @@ namespace Ical.Net.Serialization.DataTypes
             }
         }
 
-        public override object Deserialize(TextReader tr)
+        public override object Deserialize(TextReader reader)
         {
-            var value = tr.ReadToEnd();
+            if (reader == null) return null;
+            var value = reader.ReadToEnd();
 
             var p = CreateAndAssociate() as Period;
             var factory = SerializationContext.GetService<ISerializerFactory>();

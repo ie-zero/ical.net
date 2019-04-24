@@ -15,10 +15,7 @@ namespace Ical.Net.Serialization.DataTypes
         public override string SerializeToString(object obj)
         {
             var a = obj as Attachment;
-            if (a == null)
-            {
-                return null;
-            }
+            if (a == null) return null;
 
             if (a.Uri != null)
             {
@@ -49,6 +46,8 @@ namespace Ical.Net.Serialization.DataTypes
             try
             {
                 var a = CreateAndAssociate() as Attachment;
+                if (a == null) return null;
+
                 // Decode the value, if necessary
                 var data = DecodeData(a, attachment);
 
@@ -78,7 +77,7 @@ namespace Ical.Net.Serialization.DataTypes
             }
             catch
             {
-                // ignored
+                // TODO: Review code - exceptions are swallowed silently
             }
 
             return null;

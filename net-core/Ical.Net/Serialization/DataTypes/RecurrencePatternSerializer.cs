@@ -247,9 +247,10 @@ namespace Ical.Net.Serialization.DataTypes
 
         internal static readonly Regex SpecificRecurrenceCount = new Regex(@"^\s*for\s+(?<Count>\d+)\s+occurrences\s*$", _ciCompiled);
 
-        public override object Deserialize(TextReader tr)
+        public override object Deserialize(TextReader reader)
         {
-            var value = tr.ReadToEnd();
+            if (reader == null) return null;
+            var value = reader.ReadToEnd();
 
             // Instantiate the data type
             var r = CreateAndAssociate() as RecurrencePattern;

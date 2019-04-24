@@ -50,13 +50,15 @@ namespace Ical.Net.Serialization.DataTypes
             }
             catch
             {
+                // TODO: Review code - exceptions are swallowed silently
                 return null;
             }
         }
 
-        public override object Deserialize(TextReader tr)
+        public override object Deserialize(TextReader reader)
         {
-            var value = tr.ReadToEnd();
+            if (reader == null) return null;
+            var value = reader.ReadToEnd();
 
             if (!(CreateAndAssociate() is Trigger t))
             {

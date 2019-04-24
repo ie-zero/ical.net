@@ -46,9 +46,10 @@ namespace Ical.Net.Serialization.DataTypes
             return Encode(periodList, string.Join(",", parts));
         }
 
-        public override object Deserialize(TextReader tr)
+        public override object Deserialize(TextReader reader)
         {
-            var value = tr.ReadToEnd();
+            if (reader == null) return null;
+            var value = reader.ReadToEnd();
 
             // Create the day specifier and associate it with a calendar object
             var rdt = CreateAndAssociate() as PeriodList;

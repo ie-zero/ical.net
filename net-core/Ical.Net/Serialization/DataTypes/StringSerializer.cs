@@ -99,14 +99,10 @@ namespace Ical.Net.Serialization.DataTypes
         }
 
         internal static readonly Regex UnescapedCommas = new Regex(@"(?<!\\),", RegexOptions.Compiled);
-        public override object Deserialize(TextReader tr)
+        public override object Deserialize(TextReader reader)
         {
-            if (tr == null)
-            {
-                return null;
-            }
-
-            var value = tr.ReadToEnd();
+            if (reader == null) return null;
+            var value = reader.ReadToEnd();
 
             // NOTE: this can deserialize into an IList<string> or simply a string,
             // depending on the input text.  Anything that uses this serializer should

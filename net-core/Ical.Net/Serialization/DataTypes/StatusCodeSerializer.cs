@@ -16,10 +16,7 @@ namespace Ical.Net.Serialization.DataTypes
         public override string SerializeToString(object obj)
         {
             var sc = obj as StatusCode;
-            if (sc == null)
-            {
-                return null;
-            }
+            if (sc == null) return null;
 
             var vals = new string[sc.Parts.Length];
             for (var i = 0; i < sc.Parts.Length; i++)
@@ -31,9 +28,10 @@ namespace Ical.Net.Serialization.DataTypes
 
         internal static readonly Regex StatusCode = new Regex(@"\d(\.\d+)*", RegexOptions.Compiled | RegexOptions.CultureInvariant);
 
-        public override object Deserialize(TextReader tr)
+        public override object Deserialize(TextReader reader)
         {
-            var value = tr.ReadToEnd();
+            if (reader == null) return null;
+            var value = reader.ReadToEnd();
 
             var sc = CreateAndAssociate() as StatusCode;
             if (sc == null)
