@@ -2,14 +2,9 @@
 
 namespace Ical.Net
 {
-    public class CalendarObjectBase : ICopyable, ILoadable
+    public class CalendarObjectBase : ICopyable
     {
-        private bool _mIsLoaded;
-
-        public CalendarObjectBase()
-        {
-            _mIsLoaded = true;
-        }
+        public bool IsLoaded { get; }
 
         /// <summary>
         /// Copies values from the target object to the
@@ -33,16 +28,6 @@ namespace Ical.Net
                 return (T) obj;
             }
             return default(T);
-        }
-
-        public virtual bool IsLoaded => _mIsLoaded;
-
-        public event EventHandler Loaded;
-
-        public virtual void OnLoaded()
-        {
-            _mIsLoaded = true;
-            Loaded?.Invoke(this, EventArgs.Empty);
         }
     }
 }
