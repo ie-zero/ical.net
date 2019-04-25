@@ -4,8 +4,6 @@ namespace Ical.Net
 {
     public class CalendarObjectBase : ICopyable
     {
-        public bool IsLoaded { get; }
-
         /// <summary>
         /// Copies values from the target object to the
         /// current object.

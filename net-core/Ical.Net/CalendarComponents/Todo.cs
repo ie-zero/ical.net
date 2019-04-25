@@ -115,12 +115,12 @@ namespace Ical.Net.CalendarComponents
                 // component is fully loaded (When deserializing, it shouldn't
                 // automatically set the completed time just because the
                 // status was changed).
-                if (IsLoaded)
-                {
-                    Completed = string.Equals(value, TodoStatus.Completed, TodoStatus.Comparison)
-                        ? CalDateTime.Now
-                        : null;
-                }
+                //if (IsLoaded)
+                //{
+                //    Completed = string.Equals(value, TodoStatus.Completed, TodoStatus.Comparison)
+                //        ? CalDateTime.Now
+                //        : null;
+                //}
 
                 Properties.Set(TodoStatus.Key, value);
             }
