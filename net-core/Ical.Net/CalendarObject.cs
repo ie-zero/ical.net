@@ -24,12 +24,6 @@ namespace Ical.Net
             Name = name;
         }
 
-        public CalendarObject(int line, int col) : this()
-        {
-            Line = line;
-            Column = col;
-        }
-
         private void Initialize()
         {
             //ToDo: I'm fairly certain this is ONLY used for null checking. If so, maybe it can just be a bool? CalendarObjectList is an empty object, and
@@ -76,8 +70,6 @@ namespace Ical.Net
             // Copy the name and basic information
             Name = obj.Name;
             Parent = obj.Parent;
-            Line = obj.Line;
-            Column = obj.Column;
 
             // Add each child
             Children.Clear();
@@ -119,10 +111,6 @@ namespace Ical.Net
             }
             protected set { }
         }
-
-        public virtual int Line { get; set; }
-
-        public virtual int Column { get; set; }
 
         public virtual object GetService(Type serviceType)
         {
