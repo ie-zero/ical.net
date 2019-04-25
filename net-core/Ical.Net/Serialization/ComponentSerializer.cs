@@ -25,37 +25,54 @@ namespace Ical.Net.Serialization
                 return null;
             }
 
-            var sb = new StringBuilder();
-            var upperName = c.Name.ToUpperInvariant();
-            sb.Append(TextUtil.FoldLines($"BEGIN:{upperName}"));
-
             // Get a serializer factory
-            var sf = SerializationContext.GetService<ISerializerFactory>();
+            var factory = SerializationContext.GetService<ISerializerFactory>();
 
             // Sort the calendar properties in alphabetical order before serializing them!
-            var properties = c.Properties.OrderBy(p => p.Name).ToList();
+            var properties = c.Properties.OrderBy(p => p.Name).ToArray();
 
-            // Serialize properties
-            foreach (var p in properties)
-            {
-                // Get a serializer for each property.
-                var serializer = sf.Build(p.GetType(), SerializationContext) as IStringSerializer;
-                sb.Append(serializer.SerializeToString(p));
-            }
+            var builder = new StringBuilder();
+            SerializeBeginComponent(builder, c.Name);
+            SerializeProperties(builder, properties, factory);
+            SerializeChildObjects(builder, c.Children, factory);
+            SerializeEndComponent(builder, c.Name);
 
-            // Serialize child objects
-            foreach (var child in c.Children)
-            {
-                // Get a serializer for each child object.
-                var serializer = sf.Build(child.GetType(), SerializationContext) as IStringSerializer;
-                sb.Append(serializer.SerializeToString(child));
-            }
-
-            sb.Append(TextUtil.FoldLines($"END:{upperName}"));
-            return sb.ToString();
+            return builder.ToString();
         }
 
-        public override object Deserialize(TextReader tr) => null;
+        private static void SerializeBeginComponent(StringBuilder builder, string componentName)
+        {
+            string upperName = componentName.ToUpperInvariant();
+            builder.Append(TextUtil.FoldLines($"BEGIN:{upperName}"));
+        }
+
+        private static void SerializeEndComponent(StringBuilder builder, string componentName)
+        {
+            string upperName = componentName.ToUpperInvariant();
+            builder.Append(TextUtil.FoldLines($"END:{upperName}"));
+        }
+
+        private void SerializeProperties(StringBuilder builder, ICalendarProperty[] properties, ISerializerFactory factory)
+        {
+            foreach (var prop in properties)
+            {
+                // Get a serializer for each property.
+                var serializer = factory.Build(prop.GetType(), SerializationContext) as IStringSerializer;
+                builder.Append(serializer.SerializeToString(prop));
+            }
+        }
+
+        private void SerializeChildObjects(StringBuilder builder, ICalendarObjectList<ICalendarObject> children, ISerializerFactory factory)
+        {
+            foreach (var child in children)
+            {
+                // Get a serializer for each child object.
+                var serializer = factory.Build(child.GetType(), SerializationContext) as IStringSerializer;
+                builder.Append(serializer.SerializeToString(child));
+            }
+        }
+
+        public override object Deserialize(TextReader reader) => null;
 
         public class PropertyAlphabetizer : IComparer<ICalendarProperty>
         {
