@@ -25,6 +25,7 @@ namespace Ical.Net.Serialization
             }
             catch
             {
+                // TODO: Review code - exceptions are swallowed silently
                 return null;
             }
         }
@@ -38,6 +39,7 @@ namespace Ical.Net.Serialization
             }
             catch
             {
+                // TODO: Review code - exceptions are swallowed silently
                 return null;
             }
         }
@@ -50,6 +52,7 @@ namespace Ical.Net.Serialization
             }
             catch
             {
+                // TODO: Review code - exceptions are swallowed silently
                 return null;
             }
         }
@@ -83,6 +86,7 @@ namespace Ical.Net.Serialization
             }
             catch
             {
+                // TODO: Review code - exceptions are swallowed silently
                 return null;
             }
         }
@@ -96,6 +100,7 @@ namespace Ical.Net.Serialization
             }
             catch
             {
+                // TODO: Review code - exceptions are swallowed silently
                 return null;
             }
         }
@@ -108,6 +113,7 @@ namespace Ical.Net.Serialization
             }
             catch
             {
+                // TODO: Review code - exceptions are swallowed silently
                 return null;
             }
         }
