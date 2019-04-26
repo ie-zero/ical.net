@@ -2,7 +2,7 @@
 
 namespace Ical.Net
 {
-    public class CalendarObjectBase : ICopyable
+    public abstract class CalendarObjectBase : ICopyable
     {
         /// <summary>
         /// Copies values from the target object to the
