@@ -28,7 +28,6 @@ namespace Ical.Net.Serialization
                 var ctx = new SerializationContext
                 {
                     _typedServices = _default._typedServices,
-                    _namedServices = _default._namedServices
                 };
                 return ctx;
             }
@@ -36,12 +35,10 @@ namespace Ical.Net.Serialization
 
         private readonly Stack<WeakReference> _mStack = new Stack<WeakReference>();
         private TypedServicesProvider _typedServices;
-        private NamedServicesProvider _namedServices;
 
         public SerializationContext()
         {
             _typedServices = new TypedServicesProvider();
-            _namedServices = new NamedServicesProvider();
 
             // Add some services by default
             SetService(new SerializerFactory());
@@ -90,24 +87,9 @@ namespace Ical.Net.Serialization
             return _typedServices.GetService(serviceType);
         }
 
-        public virtual object GetService(string name)
-        {
-            return _namedServices.GetService(name);
-        }
-
         public virtual T GetService<T>()
         {
             return _typedServices.GetService<T>();
-        }
-
-        public virtual T GetService<T>(string name)
-        {
-            return _namedServices.GetService<T>(name);
-        }
-
-        public virtual void SetService(string name, object obj)
-        {
-            _namedServices.SetService(name, obj);
         }
 
         public void SetService(object obj)
@@ -118,11 +100,6 @@ namespace Ical.Net.Serialization
         public virtual void RemoveService(Type type)
         {
             _typedServices.RemoveService(type);
-        }
-
-        public virtual void RemoveService(string name)
-        {
-            _namedServices.RemoveService(name);
         }
     }
 }
