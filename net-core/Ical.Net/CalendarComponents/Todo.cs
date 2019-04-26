@@ -111,6 +111,8 @@ namespace Ical.Net.CalendarComponents
                     return;
                 }
 
+                // TODO: The logic appears to be sound  but there is no current confirmation in the tests to verify this behaviour.s
+                //
                 // Automatically set/unset the Completed time, once the
                 // component is fully loaded (When deserializing, it shouldn't
                 // automatically set the completed time just because the
