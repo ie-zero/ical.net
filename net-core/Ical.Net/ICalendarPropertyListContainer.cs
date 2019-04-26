@@ -1,6 +1,6 @@
 ﻿namespace Ical.Net
 {
-    public interface ICalendarPropertyListContainer : ICalendarObject
+    public interface ICalendarPropertyListContainer
     {
         CalendarPropertyList Properties { get; }
     }
