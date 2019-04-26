@@ -12,7 +12,6 @@ namespace Ical.Net
         private ICalendarObjectList<ICalendarObject> _children;
 
         private TypedServicesProvider _typedServices;
-        private NamedServicesProvider _namedServices;
 
         internal CalendarObject()
         {
@@ -31,7 +30,6 @@ namespace Ical.Net
             _children = new CalendarObjectList(this);
 
             _typedServices = new TypedServicesProvider();
-            _namedServices = new NamedServicesProvider();
 
             _children.ItemAdded += Children_ItemAdded;
         }
@@ -117,24 +115,9 @@ namespace Ical.Net
             return _typedServices.GetService(serviceType);
         }
 
-        public virtual object GetService(string name)
-        {
-            return _namedServices.GetService(name);
-        }
-
         public virtual T GetService<T>()
         {
             return _typedServices.GetService<T>();
-        }
-
-        public virtual T GetService<T>(string name)
-        {
-            return _namedServices.GetService<T>(name);
-        }
-
-        public virtual void SetService(string name, object obj)
-        {
-            _namedServices.SetService(name, obj);
         }
 
         public virtual void SetService(object obj)
@@ -145,11 +128,6 @@ namespace Ical.Net
         public virtual void RemoveService(Type type)
         {
             _typedServices.RemoveService(type);
-        }
-
-        public virtual void RemoveService(string name)
-        {
-            _namedServices.RemoveService(name);
         }
 
         public virtual string Group

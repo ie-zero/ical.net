@@ -26,6 +26,7 @@ namespace Ical.Net
     [DebuggerDisplay("{Name}:{Value}")]
     public class CalendarProperty : CalendarObject, ICalendarProperty
     {
+        private NamedServicesProvider _namedServices = new NamedServicesProvider();
         private List<object> _values = new List<object>();
 
         /// <summary>
@@ -143,6 +144,26 @@ namespace Ical.Net
                 return;
             }
             _values.Remove(value);
+        }
+
+        public object GetService(string name)
+        {
+            return _namedServices.GetService(name);
+        }
+
+        public T GetService<T>(string name)
+        {
+            return _namedServices.GetService<T>(name);
+        }
+
+        public void SetService(string name, object obj)
+        {
+            _namedServices.SetService(name, obj);
+        }
+
+        public void RemoveService(string name)
+        {
+            _namedServices.RemoveService(name);
         }
     }
 }

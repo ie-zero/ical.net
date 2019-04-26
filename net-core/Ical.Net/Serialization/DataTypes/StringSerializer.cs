@@ -112,7 +112,7 @@ namespace Ical.Net.Serialization.DataTypes
 
             // Determine if we can serialize this property
             // with multiple values per line.
-            var co = SerializationContext.Peek() as ICalendarObject;
+            var co = SerializationContext.Peek() as ICalendarProperty;
             if (co is ICalendarProperty)
             {
                 serializeAsList = SerializationContext.GetService<DataTypeMapper>().GetPropertyAllowsMultipleValues(co);
