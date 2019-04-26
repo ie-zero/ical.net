@@ -12,6 +12,8 @@ using Ical.Net.Utility;
 
 namespace Ical.Net
 {
+    // TODO: Consider if 'Calendar' class should be treated as a component. 
+
     public class Calendar : CalendarComponent, IGetOccurrencesTyped, IGetFreeBusy, IMergeable
     {
         public static Calendar Load(string iCalendarString)
