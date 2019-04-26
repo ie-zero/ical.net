@@ -144,12 +144,6 @@ namespace Ical.Net.CalendarComponents
         /// </summary>
         public virtual ICalendarObjectList<Alarm> Alarms => new CalendarObjectListProxy<Alarm>(Children);
 
-        public RecurringComponent()
-        {
-            Initialize();
-            EnsureProperties();
-        }
-
         public RecurringComponent(string name) : base(name)
         {
             Initialize();

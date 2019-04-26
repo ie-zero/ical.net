@@ -55,9 +55,8 @@ namespace Ical.Net
         /// </code>
         /// </example>
         /// </summary>
-        public Calendar()
+        public Calendar() : base(Components.Calendar)
         {
-            Name = Components.Calendar;
             Initialize();
         }
 

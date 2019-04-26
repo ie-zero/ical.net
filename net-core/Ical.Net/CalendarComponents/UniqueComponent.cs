@@ -18,11 +18,6 @@ namespace Ical.Net.CalendarComponents
         // parameter ("PARENT", "CHILD", "SIBLING", or other)
         // TODO: Add RemoveRelationship() public method.        
 
-        public UniqueComponent()
-        {
-            EnsureProperties();
-        }
-
         public UniqueComponent(string name) : base(name)
         {
             EnsureProperties();

@@ -61,9 +61,8 @@ namespace Ical.Net.CalendarComponents
 
         protected virtual IList<AlarmOccurrence> Occurrences { get; set; }
 
-        public Alarm()
+        public Alarm() : base(Components.Alarm)
         {
-            Name = Components.Alarm;
             Occurrences = new List<AlarmOccurrence>();
         }
 

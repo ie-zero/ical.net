@@ -13,14 +13,10 @@ namespace Ical.Net
 
         private TypedServicesProvider _typedServices;
 
-        internal CalendarObject()
-        {
-            Initialize();
-        }
-
-        public CalendarObject(string name) : this()
+        public CalendarObject(string name) 
         {
             Name = name;
+            Initialize();
         }
 
         private void Initialize()
@@ -90,7 +86,7 @@ namespace Ical.Net
         /// <summary>
         /// Gets or sets the name of the iCalObject.  For iCalendar components, this is the RFC 5545 name of the component.
         /// </summary>        
-        public virtual string Name { get; set; }
+        public virtual string Name { get; internal set; }
 
         /// <summary>
         /// Returns the <see cref="Calendar"/> that this DDayiCalObject belongs to.

@@ -34,7 +34,7 @@ namespace Ical.Net
         /// </summary>
         public virtual IParameterCollection Parameters { get; protected set; } = new ParameterList();
 
-        public CalendarProperty() {}
+        public CalendarProperty() : base(null) {}
 
         public CalendarProperty(string name) : base(name) {}
 

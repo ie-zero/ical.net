@@ -144,20 +144,18 @@ namespace Ical.Net.CalendarComponents
             }
 
             var utcOffset = oldestInterval.StandardOffset.ToTimeSpan();
-
-            var timeZoneInfo = new VTimeZoneInfo();
-
             var isDaylight = oldestInterval.Savings.Ticks > 0;
 
+            VTimeZoneInfo timeZoneInfo;
             if (isDaylight)
             {
-                timeZoneInfo.Name = "DAYLIGHT";
+                timeZoneInfo = new VTimeZoneInfo("DAYLIGHT");
                 timeZoneInfo.OffsetFrom = new UtcOffset(utcOffset);
                 timeZoneInfo.OffsetTo = new UtcOffset(utcOffset - delta);
             }
             else
             {
-                timeZoneInfo.Name = "STANDARD";
+                timeZoneInfo = new VTimeZoneInfo("STANDARD");
                 timeZoneInfo.OffsetFrom = new UtcOffset(utcOffset + delta);
                 timeZoneInfo.OffsetTo = new UtcOffset(utcOffset);
             }
@@ -259,10 +257,7 @@ namespace Ical.Net.CalendarComponents
             }
         }
 
-        public VTimeZone()
-        {
-            Name = Components.Timezone;
-        }
+        public VTimeZone() : base(Components.Timezone) { }
 
         
         public VTimeZone(string tzId) : this()

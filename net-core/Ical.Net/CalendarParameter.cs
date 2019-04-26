@@ -12,7 +12,7 @@ namespace Ical.Net
     {
         private HashSet<string> _values;
 
-        public CalendarParameter()
+        public CalendarParameter() : base(null)
         {
             Initialize();
         }

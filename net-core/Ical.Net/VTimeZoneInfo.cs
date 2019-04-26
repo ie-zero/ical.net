@@ -10,20 +10,14 @@ namespace Ical.Net
     public class VTimeZoneInfo : CalendarComponent, IRecurrable
     {
         TimeZoneInfoEvaluator _evaluator;
-        DateTime _end;
 
-        public VTimeZoneInfo()
+        public VTimeZoneInfo(string name) : base(name)
         {
-            // FIXME: how do we ensure SEQUENCE doesn't get serialized?
-            //base.Sequence = null;
+            // TODO: how do we ensure SEQUENCE doesn't get serialized?
+            // 
+            // base.Sequence = null;
             // iCalTimeZoneInfo does not allow sequence numbers
             // Perhaps we should have a custom serializer that fixes this?
-
-            Initialize();
-        }
-        public VTimeZoneInfo(string name) : this()
-        {
-            Name = name;
         }
 
         void Initialize()

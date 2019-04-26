@@ -198,15 +198,13 @@ namespace Ical.Net.CalendarComponents
         /// Constructs an Event object, with an iCalObject
         /// (usually an iCalendar object) as its parent.
         /// </summary>
-        public CalendarEvent()
+        public CalendarEvent() : base(EventStatus.Name)
         {
             Initialize();
         }
 
         private void Initialize()
         {
-            Name = EventStatus.Name;
-
             _mEvaluator = new EventEvaluator(this);
             SetService(_mEvaluator);
         }

@@ -128,10 +128,8 @@ namespace Ical.Net.CalendarComponents
             }
         }
 
-        public Todo()
+        public Todo() : base(TodoStatus.Name)
         {
-            Name = TodoStatus.Name;
-
             _mEvaluator = new TodoEvaluator(this);
             SetService(_mEvaluator);
         }

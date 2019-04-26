@@ -17,10 +17,7 @@ namespace Ical.Net.CalendarComponents
         /// Constructs an Journal object, with an iCalObject
         /// (usually an iCalendar object) as its parent.
         /// </summary>
-        public Journal()
-        {
-            Name = JournalStatus.Name;
-        }
+        public Journal() : base(JournalStatus.Name) { }
         
         protected override bool EvaluationIncludesReferenceDate => true;
         

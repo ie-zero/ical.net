@@ -117,10 +117,7 @@ namespace Ical.Net.CalendarComponents
             return fb;
         }
 
-        public FreeBusy()
-        {
-            Name = Components.Freebusy;
-        }
+        public FreeBusy() : base(Components.Freebusy) { }
 
         public virtual IList<FreeBusyEntry> Entries
         {
