@@ -11,7 +11,7 @@ namespace Ical.Net.Serialization
         private readonly Type _innerType;
         private readonly Type _objectType;
 
-        public GenericListSerializer(Type objectType)
+        public GenericListSerializer(SerializationContext ctx, Type objectType) : base(ctx)
         {
             _innerType = objectType.GetGenericArguments()[0];
 

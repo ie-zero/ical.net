@@ -55,7 +55,7 @@ namespace Ical.Net.CoreUnitTests
             Duration = TimeSpan.FromHours(1),
         };
 
-        private static string SerializeEvent(CalendarEvent e) => new CalendarSerializer().SerializeToString(new Calendar { Events = { e } });
+        private static string SerializeEvent(CalendarEvent e) => CreateCalendarSerializer().SerializeToString(new Calendar { Events = { e } });
 
         [Test]
         public void EventUid_Tests()
@@ -73,6 +73,11 @@ namespace Ical.Net.CoreUnitTests
 
             var serializedCopy = SerializeEvent(copy);
             Assert.AreEqual(1, Regex.Matches(serializedCopy, uidPattern).Count);
+        }
+
+        private static CalendarSerializer CreateCalendarSerializer()
+        {
+            return new CalendarSerializer(SerializationContext.Default);
         }
     }
 }

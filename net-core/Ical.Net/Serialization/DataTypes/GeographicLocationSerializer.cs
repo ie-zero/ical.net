@@ -8,8 +8,6 @@ namespace Ical.Net.Serialization.DataTypes
 {
     public class GeographicLocationSerializer : EncodableDataTypeSerializer
     {
-        public GeographicLocationSerializer() { }
-
         public GeographicLocationSerializer(SerializationContext ctx) : base(ctx) { }
 
         public override Type TargetType => typeof(GeographicLocation);

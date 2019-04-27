@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using Ical.Net.Serialization;
 using Ical.Net.Serialization.DataTypes;
 
 namespace Ical.Net.DataTypes
@@ -60,7 +61,7 @@ namespace Ical.Net.DataTypes
                 return;
             }
 
-            var serializer = new OrganizerSerializer();
+            var serializer = new OrganizerSerializer(SerializationContext.Default);
             CopyFrom(serializer.Deserialize(new StringReader(value)) as ICopyable);
         }
 

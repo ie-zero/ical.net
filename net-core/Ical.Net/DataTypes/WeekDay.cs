@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using Ical.Net.Serialization;
 using Ical.Net.Serialization.DataTypes;
 
 namespace Ical.Net.DataTypes
@@ -32,7 +33,7 @@ namespace Ical.Net.DataTypes
 
         public WeekDay(string value)
         {
-            var serializer = new WeekDaySerializer();
+            var serializer = new WeekDaySerializer(SerializationContext.Default);
             CopyFrom(serializer.Deserialize(new StringReader(value)) as ICopyable);
         }
 

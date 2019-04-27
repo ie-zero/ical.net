@@ -45,7 +45,7 @@ namespace Ical.Net.Serialization
             }
             else if (objectType.GetTypeInfo().IsEnum)
             {
-                return new EnumSerializer(objectType, ctx);
+                return new EnumSerializer(ctx, objectType);
             }
             else if (typeof(TimeSpan).IsAssignableFrom(objectType))
             {

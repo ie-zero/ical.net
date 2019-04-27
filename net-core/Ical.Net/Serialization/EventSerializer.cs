@@ -5,8 +5,6 @@ namespace Ical.Net.Serialization
 {
     public class EventSerializer : ComponentSerializer
     {
-        public EventSerializer() { }
-
         public EventSerializer(SerializationContext ctx) : base(ctx) { }
 
         public override Type TargetType => typeof(CalendarEvent);

@@ -141,7 +141,7 @@ namespace Ical.Net.FrameworkUnitTests
             var evt = new CalendarEvent();
             emptyCalendar.Events.Add(evt);
 
-            var serializer = new CalendarSerializer();
+            var serializer = CreateCalendarSerializer();
             yield return new TestCaseData(serializer.SerializeToString(emptyCalendar))
                 .SetName("Empty calendar with empty event returns true")
                 .Returns(true);
@@ -280,7 +280,7 @@ END:VCALENDAR";
             //Change the original calendar.Event to have an ExDate
             //Serialize to string, and deserialize
             //CalendarEvent and Calendar hash codes and equality should NOT be the same
-            var serializer = new CalendarSerializer();
+            var serializer = CreateCalendarSerializer();
 
             var vEvent = GetSimpleEvent();
             vEvent.RecurrenceRules = GetSimpleRecurrenceList();
@@ -437,6 +437,11 @@ END:VCALENDAR";
 
             var expectedNegative = TimeSpan.FromMinutes(-17.5);
             Assert.AreEqual(expectedNegative, negativeOffset?.Offset);
+        }
+
+        private static CalendarSerializer CreateCalendarSerializer()
+        {
+            return new CalendarSerializer(SerializationContext.Default);
         }
     }
 }

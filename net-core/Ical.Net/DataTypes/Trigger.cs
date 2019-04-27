@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using Ical.Net.Serialization;
 using Ical.Net.Serialization.DataTypes;
 
 namespace Ical.Net.DataTypes
@@ -69,7 +70,7 @@ namespace Ical.Net.DataTypes
 
         public Trigger(string value) : this()
         {
-            var serializer = new TriggerSerializer();
+            var serializer = new TriggerSerializer(SerializationContext.Default);
             CopyFrom(serializer.Deserialize(new StringReader(value)) as ICopyable);
         }
 

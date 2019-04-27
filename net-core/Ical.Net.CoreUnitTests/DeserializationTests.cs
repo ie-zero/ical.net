@@ -116,7 +116,7 @@ namespace Ical.Net.CoreUnitTests
         public void Bug3177278()
         {
             var calendar = new Calendar();
-            var serializer = new CalendarSerializer();
+            var serializer = CreateCalendarSerializer();
 
             var ms = new MemoryStream();
             serializer.Serialize(calendar, ms, Encoding.UTF8);
@@ -377,7 +377,8 @@ END:VCALENDAR
         [Test]
         public void String2()
         {
-            var serializer = new StringSerializer();
+            StringSerializer serializer = CreateStringSerializer();
+
             var value = @"test\with\;characters";
             var unescaped = (string)serializer.Deserialize(new StringReader(value));
 
@@ -504,6 +505,16 @@ END:VCALENDAR
             {
                 Assert.AreEqual("2." + i, props[i].Value);
             }
+        }
+
+        private static StringSerializer CreateStringSerializer()
+        {
+            return new StringSerializer(SerializationContext.Default);
+        }
+
+        private static CalendarSerializer CreateCalendarSerializer()
+        {
+            return new CalendarSerializer(SerializationContext.Default);
         }
     }
 }

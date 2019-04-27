@@ -10,8 +10,6 @@ namespace Ical.Net.Serialization.DataTypes
 {
     public class StringSerializer : EncodableDataTypeSerializer
     {
-        public StringSerializer() {}
-
         public StringSerializer(SerializationContext ctx) : base(ctx) {}
 
         internal static readonly Regex SingleBackslashMatch = new Regex(@"(?<!\\)\\(?!\\)", RegexOptions.Compiled);

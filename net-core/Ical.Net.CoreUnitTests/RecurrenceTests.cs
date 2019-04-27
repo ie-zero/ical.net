@@ -2565,7 +2565,7 @@ namespace Ical.Net.CoreUnitTests
             using (var sr = new StringReader("FREQ=WEEKLY;UNTIL=20251126T120000;INTERVAL=1;BYDAY=MO"))
             {
                 var start = DateTime.Parse("2010-11-27 9:00:00");
-                var serializer = new RecurrencePatternSerializer();
+                var serializer = CreateRecurrencePatternSerializer();
                 var rp = (RecurrencePattern)serializer.Deserialize(sr);
                 var rpe = new RecurrencePatternEvaluator(rp);
                 var recurringPeriods = rpe.Evaluate(new CalDateTime(start), start, rp.Until, false);
@@ -2612,7 +2612,7 @@ namespace Ical.Net.CoreUnitTests
         {
             using (var sr = new StringReader("FREQ=WEEKLY;UNTIL=20251126"))
             {
-                var serializer = new RecurrencePatternSerializer();
+                RecurrencePatternSerializer serializer = CreateRecurrencePatternSerializer();
                 var rp = (RecurrencePattern)serializer.Deserialize(sr);
 
                 Assert.IsNotNull(rp);
@@ -2833,7 +2833,7 @@ namespace Ical.Net.CoreUnitTests
             recur.ByDay.Add(new WeekDay(DayOfWeek.Friday));
             evt.RecurrenceRules.Add(recur);
 
-            var serializer = new RecurrencePatternSerializer();
+            var serializer = CreateRecurrencePatternSerializer();
             Assert.IsTrue(string.Compare(serializer.SerializeToString(recur), "FREQ=DAILY;COUNT=3;BYDAY=MO,WE,FR", StringComparison.Ordinal) == 0,
                 "Serialized recurrence string is incorrect");
         }
@@ -3385,8 +3385,7 @@ END:VCALENDAR";
             {
                 Events = { e },
             };
-
-            var serializer = new CalendarSerializer();
+            CalendarSerializer serializer = CreateCalendarSerializer();
             var serialized = serializer.SerializeToString(calendar);
 
             const string contains = "20171108T103000";
@@ -3440,6 +3439,16 @@ END:VCALENDAR
 
             var occurrences = firstEvent.GetOccurrences(startSearch, endSearch);
             Assert.AreEqual(5, occurrences.Count);
+        }
+
+        private static CalendarSerializer CreateCalendarSerializer()
+        {
+            return new CalendarSerializer(SerializationContext.Default);
+        }
+
+        private static RecurrencePatternSerializer CreateRecurrencePatternSerializer()
+        {
+            return new RecurrencePatternSerializer(SerializationContext.Default);
         }
     }
 }

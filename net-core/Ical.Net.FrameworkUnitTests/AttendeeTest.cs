@@ -67,7 +67,9 @@ namespace Ical.Net.FrameworkUnitTests
 
             var cal = new Calendar();
             cal.Events.Add(evt);
-            var serializer = new CalendarSerializer();
+            var serializer = CreateCalendarSerializer();
+
+            // TODO: Replace Console.Write() with Asserts 
             Console.Write(serializer.SerializeToString(cal));
         }
 
@@ -89,6 +91,11 @@ namespace Ical.Net.FrameworkUnitTests
 
             evt.Attendees.Remove(_attendees.Last());
             Assert.AreEqual(0, evt.Attendees.Count);
+        }
+
+        private static CalendarSerializer CreateCalendarSerializer()
+        {
+            return new CalendarSerializer(SerializationContext.Default);
         }
     }
 }

@@ -71,7 +71,7 @@ namespace Ical.Net.CoreUnitTests
             Duration = TimeSpan.FromHours(1),
         };
 
-        private static string SerializeEvent(CalendarEvent e) => new CalendarSerializer().SerializeToString(new Calendar { Events = { e } });
+        private static string SerializeEvent(CalendarEvent e) => CreateCalendarSerializer().SerializeToString(new Calendar { Events = { e } });
 
 
         public static IEnumerable<ITestCaseData> Event_TestCases()
@@ -465,6 +465,11 @@ namespace Ical.Net.CoreUnitTests
             TestComparison((dt1, dt2) => dt1 >= dt2, (i1, i2) => i1 >= i2);
             TestComparison((dt1, dt2) => dt1 < dt2, (i1, i2) => i1 < i2);
             TestComparison((dt1, dt2) => dt1 <= dt2, (i1, i2) => i1 <= i2);
+        }
+
+        private static CalendarSerializer CreateCalendarSerializer()
+        {
+            return new CalendarSerializer(SerializationContext.Default);
         }
     }
 }

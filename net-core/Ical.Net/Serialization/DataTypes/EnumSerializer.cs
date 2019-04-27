@@ -9,18 +9,7 @@ namespace Ical.Net.Serialization.DataTypes
     {
         private readonly Type _enumType;
 
-        public EnumSerializer(Type enumType)
-        {
-            if (enumType == null)
-                throw new ArgumentNullException(nameof(enumType));
-
-            if (!enumType.GetTypeInfo().IsEnum)
-                throw new ArgumentException($"'{nameof(enumType)}' is not an enumeration type", nameof(enumType));
-
-            _enumType = enumType;
-        }
-
-        public EnumSerializer(Type enumType, SerializationContext ctx) : base(ctx)
+        public EnumSerializer(SerializationContext ctx, Type enumType) : base(ctx)
         {
             if (enumType == null)
                 throw new ArgumentNullException(nameof(enumType));

@@ -6,11 +6,6 @@ namespace Ical.Net.Serialization
 {
     public abstract class SerializerBase : IStringSerializer
     {
-        protected SerializerBase()
-        {
-            SerializationContext = SerializationContext.Default;
-        }
-
         protected SerializerBase(SerializationContext ctx)
         {
             SerializationContext = ctx ?? throw new ArgumentNullException(nameof(ctx));

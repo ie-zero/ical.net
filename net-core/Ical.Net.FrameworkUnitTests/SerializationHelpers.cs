@@ -9,6 +9,6 @@ namespace Ical.Net.FrameworkUnitTests
             => SerializeToString(new Calendar { Events = { calendarEvent } });
 
         public static string SerializeToString(Calendar iCalendar)
-            => new CalendarSerializer().SerializeToString(iCalendar);
+            => new CalendarSerializer(SerializationContext.Default).SerializeToString(iCalendar);
     }
 }
