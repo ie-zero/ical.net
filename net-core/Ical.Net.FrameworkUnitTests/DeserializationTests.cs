@@ -15,15 +15,19 @@ namespace Ical.Net.FrameworkUnitTests
     [TestFixture, Category("Deserialization")]
     public class DeserializationTests
     {
+        //
+        // TODO: *** Test class - Marked for deletion ****
+        //
+
         [Test]
         public void Attendee1()
         {
             var iCal = Calendar.Load(IcsFiles.Attendee1);
             Assert.AreEqual(1, iCal.Events.Count);
-            
+
             var evt = iCal.Events.First();
             // Ensure there are 2 attendees
-            Assert.AreEqual(2, evt.Attendees.Count);            
+            Assert.AreEqual(2, evt.Attendees.Count);
 
             var attendee1 = evt.Attendees[0];
             var attendee2 = evt.Attendees[1];

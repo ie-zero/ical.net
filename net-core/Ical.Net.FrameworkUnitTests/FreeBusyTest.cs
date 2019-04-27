@@ -7,6 +7,10 @@ namespace Ical.Net.FrameworkUnitTests
     [TestFixture]
     public class FreeBusyTest
     {
+        //
+        // TODO: *** Test class - Marked for deletion ****
+        //
+
         /// <summary>
         /// Ensures that GetFreeBusyStatus() return the correct status.
         /// </summary>

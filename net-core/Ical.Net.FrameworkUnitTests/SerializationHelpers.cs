@@ -5,6 +5,10 @@ namespace Ical.Net.FrameworkUnitTests
 {
     internal class SerializationHelpers
     {
+        //
+        // TODO: *** Test class - Marked for deletion ****
+        //
+
         public static string SerializeToString(CalendarEvent calendarEvent)
             => SerializeToString(new Calendar { Events = { calendarEvent } });
 

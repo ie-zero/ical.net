@@ -9,6 +9,10 @@ namespace Ical.Net.FrameworkUnitTests
 {
     public class VTimeZoneTest
     {
+        //
+        // TODO: *** Test class - Marked for deletion ****
+        //
+
         [Test, Category("VTimeZone")]
         public void InvalidTzIdShouldThrowException()
         {

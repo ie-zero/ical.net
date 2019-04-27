@@ -117,7 +117,7 @@ namespace Ical.Net.CoreUnitTests
         public void Bug3177278()
         {
             var calendar = new Calendar();
-            CalendarSerializer serializer = CreateCalendarSerializer();
+            var serializer = CreateCalendarSerializer();
 
             var ms = new MemoryStream();
             serializer.Serialize(calendar, ms, Encoding.UTF8);

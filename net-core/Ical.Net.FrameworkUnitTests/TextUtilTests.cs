@@ -6,7 +6,11 @@ using NUnit.Framework.Interfaces;
 namespace Ical.Net.FrameworkUnitTests
 {
     public class TextUtilTests
-    {
+    {        
+		//
+        // TODO: *** Test class - Marked for deletion ****
+        //
+
         [Test, TestCaseSource(nameof(FoldLines_TestCases))]
         public string FoldLines_Tests(string incoming) => TextUtil.FoldLines(incoming);
 

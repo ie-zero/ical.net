@@ -9,6 +9,10 @@ namespace Ical.Net.FrameworkUnitTests
     [TestFixture]
     public class DateTimeSerializerTests
     {
+        //
+        // TODO: *** Test class - Marked for deletion ****
+        //
+
         [Test, Category("Deserialization")]
         public void TZIDPropertyShouldBeAppliedForLocalTimezones()
         {

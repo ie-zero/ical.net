@@ -12,6 +12,10 @@ namespace Ical.Net.FrameworkUnitTests
     [TestFixture]
     public class CopyTest
     {
+        //
+        // TODO: *** Test class - Marked for deletion ****
+        //
+
         [Test, TestCaseSource(nameof(CopyCalendarTest_TestCases)), Category("Copy tests")]
         public void CopyCalendarTest(string calendarString)
         {

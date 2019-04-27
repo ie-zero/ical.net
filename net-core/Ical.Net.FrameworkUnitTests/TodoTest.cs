@@ -9,6 +9,10 @@ namespace Ical.Net.FrameworkUnitTests
     [TestFixture]
     public class TodoTest
     {
+        //
+        // TODO: *** Test class - Marked for deletion ****
+        //
+
         private const string _tzid = "US-Eastern";
 
         [Test, TestCaseSource(nameof(ActiveTodo_TestCases)), Category("Todo")]

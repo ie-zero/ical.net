@@ -17,6 +17,10 @@ namespace Ical.Net.FrameworkUnitTests
     [TestFixture]
     public class SerializationTests
     {
+        //
+        // TODO: *** Test class - Marked for deletion ****
+        //
+
         private static readonly DateTime _nowTime = DateTime.Now;
         private static readonly DateTime _later = _nowTime.AddHours(1);
         private static CalendarSerializer CreateCalendarSerializer() => new CalendarSerializer(SerializationContext.Default);

@@ -19,6 +19,10 @@ namespace Ical.Net.FrameworkUnitTests
     [TestFixture]
     public class RecurrenceTests
     {
+        //
+        // TODO: *** Test class - Marked for deletion ****
+        //
+
         private const string _tzid = "US-Eastern";
 
         private void EventOccurrenceTest(

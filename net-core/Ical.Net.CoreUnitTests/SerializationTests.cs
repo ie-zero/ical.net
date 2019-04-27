@@ -145,7 +145,7 @@ namespace Ical.Net.CoreUnitTests
                 : $"TZID={cdt.TzId}:{returnVar}";
         }
 
-        //This method needs renaming
+        // TODO: This method needs renaming
         static Dictionary<string, string> GetValues(string serialized, string name, string value)
         {
             var lengthened = serialized.Replace(SerializationConstants.LineBreak + ' ', string.Empty);
@@ -196,6 +196,7 @@ namespace Ical.Net.CoreUnitTests
 
             InspectSerializedSection(vTimezone, "DAYLIGHT", new[] {"TZNAME:" + tzi.DaylightName, "TZOFFSETFROM:" + o});
         }
+
         [Test, Category("Serialization")]
         public void SerializeDeserialize()
         {

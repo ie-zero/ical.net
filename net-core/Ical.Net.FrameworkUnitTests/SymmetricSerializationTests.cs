@@ -13,6 +13,10 @@ namespace Ical.Net.FrameworkUnitTests
 {
     public class SymmetricSerializationTests
     {
+        //
+        // TODO: *** Test class - Marked for deletion ****
+        //
+
         private const string _ldapUri = "ldap://example.com:6666/o=eDABC Industries,c=3DUS??(cn=3DBMary Accepted)";
 
         private static readonly DateTime _nowTime = DateTime.Now;

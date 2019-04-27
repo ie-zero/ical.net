@@ -10,6 +10,10 @@ namespace Ical.Net.FrameworkUnitTests
     [TestFixture]
     public class CalendarPropertiesTest
     {
+        //
+        // TODO: *** Test class - Marked for deletion ****
+        //
+
         [Test]
         public void AddPropertyShouldNotIncludePropertyNameInValue()
         {

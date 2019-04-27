@@ -13,6 +13,10 @@ namespace Ical.Net.FrameworkUnitTests
 {
     public class EqualityAndHashingTests
     {
+        //
+        // TODO: *** Test class - Marked for deletion ****
+        //
+
         private const string _someTz = "America/Los_Angeles";
         private static readonly DateTime _nowTime = DateTime.Parse("2016-07-16T16:47:02.9310521-04:00");
         private static readonly DateTime _later = _nowTime.AddHours(1);

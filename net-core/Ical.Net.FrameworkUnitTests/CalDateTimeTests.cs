@@ -9,6 +9,10 @@ namespace Ical.Net.FrameworkUnitTests
 {
     public class CalDateTimeTests
     {
+        //
+        // TODO: *** Test class - Marked for deletion ****
+        //
+
         private static readonly DateTime _now = DateTime.Now;
         private static readonly DateTime _later = _now.AddHours(1);
         private static CalendarEvent GetEventWithRecurrenceRules(string tzId)

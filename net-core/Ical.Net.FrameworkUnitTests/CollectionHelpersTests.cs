@@ -8,6 +8,10 @@ namespace Ical.Net.FrameworkUnitTests
 {
     internal class CollectionHelpersTests
     {
+        //
+        // TODO: *** Test class - Marked for deletion ****
+        //
+
         private static readonly DateTime _now = DateTime.UtcNow;
         private static readonly DateTime _later = _now.AddHours(1);
         private static readonly string _uid = Guid.NewGuid().ToString();

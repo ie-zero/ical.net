@@ -377,8 +377,7 @@ END:VCALENDAR
         [Test]
         public void String2()
         {
-            StringSerializer serializer = CreateStringSerializer();
-
+            var serializer = CreateStringSerializer();
             var value = @"test\with\;characters";
             var unescaped = (string)serializer.Deserialize(new StringReader(value));
 

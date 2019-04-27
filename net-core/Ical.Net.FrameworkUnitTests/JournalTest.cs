@@ -7,6 +7,10 @@ namespace Ical.Net.FrameworkUnitTests
     [TestFixture]
     public class JournalTest
     {
+        //
+        // TODO: *** Test class - Marked for deletion ****
+        //
+
         [Test, Category("Journal")]
         public void Journal1()
         {

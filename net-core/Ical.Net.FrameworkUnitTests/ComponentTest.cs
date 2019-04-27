@@ -7,6 +7,10 @@ namespace Ical.Net.FrameworkUnitTests
 {
     public class ComponentTest
     {
+        //
+        // TODO: *** Test class - Marked for deletion ****
+        //
+
         [Test, Category("Components")]
         public void UniqueComponent1()
         {

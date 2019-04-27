@@ -6,6 +6,10 @@ namespace Ical.Net.FrameworkUnitTests
 {
     public class ConcurrentDeserializationTests
     {
+        //
+        // TODO: *** Test class - Marked for deletion ****
+        //
+
         [Test]
         public void ConcurrentDeserialization_Test()
         {

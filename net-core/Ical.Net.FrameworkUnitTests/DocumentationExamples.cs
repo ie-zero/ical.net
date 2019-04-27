@@ -8,6 +8,10 @@ namespace Ical.Net.FrameworkUnitTests
 {
     public class DocumentationExamples
     {
+        //
+        // TODO: *** Test class - Marked for deletion ****
+        //
+
         [Test]
         public void Daily_Test()
         {

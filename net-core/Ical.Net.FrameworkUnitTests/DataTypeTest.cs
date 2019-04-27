@@ -6,6 +6,10 @@ namespace Ical.Net.FrameworkUnitTests
     [TestFixture]
     public class DataTypeTest
     {
+        //
+        // TODO: *** Test class - Marked for deletion ****
+        //
+
         [Test, Category("DataType")]
         public void OrganizerConstructorMustAcceptNull()
         {

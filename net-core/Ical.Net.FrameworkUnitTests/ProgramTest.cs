@@ -9,6 +9,10 @@ namespace Ical.Net.FrameworkUnitTests
     [TestFixture]
     public class ProgramTest
     {
+        //
+        // TODO: *** Test class - Marked for deletion ****
+        //
+
         [Test]
         public void LoadAndDisplayCalendar()
         {

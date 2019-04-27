@@ -11,6 +11,10 @@ namespace Ical.Net.FrameworkUnitTests
     [TestFixture]
     public class AttendeeTest
     {
+        //
+        // TODO: *** Test class - Marked for deletion ****
+        //
+
         internal static CalendarEvent VEventFactory() => new CalendarEvent
         {
             Summary = "Testing",

@@ -15,6 +15,9 @@ namespace Ical.Net.FrameworkUnitTests
     [TestFixture]
     public class SimpleDeserializationTests
     {
+        //
+        // TODO: *** Test class - Marked for deletion ****
+        //
 
         [Test, Category("Deserialization")]
         public void Attendee1()

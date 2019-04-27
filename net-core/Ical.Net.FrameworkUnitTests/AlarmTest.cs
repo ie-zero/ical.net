@@ -9,6 +9,10 @@ namespace Ical.Net.FrameworkUnitTests
     [TestFixture]
     public class AlarmTest
     {
+        //
+        // TODO: *** Test class - Marked for deletion ****
+        //
+
         private const string _tzid = "US-Eastern";
 
         public void TestAlarm(string calendarString, List<IDateTime> dates, CalDateTime start, CalDateTime end)
