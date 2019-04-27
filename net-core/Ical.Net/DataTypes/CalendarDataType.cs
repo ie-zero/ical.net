@@ -12,7 +12,6 @@ namespace Ical.Net.DataTypes
         private IParameterCollection _parameters;
         private ParameterCollectionProxy _proxy;
         private TypedServicesProvider _typedServices;
-        private NamedServicesProvider _namedServices;
 
         protected ICalendarObject _AssociatedObject;
 
@@ -26,7 +25,6 @@ namespace Ical.Net.DataTypes
             _parameters = new ParameterList();
             _proxy = new ParameterCollectionProxy(_parameters);
             _typedServices = new TypedServicesProvider();
-            _namedServices = new NamedServicesProvider();
         }
 
         [OnDeserializing]
@@ -168,45 +166,24 @@ namespace Ical.Net.DataTypes
 
         public virtual IParameterCollection Parameters => _proxy;
 
-        public virtual object GetService(Type serviceType)
+        internal object GetService(Type serviceType)
         {
             return _typedServices.GetService(serviceType);
         }
 
-        public object GetService(string name)
-        {
-            return _namedServices.GetService(name);
-        }
-
-        public T GetService<T>()
+        internal T GetService<T>()
         {
             return _typedServices.GetService<T>();
         }
 
-        public T GetService<T>(string name)
-        {
-            return _namedServices.GetService<T>(name);
-        }
-
-        public void SetService(string name, object obj)
-        {
-            _namedServices.SetService(name, obj);
-        }
-
-        public void SetService(object obj)
+        internal void SetService(object obj)
         {
             _typedServices.SetService(obj);
         }
 
-        public void RemoveService(Type type)
+        internal void RemoveService(Type type)
         {
             _typedServices.RemoveService(type);
         }
-
-        public void RemoveService(string name)
-        {
-            _namedServices.RemoveService(name);
-        }
-
     }
 }
