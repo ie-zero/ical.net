@@ -119,18 +119,6 @@ namespace Ical.Net.DataTypes
             return dt;
         }
 
-        public override ICalendarObject AssociatedObject
-        {
-            get => base.AssociatedObject;
-            set
-            {
-                if (!Equals(AssociatedObject, value))
-                {
-                    base.AssociatedObject = value;
-                }
-            }
-        }
-
         public override void CopyFrom(ICopyable obj)
         {
             base.CopyFrom(obj);

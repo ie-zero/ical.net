@@ -39,14 +39,14 @@ namespace Ical.Net.DataTypes
             OnDeserialized(context);
         }
 
-        protected virtual void OnDeserializing(StreamingContext context)
+        protected void OnDeserializing(StreamingContext context)
         {
             Initialize();
         }
 
-        protected virtual void OnDeserialized(StreamingContext context) {}
+        protected void OnDeserialized(StreamingContext context) {}
 
-        public virtual Type GetValueType()
+        public Type GetValueType()
         {
             // See RFC 5545 Section 3.2.20.
             if (_proxy != null && _proxy.ContainsKey("VALUE"))
@@ -89,12 +89,12 @@ namespace Ical.Net.DataTypes
             return null;
         }
 
-        public virtual void SetValueType(string type)
+        public void SetValueType(string type)
         {
             _proxy?.Set("VALUE", type ?? type.ToUpper());
         }
 
-        public virtual ICalendarObject AssociatedObject
+        public ICalendarObject AssociatedObject
         {
             get => _AssociatedObject;
             set
@@ -121,9 +121,9 @@ namespace Ical.Net.DataTypes
             }
         }
 
-        public virtual Calendar Calendar => _AssociatedObject?.Calendar;
+        public Calendar Calendar => _AssociatedObject?.Calendar;
 
-        public virtual string Language
+        public string Language
         {
             get => Parameters.Get("LANGUAGE");
             set => Parameters.Set("LANGUAGE", value);
@@ -150,7 +150,7 @@ namespace Ical.Net.DataTypes
         /// Creates a copy of the object.
         /// </summary>
         /// <returns>The copy of the object.</returns>
-        public virtual T Copy<T>()
+        public T Copy<T>()
         {
             var type = GetType();
             var obj = Activator.CreateInstance(type) as ICopyable;
@@ -164,7 +164,7 @@ namespace Ical.Net.DataTypes
             return default(T);
         }
 
-        public virtual IParameterCollection Parameters => _proxy;
+        public IParameterCollection Parameters => _proxy;
 
         internal object GetService(Type serviceType)
         {
