@@ -1,5 +1,8 @@
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Ical.Net.DataTypes.Values;
 using Ical.Net.Serialization;
 using Ical.Net.Serialization.DataTypes;
 using Ical.Net.Utility;
@@ -11,28 +14,24 @@ namespace Ical.Net.DataTypes
     /// </summary>
     public class StatusCode : EncodableDataType
     {
-        public int[] Parts { get; private set; }
+        private StatusCodeValue _value;
 
-        public int Primary
+        public int[] Parts => _value.Parts;
+
+        public int Primary => _value.Primary;
+
+        public int Secondary => _value.Secondary;
+
+        public int Tertiary => _value.Tertiary;
+
+        public StatusCode()
         {
-            get { return Parts.Length > 0 ? Parts[0] : 0; }
+            _value = new StatusCodeValue(Array.Empty<int>());
         }
-
-        public int Secondary
-        {
-            get { return Parts.Length > 1 ? Parts[1] : 0; }
-        }
-
-        public int Tertiary
-        {
-            get { return Parts.Length > 2 ? Parts[2] : 0; }
-        }
-
-        public StatusCode() { }
 
         public StatusCode(int[] parts)
         {
-            Parts = parts;
+            _value = new StatusCodeValue(parts);
         }
 
         public StatusCode(string value) : this()
@@ -48,18 +47,12 @@ namespace Ical.Net.DataTypes
             var sc = obj as StatusCode;
             if (sc == null) return;
 
-            Parts = new int[sc.Parts.Length];
-            sc.Parts.CopyTo(Parts, 0);
+            _value = new StatusCodeValue(sc.Parts);
         }
 
         public override string ToString()
         {
             return new StatusCodeSerializer(SerializationContext.Default).SerializeToString(this);
-        }
-
-        protected bool Equals(StatusCode other)
-        {
-            return Parts.SequenceEqual(other.Parts);
         }
 
         public override bool Equals(object obj)
@@ -70,15 +63,15 @@ namespace Ical.Net.DataTypes
             if (ReferenceEquals(this, obj))
                 return true;
 
-            if (obj.GetType() != GetType())
-                return false;
+            var other = obj as StatusCode;
+            if (other == null) return false;
 
-            return Equals((StatusCode)obj);
+            return _value.Equals(other._value);
         }
 
         public override int GetHashCode()
         {
-            return CollectionHelpers.GetHashCode(Parts);
+            return _value.GetHashCode();
         }
     }
 }
