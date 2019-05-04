@@ -1,7 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 
-namespace Ical.Net.IntegrationTests
+namespace Ical.Net.Tests
 {
     public class TypedServicesProviderTests
     {

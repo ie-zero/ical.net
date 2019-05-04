@@ -4,7 +4,7 @@ using Ical.Net.CalendarComponents;
 using Ical.Net.DataTypes;
 using NUnit.Framework;
 
-namespace Ical.Net.IntegrationTests
+namespace Ical.Net.Tests
 {
     public class DocumentationExamples
     {

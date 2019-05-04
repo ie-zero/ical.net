@@ -5,7 +5,7 @@ using Ical.Net.DataTypes;
 using Ical.Net.Serialization;
 using NUnit.Framework;
 
-namespace Ical.Net.IntegrationTests
+namespace Ical.Net.Tests
 {
     public class VTimeZoneTest
     {

@@ -4,7 +4,7 @@ using Ical.Net.Serialization;
 using Ical.Net.Serialization.DataTypes;
 using NUnit.Framework;
 
-namespace Ical.Net.IntegrationTests
+namespace Ical.Net.Tests
 {
     [TestFixture]
     public class DateTimeSerializerTests

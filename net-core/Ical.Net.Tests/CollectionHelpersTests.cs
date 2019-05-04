@@ -4,7 +4,7 @@ using System.Linq;
 using Ical.Net.DataTypes;
 using NUnit.Framework;
 
-namespace Ical.Net.IntegrationTests
+namespace Ical.Net.Tests
 {
     internal class CollectionHelpersTests
     {

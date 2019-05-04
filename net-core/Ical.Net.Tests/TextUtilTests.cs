@@ -3,7 +3,7 @@ using Ical.Net.Utility;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 
-namespace Ical.Net.IntegrationTests
+namespace Ical.Net.Tests
 {
     public class TextUtilTests
     {
