@@ -15,25 +15,20 @@ namespace Ical.Net.DataTypes
 
         public int Primary
         {
-            get
-            {
-                if (Parts.Length > 0)
-                {
-                    return Parts[0];
-                }
-                return 0;
-            }
+            get { return Parts.Length > 0 ? Parts[0] : 0; }
         }
 
-        public int Secondary => Parts.Length > 1
-            ? Parts[1]
-            : 0;
+        public int Secondary
+        {
+            get { return Parts.Length > 1 ? Parts[1] : 0; }
+        }
 
-        public int Tertiary => Parts.Length > 2
-            ? Parts[2]
-            : 0;
+        public int Tertiary
+        {
+            get { return Parts.Length > 2 ? Parts[2] : 0; }
+        }
 
-        public StatusCode() {}
+        public StatusCode() { }
 
         public StatusCode(int[] parts)
         {
@@ -49,12 +44,12 @@ namespace Ical.Net.DataTypes
         public override void CopyFrom(ICopyable obj)
         {
             base.CopyFrom(obj);
-            if (obj is StatusCode)
-            {
-                var sc = (StatusCode) obj;
-                Parts = new int[sc.Parts.Length];
-                sc.Parts.CopyTo(Parts, 0);
-            }
+
+            var sc = obj as StatusCode;
+            if (sc == null) return;
+
+            Parts = new int[sc.Parts.Length];
+            sc.Parts.CopyTo(Parts, 0);
         }
 
         public override string ToString()
@@ -62,25 +57,28 @@ namespace Ical.Net.DataTypes
             return new StatusCodeSerializer(SerializationContext.Default).SerializeToString(this);
         }
 
-        protected bool Equals(StatusCode other) => Parts.SequenceEqual(other.Parts);
+        protected bool Equals(StatusCode other)
+        {
+            return Parts.SequenceEqual(other.Parts);
+        }
 
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj))
-            {
                 return false;
-            }
+
             if (ReferenceEquals(this, obj))
-            {
                 return true;
-            }
+
             if (obj.GetType() != GetType())
-            {
                 return false;
-            }
-            return Equals((StatusCode) obj);
+
+            return Equals((StatusCode)obj);
         }
 
-        public override int GetHashCode() => CollectionHelpers.GetHashCode(Parts);
+        public override int GetHashCode()
+        {
+            return CollectionHelpers.GetHashCode(Parts);
+        }
     }
 }
