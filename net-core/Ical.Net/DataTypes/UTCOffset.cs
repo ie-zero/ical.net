@@ -1,4 +1,5 @@
 using System;
+using Ical.Net.DataTypes.Values;
 using Ical.Net.Serialization.DataTypes;
 
 namespace Ical.Net.DataTypes
@@ -8,31 +9,43 @@ namespace Ical.Net.DataTypes
     /// </summary>
     public class UtcOffset : EncodableDataType
     {
-        public TimeSpan Offset { get; }
+        private UtcOffsetValue _value;
 
-        public bool Positive => Offset >= TimeSpan.Zero;
+        public TimeSpan Offset => _value;
 
-        public int Hours => Math.Abs(Offset.Hours);
+        public bool Positive => _value.Positive;
 
-        public int Minutes => Math.Abs(Offset.Minutes);
+        public int Hours => _value.Hours;
 
-        public int Seconds => Math.Abs(Offset.Seconds);
+        public int Minutes => _value.Minutes;
 
-        public UtcOffset() {}
+        public int Seconds => _value.Seconds;
 
-        public UtcOffset(string value) : this()
+        public UtcOffset()
         {
-            Offset = UtcOffsetSerializer.GetOffset(value);
+            _value = UtcOffsetValue.Zero;
         }
 
-        public UtcOffset(TimeSpan ts)
+        public UtcOffset(string value)
         {
-            Offset = ts;
+            var offset = UtcOffsetSerializer.GetOffset(value);
+            _value = new UtcOffsetValue(offset);
         }
 
-        public static implicit operator UtcOffset(TimeSpan ts) => new UtcOffset(ts);
+        public UtcOffset(TimeSpan offset)
+        {
+            _value = new UtcOffsetValue(offset);
+        }
 
-        public static explicit operator TimeSpan(UtcOffset o) => o.Offset;
+        public static implicit operator UtcOffset(TimeSpan value)
+        {
+            return new UtcOffset(value);
+        }
+
+        public static explicit operator TimeSpan(UtcOffset offset)
+        {
+            return offset._value;
+        }
 
         public virtual DateTime ToUtc(DateTime dt) => DateTime.SpecifyKind(dt.Add(-Offset), DateTimeKind.Utc);
 
@@ -42,23 +55,28 @@ namespace Ical.Net.DataTypes
 
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj))
-            {
-                return false;
-            }
             if (ReferenceEquals(this, obj))
-            {
                 return true;
-            }
-            if (obj.GetType() != GetType())
-            {
+
+            if (ReferenceEquals(null, obj))
                 return false;
-            }
-            return Equals((UtcOffset) obj);
+
+            var other = obj as UtcOffset;
+
+            if (other == null)
+                return false;
+
+            return _value.Equals(other._value);
         }
 
-        public override int GetHashCode() => Offset.GetHashCode();
+        public override int GetHashCode()
+        {
+            return _value.GetHashCode();
+        }
 
-        public override string ToString() => (Positive ? "+" : "-") + Hours.ToString("00") + Minutes.ToString("00") + (Seconds != 0 ? Seconds.ToString("00") : string.Empty);
+        public override string ToString()
+        {
+            return (Positive ? "+" : "-") + Hours.ToString("00") + Minutes.ToString("00") + (Seconds != 0 ? Seconds.ToString("00") : string.Empty);
+        }
     }
 }
