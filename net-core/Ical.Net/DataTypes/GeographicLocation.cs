@@ -1,10 +1,13 @@
+using System.Collections.Generic;
 using System.Diagnostics;
 using Ical.Net.CalendarComponents;
+using Ical.Net.DataTypes.Values;
 using Ical.Net.Serialization;
 using Ical.Net.Serialization.DataTypes;
 
 namespace Ical.Net.DataTypes
 {
+
     /// <summary>
     /// A class that represents the geographical location of an
     /// <see cref="Components.Event"/> or <see cref="Todo"/> item.
@@ -12,10 +15,24 @@ namespace Ical.Net.DataTypes
     [DebuggerDisplay("{Latitude};{Longitude}")]
     public class GeographicLocation : EncodableDataType
     {
-        public double Latitude { get; set; }
-        public double Longitude { get; set; }
+        private GeographicLocationValue _value;
 
-        public GeographicLocation() {}
+        public double Latitude
+        {
+            get => _value.Latitude;
+            set => _value = new GeographicLocationValue(value, _value.Longitude);
+        }
+
+        public double Longitude
+        {
+            get => _value.Longitude;
+            set => _value = new GeographicLocationValue(_value.Latitude, value);
+        }
+
+        public GeographicLocation()
+        {
+            _value = new GeographicLocationValue();
+        }
 
         public GeographicLocation(string value) : this()
         {
@@ -25,21 +42,27 @@ namespace Ical.Net.DataTypes
 
         public GeographicLocation(double latitude, double longitude)
         {
-            Latitude = latitude;
-            Longitude = longitude;
+            _value = new GeographicLocationValue(latitude, longitude);
         }
 
-        public override void CopyFrom(ICopyable obj) {}
+        public override void CopyFrom(ICopyable obj)
+        {
+            var g = obj as GeographicLocation;
+            if (obj == null) return;
+
+            _value = new GeographicLocationValue(g.Latitude, g.Longitude);
+        }
 
         public override string ToString() => Latitude.ToString("0.000000") + ";" + Longitude.ToString("0.000000");
-
-        protected bool Equals(GeographicLocation other) => Latitude.Equals(other.Latitude) && Longitude.Equals(other.Longitude);
 
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            return obj.GetType() == GetType() && Equals((GeographicLocation)obj);
+
+            var other = obj as GeographicLocation;
+            if (other == null) return false;
+            return _value.Equals(other._value);
         }
 
         public override int GetHashCode()
