@@ -5,7 +5,7 @@ using Ical.Net.DataTypes;
 using Ical.Net.Serialization;
 using NUnit.Framework;
 
-namespace Ical.Net.CoreUnitTests
+namespace Ical.Net.IntegrationTests
 {
     [TestFixture]
     public class CalendarPropertiesTest

@@ -9,7 +9,7 @@ using Ical.Net.Serialization;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 
-namespace Ical.Net.CoreUnitTests
+namespace Ical.Net.IntegrationTests
 {
     public class SymmetricSerializationTests
     {

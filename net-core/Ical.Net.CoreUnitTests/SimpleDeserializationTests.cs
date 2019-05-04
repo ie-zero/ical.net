@@ -10,7 +10,7 @@ using Ical.Net.Serialization;
 using Ical.Net.Serialization.DataTypes;
 using NUnit.Framework;
 
-namespace Ical.Net.CoreUnitTests
+namespace Ical.Net.IntegrationTests
 {
     [TestFixture]
     public class SimpleDeserializationTests

@@ -1,7 +1,7 @@
 ﻿using Ical.Net.DataTypes;
 using NUnit.Framework;
 
-namespace Ical.Net.CoreUnitTests
+namespace Ical.Net.IntegrationTests
 {
     [TestFixture]
     public class DataTypeTest

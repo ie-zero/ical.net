@@ -14,7 +14,7 @@ using Ical.Net.Utility;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 
-namespace Ical.Net.CoreUnitTests
+namespace Ical.Net.IntegrationTests
 {
     [TestFixture]
     public class RecurrenceTests

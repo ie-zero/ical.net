@@ -1,7 +1,7 @@
 ﻿using Ical.Net.CalendarComponents;
 using Ical.Net.Serialization;
 
-namespace Ical.Net.CoreUnitTests
+namespace Ical.Net.IntegrationTests
 {
     internal class SerializationHelpers
     {

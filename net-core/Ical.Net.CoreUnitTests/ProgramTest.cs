@@ -4,7 +4,7 @@ using Ical.Net.DataTypes;
 using Ical.Net.Utility;
 using NUnit.Framework;
 
-namespace Ical.Net.CoreUnitTests
+namespace Ical.Net.IntegrationTests
 {
     [TestFixture]
     public class ProgramTest

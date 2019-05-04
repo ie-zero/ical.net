@@ -6,7 +6,7 @@ using Ical.Net.DataTypes;
 using Ical.Net.Evaluation;
 using NUnit.Framework;
 
-namespace Ical.Net.CoreUnitTests
+namespace Ical.Net.IntegrationTests
 {
     internal class GetOccurrenceTests
     {
