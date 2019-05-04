@@ -9,26 +9,26 @@ namespace Ical.Net.DataTypes
     /// </summary>
     public class RequestStatus : EncodableDataType
     {
-        private string _mDescription;
-        private string _mExtraData;
-        private StatusCode _mStatusCode;
+        private string _description;
+        private string _extraData;
+        private StatusCode _statusCode;
 
         public virtual string Description
         {
-            get => _mDescription;
-            set => _mDescription = value;
+            get => _description;
+            set => _description = value;
         }
 
         public virtual string ExtraData
         {
-            get => _mExtraData;
-            set => _mExtraData = value;
+            get => _extraData;
+            set => _extraData = value;
         }
 
         public virtual StatusCode StatusCode
         {
-            get => _mStatusCode;
-            set => _mStatusCode = value;
+            get => _statusCode;
+            set => _statusCode = value;
         }
 
         public RequestStatus() {}
@@ -62,8 +62,8 @@ namespace Ical.Net.DataTypes
             return serializer.SerializeToString(this);
         }
 
-        protected bool Equals(RequestStatus other) => string.Equals(_mDescription, other._mDescription) && string.Equals(_mExtraData, other._mExtraData) &&
-            Equals(_mStatusCode, other._mStatusCode);
+        protected bool Equals(RequestStatus other) => string.Equals(_description, other._description) && string.Equals(_extraData, other._extraData) &&
+            Equals(_statusCode, other._statusCode);
 
         public override bool Equals(object obj)
         {
@@ -86,9 +86,9 @@ namespace Ical.Net.DataTypes
         {
             unchecked
             {
-                var hashCode = _mDescription?.GetHashCode() ?? 0;
-                hashCode = (hashCode * 397) ^ (_mExtraData?.GetHashCode() ?? 0);
-                hashCode = (hashCode * 397) ^ (_mStatusCode?.GetHashCode() ?? 0);
+                var hashCode = _description?.GetHashCode() ?? 0;
+                hashCode = (hashCode * 397) ^ (_extraData?.GetHashCode() ?? 0);
+                hashCode = (hashCode * 397) ^ (_statusCode?.GetHashCode() ?? 0);
                 return hashCode;
             }
         }
