@@ -102,7 +102,7 @@ namespace Ical.Net.DataTypes
         }
 
         private IDateTime _startTime;
-        public virtual IDateTime StartTime
+        public IDateTime StartTime
         {
             get => _startTime.HasTime
                 ? _startTime
@@ -119,7 +119,7 @@ namespace Ical.Net.DataTypes
         }
 
         private IDateTime _endTime;
-        public virtual IDateTime EndTime
+        public IDateTime EndTime
         {
             get => _endTime;
             set
@@ -134,7 +134,7 @@ namespace Ical.Net.DataTypes
         }
 
         private TimeSpan _duration;
-        public virtual TimeSpan Duration
+        public TimeSpan Duration
         {
             get
             {
@@ -157,7 +157,7 @@ namespace Ical.Net.DataTypes
             }
         }
 
-        public virtual bool Contains(IDateTime dt)
+        public bool Contains(IDateTime dt)
         {
             // Start time is inclusive
             if (dt == null || StartTime == null || !StartTime.LessThanOrEqual(dt))
@@ -169,7 +169,7 @@ namespace Ical.Net.DataTypes
             return EndTime == null || EndTime.GreaterThan(dt);
         }
 
-        public virtual bool CollidesWith(Period period) => period != null
+        public bool CollidesWith(Period period) => period != null
             && ((period.StartTime != null && Contains(period.StartTime)) || (period.EndTime != null && Contains(period.EndTime)));
 
         public int CompareTo(Period other)

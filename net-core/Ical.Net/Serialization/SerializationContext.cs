@@ -48,7 +48,7 @@ namespace Ical.Net.Serialization
             SetService(new EncodingProvider(this));
         }
 
-        public virtual void Push(object item)
+        public void Push(object item)
         {
             if (item != null)
             {
@@ -56,7 +56,7 @@ namespace Ical.Net.Serialization
             }
         }
 
-        public virtual object Pop()
+        public object Pop()
         {
             if (_mStack.Count > 0)
             {
@@ -69,7 +69,7 @@ namespace Ical.Net.Serialization
             return null;
         }
 
-        public virtual object Peek()
+        public object Peek()
         {
             if (_mStack.Count > 0)
             {
@@ -82,12 +82,12 @@ namespace Ical.Net.Serialization
             return null;
         }
 
-        public virtual object GetService(Type serviceType)
+        public object GetService(Type serviceType)
         {
             return _typedServices.GetService(serviceType);
         }
 
-        public virtual T GetService<T>()
+        public T GetService<T>()
         {
             return _typedServices.GetService<T>();
         }
@@ -97,7 +97,7 @@ namespace Ical.Net.Serialization
             _typedServices.SetService(obj);
         }
 
-        public virtual void RemoveService(Type type)
+        public void RemoveService(Type type)
         {
             _typedServices.RemoveService(type);
         }

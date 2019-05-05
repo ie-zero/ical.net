@@ -57,7 +57,7 @@ namespace Ical.Net.Serialization
             }
         }
 
-        protected virtual DecoderDelegate GetDecoderFor(string encoding)
+        protected DecoderDelegate GetDecoderFor(string encoding)
         {
             if (encoding == null)
             {
@@ -118,7 +118,7 @@ namespace Ical.Net.Serialization
             }
         }
 
-        protected virtual EncoderDelegate GetEncoderFor(string encoding)
+        protected EncoderDelegate GetEncoderFor(string encoding)
         {
             if (encoding == null)
             {

@@ -12,7 +12,7 @@ namespace Ical.Net.DataTypes
     [DebuggerDisplay("{Value}")]
     public class Organizer : EncodableDataType
     {
-        public virtual Uri SentBy
+        public Uri SentBy
         {
             get => new Uri(Parameters.Get("SENT-BY"));
             set
@@ -28,13 +28,13 @@ namespace Ical.Net.DataTypes
             }
         }
 
-        public virtual string CommonName
+        public string CommonName
         {
             get => Parameters.Get("CN");
             set => Parameters.Set("CN", value);
         }
 
-        public virtual Uri DirectoryEntry
+        public Uri DirectoryEntry
         {
             get => new Uri(Parameters.Get("DIR"));
             set
@@ -50,7 +50,7 @@ namespace Ical.Net.DataTypes
             }
         }
 
-        public virtual Uri Value { get; set; }
+        public Uri Value { get; set; }
 
         public Organizer() {}
 
