@@ -88,7 +88,7 @@ namespace Ical.Net.IntegrationTests
         }
 
         /// <summary>
-        /// Tests bug #2938007 - involving the HasTime property in IDateTime values.
+        /// Tests bug #2938007 - involving the HasTime property in CalDateTime values.
         /// See https://sourceforge.net/tracker/?func=detail&aid=2938007&group_id=187422&atid=921236
         /// </summary>
         [Test]
@@ -291,8 +291,8 @@ END:VCALENDAR
             var evt = iCal.Events["594oeajmftl3r9qlkb476rpr3c@google.com"];
             Assert.IsNotNull(evt);
 
-            IDateTime dtStart = new CalDateTime(2006, 12, 18, tzId);
-            IDateTime dtEnd = new CalDateTime(2006, 12, 23, tzId);
+            CalDateTime dtStart = new CalDateTime(2006, 12, 18, tzId);
+            CalDateTime dtEnd = new CalDateTime(2006, 12, 23, tzId);
             var occurrences = iCal.GetOccurrences(dtStart, dtEnd).OrderBy(o => o.Period.StartTime).ToList();
 
             var dateTimes = new[]

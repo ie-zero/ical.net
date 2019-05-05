@@ -80,7 +80,7 @@ namespace Ical.Net.IntegrationTests
 
             for (var i = 0; i < dateTimes.Length; i++)
             {
-                IDateTime dt = dateTimes[i];
+                CalDateTime dt = dateTimes[i];
                 var start = occurrences[i].Period.StartTime;
                 Assert.AreEqual(dt, start);
 
@@ -148,7 +148,7 @@ namespace Ical.Net.IntegrationTests
 
             for (var i = 0; i < dateTimes1.Length; i++)
             {
-                IDateTime dt = dateTimes1[i];
+                CalDateTime dt = dateTimes1[i];
                 var start = occurrences[i].Period.StartTime;
                 Assert.AreEqual(dt, start);
                 Assert.IsTrue(dt.TimeZoneName == timeZones1[i], "Event " + dt + " should occur in the " + timeZones1[i] + " timezone");

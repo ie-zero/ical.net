@@ -15,7 +15,7 @@ namespace Ical.Net.Evaluation
 
         public TimeZoneInfoEvaluator(IRecurrable tzi) : base(tzi) { }
 
-        public override HashSet<Period> Evaluate(IDateTime referenceDate, DateTime periodStart, DateTime periodEnd, bool includeReferenceDateInResults)
+        public override HashSet<Period> Evaluate(CalDateTime referenceDate, DateTime periodStart, DateTime periodEnd, bool includeReferenceDateInResults)
         {
             // Time zones must include an effective start date/time
             // and must provide an evaluator.

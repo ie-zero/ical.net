@@ -26,7 +26,7 @@ namespace Ical.Net.Serialization.DataTypes
 
             try
             {
-                var dtSerializer = factory.Build(typeof (IDateTime), SerializationContext) as IStringSerializer;
+                var dtSerializer = factory.Build(typeof (CalDateTime), SerializationContext) as IStringSerializer;
                 var timeSpanSerializer = factory.Build(typeof (TimeSpan), SerializationContext) as IStringSerializer;
                 if (dtSerializer == null || timeSpanSerializer == null)
                 {
@@ -67,7 +67,7 @@ namespace Ical.Net.Serialization.DataTypes
                 return null;
             }
 
-            var dtSerializer = factory.Build(typeof (IDateTime), SerializationContext) as IStringSerializer;
+            var dtSerializer = factory.Build(typeof (CalDateTime), SerializationContext) as IStringSerializer;
             var durationSerializer = factory.Build(typeof (TimeSpan), SerializationContext) as IStringSerializer;
             if (dtSerializer == null || durationSerializer == null)
             {
@@ -83,8 +83,8 @@ namespace Ical.Net.Serialization.DataTypes
                 return false;
             }
 
-            p.StartTime = dtSerializer.Deserialize(new StringReader(values[0])) as IDateTime;
-            p.EndTime = dtSerializer.Deserialize(new StringReader(values[1])) as IDateTime;
+            p.StartTime = dtSerializer.Deserialize(new StringReader(values[0])) as CalDateTime;
+            p.EndTime = dtSerializer.Deserialize(new StringReader(values[1])) as CalDateTime;
             if (p.EndTime == null)
             {
                 p.Duration = (TimeSpan) durationSerializer.Deserialize(new StringReader(values[1]));

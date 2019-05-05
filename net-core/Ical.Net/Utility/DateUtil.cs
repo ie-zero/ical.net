@@ -10,16 +10,16 @@ namespace Ical.Net.Utility
 {
     internal static class DateUtil
     {
-        public static IDateTime StartOfDay(IDateTime dt)
+        public static CalDateTime StartOfDay(CalDateTime dt)
             => dt.AddHours(-dt.Hour).AddMinutes(-dt.Minute).AddSeconds(-dt.Second);
 
-        public static IDateTime EndOfDay(IDateTime dt)
+        public static CalDateTime EndOfDay(CalDateTime dt)
             => StartOfDay(dt).AddDays(1).AddTicks(-1);
 
-        public static DateTime GetSimpleDateTimeData(IDateTime dt)
+        public static DateTime GetSimpleDateTimeData(CalDateTime dt)
             => DateTime.SpecifyKind(dt.Value, dt.IsUtc ? DateTimeKind.Utc : DateTimeKind.Local);
 
-        public static DateTime SimpleDateTimeToMatch(IDateTime dt, IDateTime toMatch)
+        public static DateTime SimpleDateTimeToMatch(CalDateTime dt, CalDateTime toMatch)
         {
             if (toMatch.IsUtc && dt.IsUtc)
             {
@@ -36,7 +36,7 @@ namespace Ical.Net.Utility
             return dt.Value;
         }
 
-        public static IDateTime MatchTimeZone(IDateTime dt1, IDateTime dt2)
+        public static CalDateTime MatchTimeZone(CalDateTime dt1, CalDateTime dt2)
         {
             // Associate the date/time with the first.
             var copy = dt2;

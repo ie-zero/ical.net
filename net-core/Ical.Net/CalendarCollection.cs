@@ -42,7 +42,7 @@ namespace Ical.Net
             }
         }
 
-        public HashSet<Occurrence> GetOccurrences(IDateTime dt)
+        public HashSet<Occurrence> GetOccurrences(CalDateTime dt)
         {
             var occurrences = new HashSet<Occurrence>();
             foreach (var iCal in this)
@@ -62,7 +62,7 @@ namespace Ical.Net
             return occurrences;
         }
 
-        public HashSet<Occurrence> GetOccurrences(IDateTime startTime, IDateTime endTime)
+        public HashSet<Occurrence> GetOccurrences(CalDateTime startTime, CalDateTime endTime)
         {
             var occurrences = new HashSet<Occurrence>();
             foreach (var iCal in this)
@@ -82,7 +82,7 @@ namespace Ical.Net
             return occurrences;
         }
 
-        public HashSet<Occurrence> GetOccurrences<T>(IDateTime dt) where T : IRecurringComponent
+        public HashSet<Occurrence> GetOccurrences<T>(CalDateTime dt) where T : IRecurringComponent
         {
             var occurrences = new HashSet<Occurrence>();
             foreach (var iCal in this)
@@ -102,7 +102,7 @@ namespace Ical.Net
             return occurrences;
         }
 
-        public HashSet<Occurrence> GetOccurrences<T>(IDateTime startTime, IDateTime endTime) where T : IRecurringComponent
+        public HashSet<Occurrence> GetOccurrences<T>(CalDateTime startTime, CalDateTime endTime) where T : IRecurringComponent
         {
             var occurrences = new HashSet<Occurrence>();
             foreach (var iCal in this)
@@ -133,12 +133,12 @@ namespace Ical.Net
             return this.Aggregate<Calendar, FreeBusy>(null, (current, iCal) => CombineFreeBusy(current, iCal.GetFreeBusy(freeBusyRequest)));
         }
 
-        public FreeBusy GetFreeBusy(IDateTime fromInclusive, IDateTime toExclusive)
+        public FreeBusy GetFreeBusy(CalDateTime fromInclusive, CalDateTime toExclusive)
         {
             return this.Aggregate<Calendar, FreeBusy>(null, (current, iCal) => CombineFreeBusy(current, iCal.GetFreeBusy(fromInclusive, toExclusive)));
         }
 
-        public FreeBusy GetFreeBusy(Organizer organizer, IEnumerable<Attendee> contacts, IDateTime fromInclusive, IDateTime toExclusive)
+        public FreeBusy GetFreeBusy(Organizer organizer, IEnumerable<Attendee> contacts, CalDateTime fromInclusive, CalDateTime toExclusive)
         {
             return this.Aggregate<Calendar, FreeBusy>(null, (current, iCal) => CombineFreeBusy(current, iCal.GetFreeBusy(organizer, contacts, fromInclusive, toExclusive)));
         }

@@ -40,7 +40,7 @@ namespace Ical.Net.Serialization.DataTypes
 
         public override string SerializeToString(object obj)
         {
-            var dt = obj as IDateTime;
+            var dt = obj as CalDateTime;
             if (dt == null)  return null;
 
             // RFC 5545 3.3.5: 
@@ -79,7 +79,7 @@ namespace Ical.Net.Serialization.DataTypes
             return Encode(dt, value);
         }
 
-        private static string SerializeDateTimeValue(IDateTime dt)
+        private static string SerializeDateTimeValue(CalDateTime dt)
         {
             var builder = new StringBuilder();
             builder.Append($"{dt.Year:0000}{dt.Month:00}{dt.Day:00}");
@@ -105,7 +105,7 @@ namespace Ical.Net.Serialization.DataTypes
             if (reader == null) return null;
             var value = reader.ReadToEnd();
 
-            var dt = CreateAndAssociate() as IDateTime;
+            var dt = CreateAndAssociate() as CalDateTime;
             if (dt == null) return null;
 
             // Decode the value as necessary

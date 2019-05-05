@@ -23,9 +23,9 @@ namespace Ical.Net.IntegrationTests
 
         private void EventOccurrenceTest(
             Calendar cal,
-            IDateTime fromDate,
-            IDateTime toDate,
-            IDateTime[] dateTimes,
+            CalDateTime fromDate,
+            CalDateTime toDate,
+            CalDateTime[] dateTimes,
             string[] timeZones,
             int eventIndex
         )
@@ -62,9 +62,9 @@ namespace Ical.Net.IntegrationTests
 
         private void EventOccurrenceTest(
             Calendar cal,
-            IDateTime fromDate,
-            IDateTime toDate,
-            IDateTime[] dateTimes,
+            CalDateTime fromDate,
+            CalDateTime toDate,
+            CalDateTime[] dateTimes,
             string[] timeZones
         )
         {
@@ -84,7 +84,7 @@ namespace Ical.Net.IntegrationTests
                 new CalDateTime(2006, 1, 1, _tzid),
                 new CalDateTime(2011, 1, 1, _tzid)).OrderBy(o => o.Period.StartTime).ToList();
 
-            IDateTime dt = new CalDateTime(2007, 1, 1, 8, 30, 0, _tzid);
+            CalDateTime dt = new CalDateTime(2007, 1, 1, 8, 30, 0, _tzid);
             var i = 0;
 
             while (dt.Year < 2011)
@@ -146,7 +146,7 @@ namespace Ical.Net.IntegrationTests
                 new CalDateTime(1997, 9, 1, _tzid),
                 new CalDateTime(1998, 1, 1, _tzid)).OrderBy(o => o.Period.StartTime).ToList();
 
-            IDateTime dt = new CalDateTime(1997, 9, 2, 9, 0, 0, _tzid);
+            CalDateTime dt = new CalDateTime(1997, 9, 2, 9, 0, 0, _tzid);
             var i = 0;
             while (dt.Year < 1998)
             {
@@ -316,7 +316,7 @@ namespace Ical.Net.IntegrationTests
                 new CalDateTime(1998, 1, 1, _tzid),
                 new CalDateTime(2000, 12, 31, _tzid)).OrderBy(o => o.Period.StartTime).ToList();
 
-            IDateTime dt = new CalDateTime(1998, 1, 1, 9, 0, 0, _tzid);
+            CalDateTime dt = new CalDateTime(1998, 1, 1, 9, 0, 0, _tzid);
             var i = 0;
             while (dt.Year < 2001)
             {
@@ -2847,8 +2847,8 @@ namespace Ical.Net.IntegrationTests
 
             rpattern.Frequency = FrequencyType.Weekly;
 
-            IDateTime evtStart = new CalDateTime(2006, 12, 1);
-            IDateTime evtEnd = new CalDateTime(2007, 1, 1);
+            CalDateTime evtStart = new CalDateTime(2006, 12, 1);
+            CalDateTime evtEnd = new CalDateTime(2007, 1, 1);
 
             var evaluator = rpattern.GetService(typeof(IEvaluator)) as IEvaluator;
             Assert.IsNotNull(evaluator);

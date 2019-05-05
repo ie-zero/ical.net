@@ -60,9 +60,9 @@ namespace Ical.Net.DataTypes
                     case "CAL-ADDRESS":
                         return typeof (Uri);
                     case "DATE":
-                        return typeof (IDateTime);
+                        return typeof (CalDateTime);
                     case "DATE-TIME":
-                        return typeof (IDateTime);
+                        return typeof (CalDateTime);
                     case "DURATION":
                         return typeof (TimeSpan);
                     case "FLOAT":

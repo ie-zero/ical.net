@@ -73,7 +73,7 @@ namespace Ical.Net.IntegrationTests
                 periodStart: intervalStart,
                 periodEnd: intervalEnd,
                 includeReferenceDateInResults: false);
-            var occurrenceSet = new HashSet<IDateTime>(occurrences.Select(o => o.Period.StartTime));
+            var occurrenceSet = new HashSet<CalDateTime>(occurrences.Select(o => o.Period.StartTime));
 
             Assert.AreEqual(evaluationsCount, occurrenceSet.Count);
 

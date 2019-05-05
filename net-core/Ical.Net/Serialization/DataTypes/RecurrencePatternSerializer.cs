@@ -165,10 +165,10 @@ namespace Ical.Net.Serialization.DataTypes
         {
             if (untilDateTime != DateTime.MinValue)
             {
-                var serializer = factory.Build(typeof(IDateTime), SerializationContext) as IStringSerializer;
+                var serializer = factory.Build(typeof(CalDateTime), SerializationContext) as IStringSerializer;
                 if (serializer != null)
                 {
-                    IDateTime until = new CalDateTime(untilDateTime);
+                    CalDateTime until = new CalDateTime(untilDateTime);
                     until.HasTime = true;
                     values.Add("UNTIL=" + serializer.SerializeToString(until));
                 }
@@ -283,8 +283,8 @@ namespace Ical.Net.Serialization.DataTypes
                         {
                             case "UNTIL":
                             {
-                                var serializer = factory.Build(typeof (IDateTime), SerializationContext) as IStringSerializer;
-                                var dt = serializer?.Deserialize(new StringReader(keyValue)) as IDateTime;
+                                var serializer = factory.Build(typeof (CalDateTime), SerializationContext) as IStringSerializer;
+                                var dt = serializer?.Deserialize(new StringReader(keyValue)) as CalDateTime;
                                 if (dt != null)
                                 {
                                     r.Until = dt.Value;

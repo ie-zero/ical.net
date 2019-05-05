@@ -14,10 +14,10 @@ namespace Ical.Net.Evaluation
             evaluator?.Clear();
         }
 
-        public static HashSet<Occurrence> GetOccurrences(IRecurrable recurrable, IDateTime dt, bool includeReferenceDateInResults) => GetOccurrences(recurrable,
+        public static HashSet<Occurrence> GetOccurrences(IRecurrable recurrable, CalDateTime dt, bool includeReferenceDateInResults) => GetOccurrences(recurrable,
             new CalDateTime(dt.AsSystemLocal.Date), new CalDateTime(dt.AsSystemLocal.Date.AddDays(1).AddSeconds(-1)), includeReferenceDateInResults);
 
-        public static HashSet<Occurrence> GetOccurrences(IRecurrable recurrable, IDateTime periodStart, IDateTime periodEnd, bool includeReferenceDateInResults)
+        public static HashSet<Occurrence> GetOccurrences(IRecurrable recurrable, CalDateTime periodStart, CalDateTime periodEnd, bool includeReferenceDateInResults)
         {
             var evaluator = recurrable.GetService(typeof(IEvaluator)) as IEvaluator;
             if (evaluator == null || recurrable.Start == null)

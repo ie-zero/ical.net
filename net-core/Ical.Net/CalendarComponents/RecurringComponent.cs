@@ -49,9 +49,9 @@ namespace Ical.Net.CalendarComponents
             set => Properties.Set("CONTACT", value);
         }
 
-        public IDateTime Created
+        public CalDateTime Created
         {
-            get => Properties.Get<IDateTime>("CREATED");
+            get => Properties.Get<CalDateTime>("CREATED");
             set => Properties.Set("CREATED", value);
         }
 
@@ -64,9 +64,9 @@ namespace Ical.Net.CalendarComponents
         /// <summary>
         /// The start date/time of the component.
         /// </summary>
-        public virtual IDateTime DtStart
+        public virtual CalDateTime DtStart
         {
-            get => Properties.Get<IDateTime>("DTSTART");
+            get => Properties.Get<CalDateTime>("DTSTART");
             set => Properties.Set("DTSTART", value);
         }
 
@@ -82,9 +82,9 @@ namespace Ical.Net.CalendarComponents
             set => Properties.Set("EXRULE", value);
         }
 
-        public IDateTime LastModified
+        public CalDateTime LastModified
         {
-            get => Properties.Get<IDateTime>("LAST-MODIFIED");
+            get => Properties.Get<CalDateTime>("LAST-MODIFIED");
             set => Properties.Set("LAST-MODIFIED", value);
         }
 
@@ -106,9 +106,9 @@ namespace Ical.Net.CalendarComponents
             set => Properties.Set("RRULE", value);
         }
 
-        public IDateTime RecurrenceId
+        public CalDateTime RecurrenceId
         {
-            get => Properties.Get<IDateTime>("RECURRENCE-ID");
+            get => Properties.Get<CalDateTime>("RECURRENCE-ID");
             set => Properties.Set("RECURRENCE-ID", value);
         }
 
@@ -127,7 +127,7 @@ namespace Ical.Net.CalendarComponents
         /// <summary>
         /// An alias to the DTStart field (i.e. start date/time).
         /// </summary>
-        public IDateTime Start
+        public CalDateTime Start
         {
             get => DtStart;
             set => DtStart = value;
@@ -169,12 +169,12 @@ namespace Ical.Net.CalendarComponents
 
         public void ClearEvaluation() => RecurrenceUtil.ClearEvaluation(this);
 
-        public HashSet<Occurrence> GetOccurrences(IDateTime dt) => RecurrenceUtil.GetOccurrences(this, dt, EvaluationIncludesReferenceDate);
+        public HashSet<Occurrence> GetOccurrences(CalDateTime dt) => RecurrenceUtil.GetOccurrences(this, dt, EvaluationIncludesReferenceDate);
 
         public HashSet<Occurrence> GetOccurrences(DateTime dt)
             => RecurrenceUtil.GetOccurrences(this, new CalDateTime(dt), EvaluationIncludesReferenceDate);
 
-        public HashSet<Occurrence> GetOccurrences(IDateTime startTime, IDateTime endTime)
+        public HashSet<Occurrence> GetOccurrences(CalDateTime startTime, CalDateTime endTime)
             => RecurrenceUtil.GetOccurrences(this, startTime, endTime, EvaluationIncludesReferenceDate);
 
         public HashSet<Occurrence> GetOccurrences(DateTime startTime, DateTime endTime)
@@ -182,7 +182,7 @@ namespace Ical.Net.CalendarComponents
 
         public IList<AlarmOccurrence> PollAlarms() => PollAlarms(null, null);
 
-        public IList<AlarmOccurrence> PollAlarms(IDateTime startTime, IDateTime endTime)
+        public IList<AlarmOccurrence> PollAlarms(CalDateTime startTime, CalDateTime endTime)
             => Alarms?.SelectMany(a => a.Poll(startTime, endTime)).ToList()
                 ?? new List<AlarmOccurrence>();
 
