@@ -76,22 +76,22 @@ namespace Ical.Net
         /// <summary>
         /// Returns the parent iCalObject that owns this one.
         /// </summary>
-        public virtual ICalendarObject Parent { get; set; }
+        public ICalendarObject Parent { get; set; }
 
         /// <summary>
         /// A collection of iCalObjects that are children of the current object.
         /// </summary>
-        public virtual ICalendarObjectList<ICalendarObject> Children => _children;
+        public ICalendarObjectList<ICalendarObject> Children => _children;
 
         /// <summary>
         /// Gets or sets the name of the iCalObject.  For iCalendar components, this is the RFC 5545 name of the component.
         /// </summary>        
-        public virtual string Name { get; internal set; }
+        public string Name { get; internal set; }
 
         /// <summary>
         /// Returns the <see cref="Calendar"/> that this DDayiCalObject belongs to.
         /// </summary>
-        public virtual Calendar Calendar
+        public Calendar Calendar
         {
             get
             {
@@ -106,27 +106,27 @@ namespace Ical.Net
             protected set { }
         }
 
-        public virtual object GetService(Type serviceType)
+        public object GetService(Type serviceType)
         {
             return _typedServices.GetService(serviceType);
         }
 
-        public virtual T GetService<T>()
+        public T GetService<T>()
         {
             return _typedServices.GetService<T>();
         }
 
-        public virtual void SetService(object obj)
+        public void SetService(object obj)
         {
             _typedServices.SetService(obj);
         }
 
-        public virtual void RemoveService(Type type)
+        public void RemoveService(Type type)
         {
             _typedServices.RemoveService(type);
         }
 
-        public virtual string Group
+        public string Group
         {
             get => Name;
             set => Name = value;
