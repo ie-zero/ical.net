@@ -11,7 +11,7 @@ namespace Ical.Net.IntegrationTests
     {
         private const string _tzid = "US-Eastern";
 
-        public void TestAlarm(string calendarString, List<IDateTime> dates, CalDateTime start, CalDateTime end)
+        public void TestAlarm(string calendarString, List<CalDateTime> dates, CalDateTime start, CalDateTime end)
         {
             var iCal = Calendar.Load(calendarString);
             ProgramTest.TestCal(iCal);
@@ -33,7 +33,7 @@ namespace Ical.Net.IntegrationTests
         [Test, Category("Alarm")]
         public void Alarm1()
         {
-            var dateTimes = new List<IDateTime>();
+            var dateTimes = new List<CalDateTime>();
             dateTimes.AddRange(new[]
             {
                 new CalDateTime(2006, 7, 18, 9, 30, 0, _tzid)
@@ -46,7 +46,7 @@ namespace Ical.Net.IntegrationTests
         [Test, Category("Alarm")]
         public void Alarm2()
         {
-            var dateTimes = new List<IDateTime>();
+            var dateTimes = new List<CalDateTime>();
             dateTimes.AddRange(new[]
             {
                 new CalDateTime(2006, 7, 18, 9, 30, 0, _tzid),
@@ -68,7 +68,7 @@ namespace Ical.Net.IntegrationTests
         [Test, Category("Alarm")]
         public void Alarm3()
         {
-            var dateTimes = new List<IDateTime>();
+            var dateTimes = new List<CalDateTime>();
             dateTimes.AddRange(new[]
             {
                 new CalDateTime(1998, 2, 11, 9, 0, 0, _tzid),
@@ -85,7 +85,7 @@ namespace Ical.Net.IntegrationTests
         [Test, Category("Alarm")]
         public void Alarm4()
         {
-            var dateTimes = new List<IDateTime>();
+            var dateTimes = new List<CalDateTime>();
             dateTimes.AddRange(new[]
             {
                 new CalDateTime(1998, 2, 11, 9, 0, 0, _tzid),
@@ -117,7 +117,7 @@ namespace Ical.Net.IntegrationTests
         [Test, Category("Alarm")]
         public void Alarm5()
         {
-            var dateTimes = new List<IDateTime>();
+            var dateTimes = new List<CalDateTime>();
             dateTimes.AddRange(new[]
             {
                 new CalDateTime(1998, 1, 2, 8, 0, 0, _tzid)
@@ -130,7 +130,7 @@ namespace Ical.Net.IntegrationTests
         [Test, Category("Alarm")]
         public void Alarm6()
         {
-            var dateTimes = new List<IDateTime>();
+            var dateTimes = new List<CalDateTime>();
             dateTimes.AddRange(new[]
             {
                 new CalDateTime(1998, 1, 2, 8, 0, 0, _tzid),
@@ -148,7 +148,7 @@ namespace Ical.Net.IntegrationTests
         [Test, Category("Alarm")]
         public void Alarm7()
         {
-            var dateTimes = new List<IDateTime>();
+            var dateTimes = new List<CalDateTime>();
             dateTimes.AddRange(new[]
             {
                 new CalDateTime(2006, 7, 18, 10, 30, 0, _tzid),

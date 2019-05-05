@@ -20,7 +20,7 @@ namespace Ical.Net.Serialization.DataTypes
                 return null;
             }
 
-            var dtSerializer = factory.Build(typeof(IDateTime), SerializationContext) as IStringSerializer;
+            var dtSerializer = factory.Build(typeof(CalDateTime), SerializationContext) as IStringSerializer;
             var periodSerializer = factory.Build(typeof(Period), SerializationContext) as IStringSerializer;
             if (dtSerializer == null || periodSerializer == null)
             {
@@ -60,7 +60,7 @@ namespace Ical.Net.Serialization.DataTypes
             // Decode the value, if necessary
             value = Decode(rdt, value);
 
-            var dtSerializer = factory.Build(typeof (IDateTime), SerializationContext) as IStringSerializer;
+            var dtSerializer = factory.Build(typeof (CalDateTime), SerializationContext) as IStringSerializer;
             var periodSerializer = factory.Build(typeof (Period), SerializationContext) as IStringSerializer;
             if (dtSerializer == null || periodSerializer == null)
             {
@@ -70,7 +70,7 @@ namespace Ical.Net.Serialization.DataTypes
             var values = value.Split(',');
             foreach (var v in values)
             {
-                var dt = dtSerializer.Deserialize(new StringReader(v)) as IDateTime;
+                var dt = dtSerializer.Deserialize(new StringReader(v)) as CalDateTime;
                 var p = periodSerializer.Deserialize(new StringReader(v)) as Period;
 
                 if (dt != null)

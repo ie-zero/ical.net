@@ -23,7 +23,7 @@ namespace Ical.Net.Evaluation
             _occurrences = new List<Occurrence>();
         }
 
-        void ProcessOccurrences(IDateTime referenceDate)
+        void ProcessOccurrences(CalDateTime referenceDate)
         {
             // Sort the occurrences by start time
             _occurrences.Sort(
@@ -51,7 +51,7 @@ namespace Ical.Net.Evaluation
                 // new end times are determined.
                 curr.Period.EndTime = next != null
                     ? next.Period.StartTime.AddTicks(-1)
-                    : ConvertToIDateTime(EvaluationEndBounds, referenceDate);
+                    : ConvertToCalDateTime(EvaluationEndBounds, referenceDate);
             }
         }
 
@@ -61,7 +61,7 @@ namespace Ical.Net.Evaluation
             _occurrences.Clear();
         }
 
-        public override HashSet<Period> Evaluate(IDateTime referenceDate, DateTime periodStart, DateTime periodEnd, bool includeReferenceDateInResults)
+        public override HashSet<Period> Evaluate(CalDateTime referenceDate, DateTime periodStart, DateTime periodEnd, bool includeReferenceDateInResults)
         {
             // Ensure the reference date is associated with the time zone
             if (referenceDate.AssociatedObject == null)

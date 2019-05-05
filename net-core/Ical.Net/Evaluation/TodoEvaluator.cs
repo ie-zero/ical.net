@@ -13,9 +13,9 @@ namespace Ical.Net.Evaluation
 
         public TodoEvaluator(Todo todo) : base(todo) {}
 
-        public void EvaluateToPreviousOccurrence(IDateTime completedDate, IDateTime currDt)
+        public void EvaluateToPreviousOccurrence(CalDateTime completedDate, CalDateTime currDt)
         {
-            var beginningDate = completedDate.Copy<IDateTime>();
+            var beginningDate = completedDate.Copy<CalDateTime>();
 
             if (Todo.RecurrenceRules != null)
             {
@@ -49,7 +49,7 @@ namespace Ical.Net.Evaluation
             Evaluate(Todo.Start, DateUtil.GetSimpleDateTimeData(beginningDate), DateUtil.GetSimpleDateTimeData(currDt).AddTicks(1), true);
         }
 
-        public void DetermineStartingRecurrence(PeriodList rdate, ref IDateTime referenceDateTime)
+        public void DetermineStartingRecurrence(PeriodList rdate, ref CalDateTime referenceDateTime)
         {
             var evaluator = rdate.GetService<IEvaluator>();
 
@@ -60,11 +60,11 @@ namespace Ical.Net.Evaluation
             }
         }
 
-        public void DetermineStartingRecurrence(RecurrencePattern recur, ref IDateTime referenceDateTime)
+        public void DetermineStartingRecurrence(RecurrencePattern recur, ref CalDateTime referenceDateTime)
         {
             if (recur.Count != int.MinValue)
             {
-                referenceDateTime = Todo.Start.Copy<IDateTime>();
+                referenceDateTime = Todo.Start.Copy<CalDateTime>();
             }
             else
             {
@@ -74,7 +74,7 @@ namespace Ical.Net.Evaluation
             }
         }
 
-        public override HashSet<Period> Evaluate(IDateTime referenceDate, DateTime periodStart, DateTime periodEnd, bool includeReferenceDateInResults)
+        public override HashSet<Period> Evaluate(CalDateTime referenceDate, DateTime periodStart, DateTime periodEnd, bool includeReferenceDateInResults)
         {
             // TODO items can only recur if a start date is specified
             if (Todo.Start == null)

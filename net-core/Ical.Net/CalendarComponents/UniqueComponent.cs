@@ -53,9 +53,9 @@ namespace Ical.Net.CalendarComponents
             set => Properties.Set("COMMENT", value);
         }
 
-        public IDateTime DtStamp
+        public CalDateTime DtStamp
         {
-            get => Properties.Get<IDateTime>("DTSTAMP");
+            get => Properties.Get<CalDateTime>("DTSTAMP");
             set => Properties.Set("DTSTAMP", value);
         }
 

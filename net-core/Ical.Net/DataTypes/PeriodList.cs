@@ -50,7 +50,7 @@ namespace Ical.Net.DataTypes
             return new PeriodListSerializer(SerializationContext.Default).SerializeToString(this);
         }
 
-        public void Add(IDateTime dt) => Periods.Add(new Period(dt));
+        public void Add(CalDateTime dt) => Periods.Add(new Period(dt));
 
         public static Dictionary<string, List<Period>> GetGroupedPeriods(IList<PeriodList> periodLists)
         {

@@ -92,7 +92,7 @@ namespace Ical.Net.CalendarComponents
             return fb;
         }
 
-        public static FreeBusy CreateRequest(IDateTime fromInclusive, IDateTime toExclusive, Organizer organizer, IEnumerable<Attendee> contacts)
+        public static FreeBusy CreateRequest(CalDateTime fromInclusive, CalDateTime toExclusive, Organizer organizer, IEnumerable<Attendee> contacts)
         {
             var fb = new FreeBusy
             {
@@ -125,27 +125,27 @@ namespace Ical.Net.CalendarComponents
             set => Properties.Set("FREEBUSY", value);
         }
 
-        public IDateTime DtStart
+        public CalDateTime DtStart
         {
-            get => Properties.Get<IDateTime>("DTSTART");
+            get => Properties.Get<CalDateTime>("DTSTART");
             set => Properties.Set("DTSTART", value);
         }
 
-        public IDateTime DtEnd
+        public CalDateTime DtEnd
         {
-            get => Properties.Get<IDateTime>("DTEND");
+            get => Properties.Get<CalDateTime>("DTEND");
             set => Properties.Set("DTEND", value);
         }
 
-        public IDateTime Start
+        public CalDateTime Start
         {
-            get => Properties.Get<IDateTime>("DTSTART");
+            get => Properties.Get<CalDateTime>("DTSTART");
             set => Properties.Set("DTSTART", value);
         }
 
-        public IDateTime End
+        public CalDateTime End
         {
-            get => Properties.Get<IDateTime>("DTEND");
+            get => Properties.Get<CalDateTime>("DTEND");
             set => Properties.Set("DTEND", value);
         }
 
@@ -164,7 +164,7 @@ namespace Ical.Net.CalendarComponents
             return status;
         }
 
-        public FreeBusyStatus GetFreeBusyStatus(IDateTime dt)
+        public FreeBusyStatus GetFreeBusyStatus(CalDateTime dt)
         {
             var status = FreeBusyStatus.Free;
             if (dt == null)

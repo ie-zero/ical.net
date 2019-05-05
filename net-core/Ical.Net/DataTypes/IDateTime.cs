@@ -2,7 +2,8 @@
 
 namespace Ical.Net.DataTypes
 {
-    public interface IDateTime : IEncodableDataType, IComparable<IDateTime>, IFormattable, ICalendarDataType
+    [Obsolete]
+    public interface IDateTime : IEncodableDataType, IComparable<CalDateTime>, IFormattable, ICalendarDataType
     {
         /// <summary>
         /// Converts the date/time to this computer's local date/time.
@@ -108,26 +109,26 @@ namespace Ical.Net.DataTypes
         /// Converts the date/time value to a local time
         /// within the specified time zone.
         /// </summary>
-        IDateTime ToTimeZone(string tzId);
+        CalDateTime ToTimeZone(string tzId);
 
-        IDateTime Add(TimeSpan ts);
-        IDateTime Subtract(TimeSpan ts);
-        TimeSpan Subtract(IDateTime dt);
+        CalDateTime Add(TimeSpan ts);
+        CalDateTime Subtract(TimeSpan ts);
+        TimeSpan Subtract(CalDateTime dt);
 
-        IDateTime AddYears(int years);
-        IDateTime AddMonths(int months);
-        IDateTime AddDays(int days);
-        IDateTime AddHours(int hours);
-        IDateTime AddMinutes(int minutes);
-        IDateTime AddSeconds(int seconds);
-        IDateTime AddMilliseconds(int milliseconds);
-        IDateTime AddTicks(long ticks);
+        CalDateTime AddYears(int years);
+        CalDateTime AddMonths(int months);
+        CalDateTime AddDays(int days);
+        CalDateTime AddHours(int hours);
+        CalDateTime AddMinutes(int minutes);
+        CalDateTime AddSeconds(int seconds);
+        CalDateTime AddMilliseconds(int milliseconds);
+        CalDateTime AddTicks(long ticks);
 
-        bool LessThan(IDateTime dt);
-        bool GreaterThan(IDateTime dt);
-        bool LessThanOrEqual(IDateTime dt);
-        bool GreaterThanOrEqual(IDateTime dt);
+        bool LessThan(CalDateTime dt);
+        bool GreaterThan(CalDateTime dt);
+        bool LessThanOrEqual(CalDateTime dt);
+        bool GreaterThanOrEqual(CalDateTime dt);
 
-        void AssociateWith(IDateTime dt);
+        void AssociateWith(CalDateTime dt);
     }
 }

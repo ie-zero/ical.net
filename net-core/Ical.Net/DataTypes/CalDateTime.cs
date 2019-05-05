@@ -14,7 +14,7 @@ namespace Ical.Net.DataTypes
     /// class handles time zone differences, and integrates seamlessly into the iCalendar framework.
     /// </remarks>
     /// </summary>
-    public sealed class CalDateTime : EncodableDataType, IDateTime
+    public sealed class CalDateTime : EncodableDataType, IComparable<CalDateTime>
     {
         public static CalDateTime Now => new CalDateTime(DateTime.Now);
 
@@ -25,7 +25,7 @@ namespace Ical.Net.DataTypes
 
         public CalDateTime() { }
 
-        public CalDateTime(IDateTime value)
+        public CalDateTime(CalDateTime value)
         {
             Initialize(value.Value, value.TzId, null);
         }
@@ -124,7 +124,7 @@ namespace Ical.Net.DataTypes
         {
             base.CopyFrom(obj);
 
-            var dt = obj as IDateTime;
+            var dt = obj as CalDateTime;
             if (dt == null)
             {
                 return;
@@ -141,7 +141,7 @@ namespace Ical.Net.DataTypes
             => this == other;
 
         public override bool Equals(object other)
-            => other is IDateTime && (CalDateTime) other == this;
+            => other is CalDateTime && (CalDateTime) other == this;
 
         public override int GetHashCode()
         {
@@ -155,19 +155,19 @@ namespace Ical.Net.DataTypes
             }
         }
 
-        public static bool operator <(CalDateTime left, IDateTime right)
+        public static bool operator <(CalDateTime left, CalDateTime right)
             => left != null && right != null && left.AsUtc < right.AsUtc;
 
-        public static bool operator >(CalDateTime left, IDateTime right)
+        public static bool operator >(CalDateTime left, CalDateTime right)
             => left != null && right != null && left.AsUtc > right.AsUtc;
 
-        public static bool operator <=(CalDateTime left, IDateTime right)
+        public static bool operator <=(CalDateTime left, CalDateTime right)
             => left != null && right != null && left.AsUtc <= right.AsUtc;
 
-        public static bool operator >=(CalDateTime left, IDateTime right)
+        public static bool operator >=(CalDateTime left, CalDateTime right)
             => left != null && right != null && left.AsUtc >= right.AsUtc;
 
-        public static bool operator ==(CalDateTime left, IDateTime right)
+        public static bool operator ==(CalDateTime left, CalDateTime right)
         {
             return ReferenceEquals(left, null) || ReferenceEquals(right, null)
                 ? ReferenceEquals(left, right)
@@ -178,25 +178,25 @@ namespace Ical.Net.DataTypes
                     && string.Equals(left.TzId, right.TzId, StringComparison.OrdinalIgnoreCase);
         }
 
-        public static bool operator !=(CalDateTime left, IDateTime right)
+        public static bool operator !=(CalDateTime left, CalDateTime right)
             => !(left == right);
 
-        public static TimeSpan operator -(CalDateTime left, IDateTime right)
+        public static TimeSpan operator -(CalDateTime left, CalDateTime right)
         {
             left.AssociateWith(right);
             return left.AsUtc - right.AsUtc;
         }
 
-        public static IDateTime operator -(CalDateTime left, TimeSpan right)
+        public static CalDateTime operator -(CalDateTime left, TimeSpan right)
         {
-            var copy = left.Copy<IDateTime>();
+            var copy = left.Copy<CalDateTime>();
             copy.Value -= right;
             return copy;
         }
 
-        public static IDateTime operator +(CalDateTime left, TimeSpan right)
+        public static CalDateTime operator +(CalDateTime left, TimeSpan right)
         {
-            var copy = left.Copy<IDateTime>();
+            var copy = left.Copy<CalDateTime>();
             copy.Value += right;
             return copy;
         }
@@ -359,9 +359,9 @@ namespace Ical.Net.DataTypes
         public TimeSpan TimeOfDay => Value.TimeOfDay;
 
         /// <summary>
-        /// Returns a representation of the IDateTime in the specified time zone
+        /// Returns a representation of the CalDateTime in the specified time zone
         /// </summary>
-        public IDateTime ToTimeZone(string tzId)
+        public CalDateTime ToTimeZone(string tzId)
         {
             if (string.IsNullOrWhiteSpace(tzId))
             {
@@ -390,36 +390,36 @@ namespace Ical.Net.DataTypes
                 ? new DateTimeOffset(AsSystemLocal)
                 : DateUtil.ToZonedDateTimeLeniently(Value, TzId).ToDateTimeOffset();
 
-        public IDateTime Add(TimeSpan ts) => this + ts;
+        public CalDateTime Add(TimeSpan ts) => this + ts;
 
-        public IDateTime Subtract(TimeSpan ts) => this - ts;
+        public CalDateTime Subtract(TimeSpan ts) => this - ts;
 
-        public TimeSpan Subtract(IDateTime dt) => this - dt;
+        public TimeSpan Subtract(CalDateTime dt) => this - dt;
 
-        public IDateTime AddYears(int years)
+        public CalDateTime AddYears(int years)
         {
-            var dt = Copy<IDateTime>();
+            var dt = Copy<CalDateTime>();
             dt.Value = Value.AddYears(years);
             return dt;
         }
 
-        public IDateTime AddMonths(int months)
+        public CalDateTime AddMonths(int months)
         {
-            var dt = Copy<IDateTime>();
+            var dt = Copy<CalDateTime>();
             dt.Value = Value.AddMonths(months);
             return dt;
         }
 
-        public IDateTime AddDays(int days)
+        public CalDateTime AddDays(int days)
         {
-            var dt = Copy<IDateTime>();
+            var dt = Copy<CalDateTime>();
             dt.Value = Value.AddDays(days);
             return dt;
         }
 
-        public IDateTime AddHours(int hours)
+        public CalDateTime AddHours(int hours)
         {
-            var dt = Copy<IDateTime>();
+            var dt = Copy<CalDateTime>();
             if (!dt.HasTime && hours % 24 > 0)
             {
                 dt.HasTime = true;
@@ -428,9 +428,9 @@ namespace Ical.Net.DataTypes
             return dt;
         }
 
-        public IDateTime AddMinutes(int minutes)
+        public CalDateTime AddMinutes(int minutes)
         {
-            var dt = Copy<IDateTime>();
+            var dt = Copy<CalDateTime>();
             if (!dt.HasTime && minutes % 1440 > 0)
             {
                 dt.HasTime = true;
@@ -439,9 +439,9 @@ namespace Ical.Net.DataTypes
             return dt;
         }
 
-        public IDateTime AddSeconds(int seconds)
+        public CalDateTime AddSeconds(int seconds)
         {
-            var dt = Copy<IDateTime>();
+            var dt = Copy<CalDateTime>();
             if (!dt.HasTime && seconds % 86400 > 0)
             {
                 dt.HasTime = true;
@@ -450,9 +450,9 @@ namespace Ical.Net.DataTypes
             return dt;
         }
 
-        public IDateTime AddMilliseconds(int milliseconds)
+        public CalDateTime AddMilliseconds(int milliseconds)
         {
-            var dt = Copy<IDateTime>();
+            var dt = Copy<CalDateTime>();
             if (!dt.HasTime && milliseconds % 86400000 > 0)
             {
                 dt.HasTime = true;
@@ -461,23 +461,23 @@ namespace Ical.Net.DataTypes
             return dt;
         }
 
-        public IDateTime AddTicks(long ticks)
+        public CalDateTime AddTicks(long ticks)
         {
-            var dt = Copy<IDateTime>();
+            var dt = Copy<CalDateTime>();
             dt.HasTime = true;
             dt.Value = Value.AddTicks(ticks);
             return dt;
         }
 
-        public bool LessThan(IDateTime dt) => this < dt;
+        public bool LessThan(CalDateTime dt) => this < dt;
 
-        public bool GreaterThan(IDateTime dt) => this > dt;
+        public bool GreaterThan(CalDateTime dt) => this > dt;
 
-        public bool LessThanOrEqual(IDateTime dt) => this <= dt;
+        public bool LessThanOrEqual(CalDateTime dt) => this <= dt;
 
-        public bool GreaterThanOrEqual(IDateTime dt) => this >= dt;
+        public bool GreaterThanOrEqual(CalDateTime dt) => this >= dt;
 
-        public void AssociateWith(IDateTime dt)
+        public void AssociateWith(CalDateTime dt)
         {
             if (AssociatedObject == null && dt.AssociatedObject != null)
             {
@@ -489,7 +489,7 @@ namespace Ical.Net.DataTypes
             }
         }
 
-        public int CompareTo(IDateTime dt)
+        public int CompareTo(CalDateTime dt)
         {
             if (Equals(dt))
             {
@@ -503,7 +503,7 @@ namespace Ical.Net.DataTypes
             {
                 return 1;
             }
-            throw new Exception("An error occurred while comparing two IDateTime values.");
+            throw new Exception("An error occurred while comparing two CalDateTime values.");
         }
 
         public override string ToString() => ToString(null, null);

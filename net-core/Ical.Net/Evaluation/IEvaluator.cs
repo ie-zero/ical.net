@@ -68,6 +68,6 @@ namespace Ical.Net.Evaluation
         ///     A list of <see cref="System.DateTime"/> objects for
         ///     each date/time when this item occurs/recurs.
         /// </returns>
-        HashSet<Period> Evaluate(IDateTime referenceDate, DateTime periodStart, DateTime periodEnd, bool includeReferenceDateInResults);
+        HashSet<Period> Evaluate(CalDateTime referenceDate, DateTime periodStart, DateTime periodEnd, bool includeReferenceDateInResults);
     }
 }

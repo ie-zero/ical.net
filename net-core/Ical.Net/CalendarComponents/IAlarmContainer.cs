@@ -19,6 +19,6 @@ namespace Ical.Net.CalendarComponents
         /// <param name="startTime">The earliest allowable alarm occurrence to poll, or <c>null</c>.</param>
         /// <param name="endTime"></param>
         /// <returns>A List of <see cref="AlarmOccurrence"/> objects, one for each occurrence of the <see cref="Alarm"/>.</returns>
-        IList<AlarmOccurrence> PollAlarms(IDateTime startTime, IDateTime endTime);
+        IList<AlarmOccurrence> PollAlarms(CalDateTime startTime, CalDateTime endTime);
     }
 }
