@@ -258,6 +258,13 @@ namespace Ical.Net.DataTypes
         }
 
         private DateTime _value;
+
+        /// <summary>
+        /// Gets/sets the underlying DateTime value stored.  This should always
+        /// use DateTimeKind.Utc, regardless of its actual representation.
+        /// Use IsUtc along with the TZID to control how this
+        /// date/time is handled.
+        /// </summary>
         public DateTime Value
         {
             get => _value;
@@ -273,14 +280,23 @@ namespace Ical.Net.DataTypes
             }
         }
 
+        /// <summary>
+        /// Gets/sets whether the Value of this date/time represents a universal time.
+        /// </summary>
         public bool IsUtc => _value.Kind == DateTimeKind.Utc;
 
+        /// <summary>
+        /// Gets/sets whether or not this date/time value contains a 'date' part.
+        /// </summary>
         public bool HasDate
         {
             get => _hasDate;
             set => _hasDate = value;
         }
 
+        /// <summary>
+        /// Gets/sets whether or not this date/time value contains a 'time' part.
+        /// </summary>
         public bool HasTime
         {
             get => _hasTime;
@@ -332,6 +348,9 @@ namespace Ical.Net.DataTypes
             }
         }
 
+        /// <summary>
+        /// Gets the time zone name this time is in, if it references a time zone.
+        /// </summary>
         public string TimeZoneName => TzId;
 
         public int Year => Value.Year;
